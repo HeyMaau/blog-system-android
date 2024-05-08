@@ -1,30 +1,32 @@
 package top.manpok.blog.component
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import top.manpok.blog.R
-import top.manpok.blog.pojo.BottomBarItem
-
-val mBottomBarItemList = listOf(
-    BottomBarItem(R.drawable.ic_home_filled, R.drawable.ic_home, R.string.home_page),
-    BottomBarItem(R.drawable.ic_article_filled, R.drawable.ic_article, R.string.category_page),
-    BottomBarItem(
-        R.drawable.ic_tools_ladder_filled,
-        R.drawable.ic_tools_ladder,
-        R.string.tools_page
-    ),
-    BottomBarItem(R.drawable.ic_person_filled, R.drawable.ic_person, R.string.about_page)
-)
+import androidx.lifecycle.viewmodel.compose.viewModel
+import top.manpok.blog.page.HomePage
+import top.manpok.blog.viewmodel.BlogScaffoldViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun BlogScaffold(modifier: Modifier = Modifier) {
+fun BlogScaffold(
+    modifier: Modifier = Modifier,
+    blogScaffoldViewModel: BlogScaffoldViewModel = viewModel()
+) {
     Scaffold(
         bottomBar = {
-            BlogNavigationBar(mBottomBarItemList)
+            BlogNavigationBar(
+                blogScaffoldViewModel.mBottomBarItemList,
+                blogScaffoldViewModel.selectedBottomItemIndex.intValue
+            ) {
+                blogScaffoldViewModel.selectedBottomItemIndex.intValue = it
+            }
         }
     ) {
+        when (blogScaffoldViewModel.selectedBottomItemIndex.intValue) {
+            0 -> HomePage(modifier.padding(it))
+        }
     }
 }

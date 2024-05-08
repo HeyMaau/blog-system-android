@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">卧卷</string>
+    <string name="home_page">首页</string>
+    <string name="category_page">文章</string>
+    <string name="tools_page">工具</string>
+    <string name="about_page">关于</string>
 </resources>

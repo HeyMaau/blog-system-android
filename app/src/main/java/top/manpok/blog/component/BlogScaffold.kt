@@ -19,13 +19,13 @@ fun BlogScaffold(
         bottomBar = {
             BlogNavigationBar(
                 blogScaffoldViewModel.mBottomBarItemList,
-                blogScaffoldViewModel.selectedBottomItemIndex.intValue
+                blogScaffoldViewModel.selectedBottomItemIndex
             ) {
-                blogScaffoldViewModel.selectedBottomItemIndex.intValue = it
+                blogScaffoldViewModel.selectedBottomItemIndex = it
             }
         }
     ) {
-        when (blogScaffoldViewModel.selectedBottomItemIndex.intValue) {
+        when (blogScaffoldViewModel.selectedBottomItemIndex) {
             0 -> HomePage(modifier.padding(it))
         }
     }

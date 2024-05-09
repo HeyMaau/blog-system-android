@@ -1,6 +1,8 @@
 package top.manpok.blog.viewmodel
 
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import top.manpok.blog.R
 import top.manpok.blog.pojo.BottomBarItem
@@ -18,6 +20,6 @@ class BlogScaffoldViewModel : ViewModel() {
         BottomBarItem(R.drawable.ic_person_filled, R.drawable.ic_person, R.string.about_page)
     )
 
-    var selectedBottomItemIndex = mutableIntStateOf(0)
+    var selectedBottomItemIndex by mutableIntStateOf(0)
 
 }

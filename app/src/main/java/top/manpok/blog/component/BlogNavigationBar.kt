@@ -53,31 +53,6 @@ fun BlogNavigationBar(
                     )
                 )
             }
-
-            /*NavigationBarItem(selected = false, onClick = { *//*TODO*//* }, icon = {
-                Icon(
-                    imageVector = Icons.Rounded.Article,
-                    contentDescription = null
-                )
-            }, label = {
-                Text(text = stringResource(id = R.string.category_page))
-            })
-            NavigationBarItem(selected = false, onClick = { *//*TODO*//* }, icon = {
-                Icon(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_tools_ladder),
-                    contentDescription = null
-                )
-            }, label = {
-                Text(text = stringResource(id = R.string.tools_page))
-            })
-            NavigationBarItem(selected = false, onClick = { *//*TODO*//* }, icon = {
-                Icon(
-                    imageVector = Icons.Rounded.Person,
-                    contentDescription = null
-                )
-            }, label = {
-                Text(text = stringResource(id = R.string.about_page))
-            })*/
         }
     }
 }

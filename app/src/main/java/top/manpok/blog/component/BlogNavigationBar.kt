@@ -1,8 +1,6 @@
 package top.manpok.blog.component
 
 import androidx.compose.material.ripple.LocalRippleTheme
-import androidx.compose.material.ripple.RippleAlpha
-import androidx.compose.material.ripple.RippleTheme
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -18,6 +16,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import top.manpok.blog.R
 import top.manpok.blog.pojo.BottomBarItem
+import top.manpok.blog.ui.theme.NoRippleTheme
 
 @Composable
 fun BlogNavigationBar(
@@ -55,12 +54,4 @@ fun BlogNavigationBar(
             }
         }
     }
-}
-
-private object NoRippleTheme : RippleTheme {
-    @Composable
-    override fun defaultColor() = Color.Unspecified
-
-    @Composable
-    override fun rippleAlpha(): RippleAlpha = RippleAlpha(0.0f, 0.0f, 0.0f, 0.0f)
 }

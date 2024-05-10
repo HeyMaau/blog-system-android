@@ -5,6 +5,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
 @Composable
-fun HomeArticleListPage(modifier: Modifier = Modifier) {
-    Text(text = "HomeArticleListPage")
+fun HomeThinkingListPage(modifier: Modifier = Modifier) {
+    Text(text = "HomeThinkingListPage")
 }

@@ -104,7 +104,10 @@ fun HomePage(modifier: Modifier = Modifier, homePageViewModel: HomePageViewModel
 
         HorizontalPager(state = pagerState) {
             when (it) {
-                0 -> HomeArticleListPage(Modifier.fillMaxSize())
+                0 -> HomeArticleListPage(
+                    Modifier
+                        .fillMaxSize()
+                        .padding(10.dp, 0.dp))
                 1 -> HomeThinkingListPage(Modifier.fillMaxSize())
             }
         }

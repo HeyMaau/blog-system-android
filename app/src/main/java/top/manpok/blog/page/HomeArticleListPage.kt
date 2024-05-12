@@ -12,6 +12,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import top.manpok.blog.activity.SearchActivity
+import top.manpok.blog.component.ArticleList
 import top.manpok.blog.component.BlogSearchBar
 
 @Composable
@@ -22,6 +23,7 @@ fun HomeArticleListPage(modifier: Modifier = Modifier) {
             val intent = Intent(context, SearchActivity::class.java)
             context.startActivity(intent)
         })
+        ArticleList()
     }
 }
 

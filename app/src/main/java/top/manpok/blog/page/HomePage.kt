@@ -49,7 +49,7 @@ fun HomePage(modifier: Modifier = Modifier, homePageViewModel: HomePageViewModel
     )
 
 
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(modifier = modifier.fillMaxSize()) {
         CompositionLocalProvider(LocalRippleTheme provides NoRippleTheme) {
             TabRow(
                 selectedTabIndex = pagerState.currentPage,
@@ -107,7 +107,7 @@ fun HomePage(modifier: Modifier = Modifier, homePageViewModel: HomePageViewModel
                 0 -> HomeArticleListPage(
                     Modifier
                         .fillMaxSize()
-                        .padding(10.dp, 0.dp))
+                        .padding(12.dp, 0.dp))
                 1 -> HomeThinkingListPage(Modifier.fillMaxSize())
             }
         }

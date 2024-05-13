@@ -5,12 +5,12 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import top.manpok.blog.utils.Constants
 
 object BlogRetrofit {
 
     private const val TAG = "BlogRetrofit"
 
-    private const val baseUrl: String = "https://m.manpok.top"
     private val httpLoggingInterceptor: HttpLoggingInterceptor by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
         val instance = HttpLoggingInterceptor {
             Log.i(TAG, it)
@@ -24,7 +24,8 @@ object BlogRetrofit {
         return@lazy builder
     }
     private val instance: Retrofit by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
-        Retrofit.Builder().baseUrl(baseUrl).addConverterFactory(GsonConverterFactory.create())
+        Retrofit.Builder().baseUrl(Constants.BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
             .client(
                 okHttpClient.build()
             )

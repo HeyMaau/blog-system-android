@@ -25,7 +25,7 @@ import top.manpok.blog.utils.Constants
 fun ArticleListItem(item: BlogArticle.Data?, isLast: Boolean, modifier: Modifier = Modifier) {
     Column(modifier = modifier) {
         Text(text = "${item?.title}", fontWeight = FontWeight(500), fontSize = 18.sp)
-        Row(verticalAlignment = Alignment.CenterVertically) {
+        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(5.dp)) {
             AsyncImage(
                 model = Constants.BASE_IMAGE_URL + item?.user?.avatar,
                 contentDescription = null,

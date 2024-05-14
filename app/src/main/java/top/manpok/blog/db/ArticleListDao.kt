@@ -12,10 +12,10 @@ import top.manpok.blog.utils.Constants
 interface ArticleListDao {
 
     @Insert
-    suspend fun insertAll(vararg articleList: BlogArticleListItemForDB)
+    suspend fun insertAll(articleList: List<BlogArticleListItemForDB>)
 
     @Update
-    suspend fun updateAll(vararg articleList: BlogArticleListItemForDB): Int
+    suspend fun updateAll(articleList: List<BlogArticleListItemForDB>): Int
 
     @Delete
     suspend fun deleteAll(vararg articleList: BlogArticleListItemForDB): Int

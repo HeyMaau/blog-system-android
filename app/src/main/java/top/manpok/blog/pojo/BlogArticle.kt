@@ -22,7 +22,25 @@ data class BlogArticle(
         val user: User?,
         val userId: String?,
         val viewCount: Int?
-    )
+    ) {
+        constructor(id: String, title: String?, user: User, content: String?) : this(
+            category = null,
+            categoryId = null,
+            content = content,
+            cover = null,
+            createTime = null,
+            id = id,
+            labels = null,
+            state = null,
+            title = title,
+            type = null,
+            updateTime = null,
+            user = user,
+            userId = null,
+            viewCount = null
+
+        )
+    }
 
     data class Category(
         val cover: String?,
@@ -47,6 +65,20 @@ data class BlogArticle(
         val state: String?,
         val updateTime: String?,
         val userName: String?
-    )
+    ) {
+        constructor(avatar: String?, userName: String?) : this(
+            avatar = avatar,
+            createTime = null,
+            email = null,
+            hubSite = null,
+            id = null,
+            major = null,
+            roles = null,
+            sign = null,
+            state = null,
+            updateTime = null,
+            userName = userName
+        )
+    }
 }
 

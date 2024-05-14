@@ -84,7 +84,7 @@ fun HomePage(modifier: Modifier = Modifier, homePageViewModel: HomePageViewModel
                         )
                     }
                 },
-                modifier = Modifier.padding(10.dp)
+                modifier = Modifier.padding(5.dp)
             ) {
                 homePageViewModel.tabRowItemList.forEachIndexed { index, tabRowItem ->
                     Tab(selected = pagerState.currentPage == index, onClick = {

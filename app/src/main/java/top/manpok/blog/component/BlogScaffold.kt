@@ -18,6 +18,7 @@ fun BlogScaffold(
     blogScaffoldViewModel: BlogScaffoldViewModel = viewModel()
 ) {
     Scaffold(
+        containerColor = Color.White,
         bottomBar = {
             BlogNavigationBar(
                 blogScaffoldViewModel.mBottomBarItemList,

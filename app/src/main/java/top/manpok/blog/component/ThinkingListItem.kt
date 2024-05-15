@@ -56,7 +56,7 @@ fun ThinkingListItem(data: BlogThinking.Data?, modifier: Modifier = Modifier) {
                 )
             }
             Text(
-                text = data?.content!!,
+                text = data?.title!!,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
                 fontSize = 14.sp,

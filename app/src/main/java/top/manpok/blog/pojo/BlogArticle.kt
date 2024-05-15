@@ -1,12 +1,12 @@
 package top.manpok.blog.pojo
 
 data class BlogArticle(
-    val currentPage: Int?,
     val data: List<Data?>?,
-    val noMore: Boolean?,
-    val pageSize: Int?,
-    val total: Int?
-) {
+    override val currentPage: Int,
+    override val noMore: Boolean,
+    override val pageSize: Int,
+    override val total: Int,
+) : BasePaging() {
     data class Data(
         val category: Category?,
         val categoryId: String?,

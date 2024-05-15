@@ -4,6 +4,7 @@ import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,6 +25,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
@@ -107,8 +109,21 @@ fun HomePage(modifier: Modifier = Modifier, homePageViewModel: HomePageViewModel
                 0 -> HomeArticleListPage(
                     Modifier
                         .fillMaxSize()
-                        .padding(12.dp, 0.dp))
-                1 -> HomeThinkingListPage(Modifier.fillMaxSize())
+                        .padding(12.dp, 0.dp)
+                )
+
+                1 -> HomeThinkingListPage(
+                    Modifier
+                        .fillMaxSize()
+                        .background(
+                            Brush.verticalGradient(
+                                listOf(
+                                    Color.White, colorResource(id = R.color.gray_f6f7fb)
+                                ),
+                                endY = 50f
+                            )
+                        )
+                )
             }
         }
     }

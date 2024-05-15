@@ -31,7 +31,12 @@ object BlogRetrofit {
             )
             .build()
     }
+
     val articleApi: ArticleApi by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
         instance.create(ArticleApi::class.java)
+    }
+
+    val thinkingApi: ThinkingApi by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
+        instance.create(ThinkingApi::class.java)
     }
 }

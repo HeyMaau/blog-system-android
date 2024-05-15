@@ -24,7 +24,7 @@ class ArticleViewModel : ViewModel() {
 
     private val TAG = "ArticleViewModel"
 
-    var articleList = mutableStateListOf<BlogArticle.Data?>()
+    val articleList = mutableStateListOf<BlogArticle.Data?>()
     var currentPage by mutableIntStateOf(1)
     var noMore by mutableStateOf(false)
     var pageSize by mutableIntStateOf(5)
@@ -51,11 +51,11 @@ class ArticleViewModel : ViewModel() {
                     if (response.body()?.code == Constants.CODE_SUCCESS) {
                         val blogArticle = response.body()?.data
                         currentPage = blogArticle?.currentPage!!
-                        noMore = blogArticle.noMore!!
-                        pageSize = blogArticle.pageSize!!
-                        total = blogArticle.total!!
+                        noMore = blogArticle.noMore
+                        pageSize = blogArticle.pageSize
+                        total = blogArticle.total
                         articleList.clear()
-                        articleList.addAll(blogArticle.data!!)
+                        blogArticle.data?.let { articleList.addAll(it) }
                         viewModelScope.launch {
                             saveToDB(blogArticle.data)
                         }
@@ -63,7 +63,7 @@ class ArticleViewModel : ViewModel() {
                 }
             }
 
-            override fun onFailure(response: Call<BaseResponse<BlogArticle>>, error: Throwable) {
+            override fun onFailure(call: Call<BaseResponse<BlogArticle>>, error: Throwable) {
                 Log.d(TAG, "onFailure: $error")
             }
 

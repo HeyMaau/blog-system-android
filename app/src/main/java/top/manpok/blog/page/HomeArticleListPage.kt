@@ -1,7 +1,6 @@
 package top.manpok.blog.page
 
 import android.graphics.Color
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -17,9 +16,7 @@ fun HomeArticleListPage(
     modifier: Modifier = Modifier,
     articleViewModel: ArticleViewModel = viewModel()
 ) {
-    Column(modifier = modifier) {
-        ArticleList(articleViewModel.articleList.toList(), modifier = Modifier.padding(0.dp, 10.dp))
-    }
+    ArticleList(articleViewModel.articleList.toList(), modifier = modifier)
 }
 
 @Preview(showSystemUi = true, showBackground = true, backgroundColor = Color.WHITE.toLong())

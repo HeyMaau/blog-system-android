@@ -20,10 +20,12 @@ fun ArticleList(articleList: List<BlogArticle.Data?>?, modifier: Modifier = Modi
         LazyColumn(state = listState, modifier = modifier) {
             item {
                 val context = LocalContext.current
-                BlogSearchBar(modifier = Modifier.clickable {
-                    val intent = Intent(context, SearchActivity::class.java)
-                    context.startActivity(intent)
-                })
+                BlogSearchBar(modifier = Modifier
+                    .clickable {
+                        val intent = Intent(context, SearchActivity::class.java)
+                        context.startActivity(intent)
+                    }
+                    .padding(0.dp, 10.dp, 0.dp, 0.dp))
             }
             itemsIndexed(articleList) { index, item ->
                 if (index == 0) {

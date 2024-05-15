@@ -24,7 +24,9 @@ fun HomeThinkingListPage(
         horizontalArrangement = Arrangement.spacedBy(10.dp),
         modifier = modifier
     ) {
-        items(thinkingViewModel.thinkingList.toList()) {
+        items(thinkingViewModel.thinkingList.toList(), key = {
+            it.id!!
+        }) {
             ThinkingListItem(data = it)
         }
     }

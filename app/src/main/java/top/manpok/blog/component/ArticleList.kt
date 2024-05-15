@@ -27,7 +27,9 @@ fun ArticleList(articleList: List<BlogArticle.Data?>?, modifier: Modifier = Modi
                     }
                     .padding(0.dp, 10.dp, 0.dp, 0.dp))
             }
-            itemsIndexed(articleList) { index, item ->
+            itemsIndexed(articleList, key = { _, item ->
+                item?.id!!
+            }) { index, item ->
                 if (index == 0) {
                     ArticleListItem(
                         item = item,

@@ -8,29 +8,61 @@ data class BlogThinking(
     override val total: Int,
 ) : BasePaging() {
     data class Data(
-        val content: String,
-        val createTime: String,
-        val id: String,
+        val content: String?,
+        val createTime: String?,
+        val id: String?,
         val images: String?,
-        val state: String,
-        val title: String,
-        val updateTime: String,
-        val user: User,
-        val userId: String
-    )
+        val state: String?,
+        val title: String?,
+        val updateTime: String?,
+        val user: User?,
+        val userId: String?
+    ) {
+        constructor(
+            id: String?,
+            title: String?,
+            user: User?,
+            content: String?,
+            images: String?
+        ) : this(
+            content = content,
+            createTime = null,
+            id = id,
+            images = images,
+            state = null,
+            title = title,
+            user = user,
+            updateTime = null,
+            userId = null
+        )
+    }
 
     data class User(
-        val avatar: String,
-        val createTime: String,
-        val email: String,
-        val hubSite: String,
-        val id: String,
-        val major: String,
-        val roles: String,
-        val sign: String,
-        val state: String,
-        val updateTime: String,
-        val userName: String
-    )
+        val avatar: String?,
+        val createTime: String?,
+        val email: String?,
+        val hubSite: String?,
+        val id: String?,
+        val major: String?,
+        val roles: String?,
+        val sign: String?,
+        val state: String?,
+        val updateTime: String?,
+        val userName: String?
+    ) {
+        constructor(avatar: String?, userName: String?) : this(
+            avatar = avatar,
+            createTime = null,
+            email = null,
+            hubSite = null,
+            id = null,
+            major = null,
+            roles = null,
+            sign = null,
+            state = null,
+            updateTime = null,
+            userName = userName
+        )
+    }
 }
 

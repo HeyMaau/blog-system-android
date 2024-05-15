@@ -30,9 +30,6 @@ class ArticleViewModel : ViewModel() {
     var pageSize by mutableIntStateOf(5)
     var total by mutableIntStateOf(0)
 
-    @Volatile
-    private var dbHasData: Boolean = false
-
     init {
         viewModelScope.launch {
             getDataFromDB()
@@ -74,7 +71,6 @@ class ArticleViewModel : ViewModel() {
         val dataList =
             ArticleListDatabase.getDatabase(BaseApplication.getApplication()).articleListDao()
                 .getAll()
-        dbHasData = dataList.isNotEmpty()
         convertDBData(dataList)
     }
 
@@ -86,17 +82,14 @@ class ArticleViewModel : ViewModel() {
                 title = it.title,
                 avatar = it.user?.avatar,
                 userName = it.user?.userName,
-                it.content
+                content = it.content
             )
             saveList.add(item)
         }
-        if (dbHasData) {
+        val articleListDao =
             ArticleListDatabase.getDatabase(BaseApplication.getApplication()).articleListDao()
-                .updateAll(saveList.toList())
-        } else {
-            ArticleListDatabase.getDatabase(BaseApplication.getApplication()).articleListDao()
-                .insertAll(saveList.toList())
-        }
+        articleListDao.deleteAll()
+        articleListDao.insertAll(saveList)
     }
 
     private fun convertDBData(data: List<BlogArticleListItemForDB>?) {

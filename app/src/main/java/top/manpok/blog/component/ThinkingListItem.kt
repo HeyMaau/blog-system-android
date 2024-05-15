@@ -68,14 +68,14 @@ fun ThinkingListItem(data: BlogThinking.Data?, modifier: Modifier = Modifier) {
                 modifier = Modifier.padding(8.dp, 0.dp, 0.dp, 5.dp)
             ) {
                 AsyncImage(
-                    model = Constants.BASE_IMAGE_URL + data.user.avatar,
+                    model = Constants.BASE_IMAGE_URL + data.user?.avatar,
                     contentDescription = null,
                     modifier = Modifier
                         .size(20.dp)
                         .clip(CircleShape)
                 )
                 Text(
-                    text = data.user.userName,
+                    text = data.user?.userName!!,
                     color = colorResource(id = R.color.gray_878789),
                     modifier = Modifier.padding(5.dp, 0.dp),
                     fontSize = 14.sp

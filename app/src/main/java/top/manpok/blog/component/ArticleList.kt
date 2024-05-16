@@ -10,16 +10,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import top.manpok.blog.activity.ArticleDetailActivity
 import top.manpok.blog.activity.SearchActivity
 import top.manpok.blog.pojo.BlogArticle
 
 @Composable
 fun ArticleList(articleList: List<BlogArticle.Data?>?, modifier: Modifier = Modifier) {
     val listState = rememberLazyListState()
+    val context = LocalContext.current
     if (articleList != null) {
         LazyColumn(state = listState, modifier = modifier) {
             item {
-                val context = LocalContext.current
                 BlogSearchBar(modifier = Modifier
                     .clickable {
                         val intent = Intent(context, SearchActivity::class.java)
@@ -34,10 +35,19 @@ fun ArticleList(articleList: List<BlogArticle.Data?>?, modifier: Modifier = Modi
                     ArticleListItem(
                         item = item,
                         isLast = index == articleList.size - 1,
+                        click = {
+                            val intent = Intent(context, ArticleDetailActivity::class.java)
+                            intent.putExtra(ArticleDetailActivity.INTENT_KEY_ARTICLE_ID, item?.id)
+                            context.startActivity(intent)
+                        },
                         modifier = Modifier.padding(0.dp, 10.dp, 0.dp, 0.dp)
                     )
                 } else {
-                    ArticleListItem(item = item, isLast = index == articleList.size - 1)
+                    ArticleListItem(item = item, isLast = index == articleList.size - 1, click = {
+                        val intent = Intent(context, ArticleDetailActivity::class.java)
+                        intent.putExtra(ArticleDetailActivity.INTENT_KEY_ARTICLE_ID, item?.id)
+                        context.startActivity(intent)
+                    })
                 }
             }
         }

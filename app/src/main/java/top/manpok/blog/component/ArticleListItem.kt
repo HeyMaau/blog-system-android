@@ -1,5 +1,6 @@
 package top.manpok.blog.component
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -22,8 +23,13 @@ import top.manpok.blog.pojo.BlogArticle
 import top.manpok.blog.utils.Constants
 
 @Composable
-fun ArticleListItem(item: BlogArticle.Data?, isLast: Boolean, modifier: Modifier = Modifier) {
-    Column(modifier = modifier) {
+fun ArticleListItem(
+    item: BlogArticle.Data?,
+    isLast: Boolean,
+    click: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(modifier = modifier.clickable(onClick = click)) {
         Text(text = "${item?.title}", fontWeight = FontWeight(500), fontSize = 18.sp)
         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(5.dp)) {
             AsyncImage(

@@ -24,8 +24,7 @@ import top.manpok.blog.R
 fun AuthorInfoBanner(avatarUrl: String, name: String, sign: String, modifier: Modifier = Modifier) {
     Row(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(12.dp, 0.dp),
+            .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
         AsyncImage(
@@ -42,7 +41,7 @@ fun AuthorInfoBanner(avatarUrl: String, name: String, sign: String, modifier: Mo
             modifier = Modifier.padding(8.dp, 0.dp),
             verticalArrangement = Arrangement.spacedBy(5.dp)
         ) {
-            Text(text = name, fontSize = 18.sp)
+            Text(text = name, fontSize = 16.sp)
             Text(text = sign, fontSize = 14.sp, color = colorResource(id = R.color.gray_878789))
         }
     }

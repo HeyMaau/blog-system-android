@@ -2,22 +2,31 @@ package top.manpok.blog.activity
 
 import android.os.Bundle
 import android.text.TextUtils
+import android.webkit.WebView
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
 import coil.compose.AsyncImage
 import top.manpok.blog.R
 import top.manpok.blog.component.AuthorInfoBanner
 import top.manpok.blog.component.CommonHeader
 import top.manpok.blog.viewmodel.ArticleDetailViewModel
+import top.manpok.blog.webview.BlogWebChromeClient
+import top.manpok.blog.webview.BlogWebViewClient
 
 class ArticleDetailActivity : ComponentActivity() {
 
@@ -33,8 +42,11 @@ class ArticleDetailActivity : ComponentActivity() {
         val id = intent.getStringExtra(INTENT_KEY_ARTICLE_ID)
         viewModel = ArticleDetailViewModel(id)
         setContent {
+            val rememberScrollState = rememberScrollState()
             Column(
                 modifier = Modifier
+                    .verticalScroll(rememberScrollState)
+                    .background(Color.White)
                     .statusBarsPadding()
                     .padding(12.dp)
             ) {
@@ -64,6 +76,24 @@ class ArticleDetailActivity : ComponentActivity() {
                             .fillMaxWidth()
                             .padding(0.dp, 12.dp)
                     )
+                }
+                if (!TextUtils.isEmpty(viewModel.content)) {
+                    AndroidView(modifier = Modifier.fillMaxSize(), factory = {
+                        val webView = WebView(it)
+                        webView.settings.apply {
+                            setSupportZoom(false)
+                            builtInZoomControls = false
+                            displayZoomControls = false
+                            useWideViewPort = true
+                            loadWithOverviewMode = true
+                            javaScriptEnabled = true
+                        }
+                        webView.apply {
+                            webView.webViewClient = BlogWebViewClient()
+                            webChromeClient = BlogWebChromeClient()
+                            loadDataWithBaseURL(null, viewModel.content, "text/html", "utf-8", null)
+                        }
+                    })
                 }
             }
         }

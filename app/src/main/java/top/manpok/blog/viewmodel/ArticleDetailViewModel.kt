@@ -46,7 +46,7 @@ class ArticleDetailViewModel(val id: String?) : ViewModel() {
                                 authorName = data.user?.userName!!
                                 authorSign = data.user.sign!!
                                 cover = Constants.BASE_IMAGE_URL + data.cover!!
-                                content = data.content!!
+                                setHtmlContent(data.content!!)
                             }
                         }
                     }
@@ -60,5 +60,27 @@ class ArticleDetailViewModel(val id: String?) : ViewModel() {
 
                 })
         }
+    }
+
+    private fun setHtmlContent(data: String) {
+        content = """
+            <!DOCTYPE html>
+            <html lang="zh">
+            <head>
+                <meta charset="UTF-8">
+                <title>Article Title</title>
+                <script src="file:///android_asset/js/highlight.min.js"></script>
+                    <script>
+                        function highlightAll() {
+                            hljs.highlightAll()
+                            document.title = "hhh"
+                        }
+                    </script>
+            </head>
+            <body>
+                $data
+            </body>
+            </html>
+        """.trimIndent()
     }
 }

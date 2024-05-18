@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -38,7 +39,8 @@ fun ThinkingListItem(data: BlogThinking.Data?, modifier: Modifier = Modifier) {
                     AsyncImage(
                         model = Constants.BASE_IMAGE_URL + cover,
                         contentDescription = null,
-                        contentScale = ContentScale.Fit
+                        contentScale = ContentScale.Fit,
+                        placeholder = painterResource(id = R.drawable.thinking_default)
                     )
                 } else {
                     Image(

@@ -79,13 +79,15 @@ class ArticleDetailViewModel(val id: String?) : ViewModel() {
         val articleDetailDao =
             ArticleDatabase.getDatabase(BaseApplication.getApplication()).articleDetailDao()
         val data = articleDetailDao.getOne(id!!)
-        title = data.title!!
-        authorAvatar = Constants.BASE_IMAGE_URL + data.avatar
-        authorName = data.userName!!
-        authorSign = data.sign!!
-        cover = Constants.BASE_IMAGE_URL + data.cover
-        setHtmlContent(data.content!!)
-        updateTime = data.updateTime!!
+        if (data != null) {
+            title = data.title!!
+            authorAvatar = Constants.BASE_IMAGE_URL + data.avatar
+            authorName = data.userName!!
+            authorSign = data.sign!!
+            cover = Constants.BASE_IMAGE_URL + data.cover
+            setHtmlContent(data.content!!)
+            updateTime = data.updateTime!!
+        }
     }
 
     suspend fun saveToDB(data: BlogArticleDetail?) {

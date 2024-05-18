@@ -24,5 +24,5 @@ interface ArticleDetailDao {
     suspend fun deleteAll(): Int
 
     @Query("SELECT * FROM ${Constants.TABLE_NAME_ARTICLE_DETAIL} WHERE id = :id")
-    suspend fun getOne(id: String): BlogArticleDetailForDB
+    suspend fun getOne(id: String): BlogArticleDetailForDB?
 }

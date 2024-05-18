@@ -108,7 +108,7 @@ class ArticleDetailActivity : ComponentActivity() {
                     Text(
                         text = stringResource(id = R.string.update_time, viewModel.updateTime),
                         color = colorResource(id = R.color.gray_878789),
-                        modifier = Modifier.padding(0.dp, 15.dp)
+                        modifier = Modifier.padding(0.dp, 15.dp, 0.dp, 30.dp)
                     )
                 }
             }

@@ -2,6 +2,7 @@ package top.manpok.blog.activity
 
 import android.os.Bundle
 import android.text.TextUtils
+import android.view.KeyEvent
 import android.webkit.WebView
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -45,6 +46,7 @@ class ArticleDetailActivity : ComponentActivity() {
             val rememberScrollState = rememberScrollState()
             Column(
                 modifier = Modifier
+                    .fillMaxSize()
                     .verticalScroll(rememberScrollState)
                     .background(Color.White)
                     .statusBarsPadding()
@@ -85,17 +87,30 @@ class ArticleDetailActivity : ComponentActivity() {
                             builtInZoomControls = false
                             displayZoomControls = false
                             useWideViewPort = true
-                            loadWithOverviewMode = true
                             javaScriptEnabled = true
                         }
                         webView.apply {
                             webView.webViewClient = BlogWebViewClient()
                             webChromeClient = BlogWebChromeClient()
-                            loadDataWithBaseURL(null, viewModel.content, "text/html", "utf-8", null)
+                            loadDataWithBaseURL(
+                                "file:///android_asset/",
+                                viewModel.content,
+                                "text/html",
+                                "utf-8",
+                                null
+                            )
                         }
                     })
                 }
             }
         }
+    }
+
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            finish()
+            return true
+        }
+        return super.onKeyDown(keyCode, event)
     }
 }

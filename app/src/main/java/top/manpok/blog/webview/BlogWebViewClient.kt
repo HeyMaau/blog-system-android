@@ -7,6 +7,6 @@ class BlogWebViewClient : WebViewClient() {
 
     override fun onPageFinished(view: WebView?, url: String?) {
         super.onPageFinished(view, url)
-        view?.evaluateJavascript("javascript:highlightAll()", null)
+        view?.evaluateJavascript("javascript:blogHighlightAll()", null)
     }
 }

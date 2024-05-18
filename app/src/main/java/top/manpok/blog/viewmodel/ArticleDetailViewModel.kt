@@ -68,18 +68,23 @@ class ArticleDetailViewModel(val id: String?) : ViewModel() {
             <html lang="zh">
             <head>
                 <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no,maximum-scale=1.0,minimum-scale=1.0">
                 <title>Article Title</title>
-                <script src="file:///android_asset/js/highlight.min.js"></script>
-                    <script>
-                        function highlightAll() {
-                            hljs.highlightAll()
-                            document.title = "hhh"
-                        }
-                    </script>
+                <link rel="stylesheet" href="highlight.default.min.css"/>
+                <link rel="stylesheet" href="global.css"/>
+                <link rel="stylesheet" href="article.detail.css"/>
             </head>
             <body>
-                $data
+                <div class="container">
+                    $data
+                </div>
             </body>
+            <script src="highlight.min.js"></script>
+            <script>
+                function blogHighlightAll() {
+                    hljs.highlightAll()
+                }
+            </script>
             </html>
         """.trimIndent()
     }

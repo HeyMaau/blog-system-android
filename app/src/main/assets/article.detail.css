@@ -1,0 +1,28 @@
+body {
+    line-height: 1.6em;
+}
+
+img {
+    max-width: 100%;
+}
+
+pre {
+    margin-top: 2.666vw;
+    font-size: 3.5vw;
+}
+
+p, h1, h2, h3, h4, h5, h6 {
+    margin-top: 3.333vw;
+}
+
+blockquote {
+    border-left: 0.8vw solid #D3D3D3;
+    color: #646464;
+    padding-left: 1em;
+    margin: 1.4em 0;
+    font-size: 3.5vw;
+}
+
+a {
+    border-bottom: 0.266vw solid #808080;
+}

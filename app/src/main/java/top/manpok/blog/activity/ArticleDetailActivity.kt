@@ -18,6 +18,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -101,6 +103,13 @@ class ArticleDetailActivity : ComponentActivity() {
                             )
                         }
                     })
+                }
+                if (!TextUtils.isEmpty(viewModel.updateTime)) {
+                    Text(
+                        text = stringResource(id = R.string.update_time, viewModel.updateTime),
+                        color = colorResource(id = R.color.gray_878789),
+                        modifier = Modifier.padding(0.dp, 15.dp)
+                    )
                 }
             }
         }

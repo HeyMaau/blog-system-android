@@ -24,6 +24,7 @@ class ArticleDetailViewModel(val id: String?) : ViewModel() {
     var authorSign by mutableStateOf("")
     var cover by mutableStateOf("")
     var content by mutableStateOf("")
+    var updateTime by mutableStateOf("")
 
     init {
         getArticleDetail(id)
@@ -46,6 +47,7 @@ class ArticleDetailViewModel(val id: String?) : ViewModel() {
                                 authorName = data.user?.userName!!
                                 authorSign = data.user.sign!!
                                 cover = Constants.BASE_IMAGE_URL + data.cover!!
+                                updateTime = data.updateTime!!
                                 setHtmlContent(data.content!!)
                             }
                         }

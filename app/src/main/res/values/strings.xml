@@ -9,4 +9,6 @@
     <string name="thinking">想法</string>
 
     <string name="enter_key_word">请输入搜索内容</string>
+
+    <string name="update_time">编辑于 %s</string>
 </resources>

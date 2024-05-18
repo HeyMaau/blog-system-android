@@ -14,7 +14,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import top.manpok.blog.api.BlogRetrofit
 import top.manpok.blog.base.BaseApplication
-import top.manpok.blog.db.ArticleListDatabase
+import top.manpok.blog.db.ArticleDatabase
 import top.manpok.blog.db.entity.BlogArticleListItemForDB
 import top.manpok.blog.pojo.BaseResponse
 import top.manpok.blog.pojo.BlogArticle
@@ -69,7 +69,7 @@ class ArticleViewModel : ViewModel() {
 
     private suspend fun getDataFromDB() {
         val dataList =
-            ArticleListDatabase.getDatabase(BaseApplication.getApplication()).articleListDao()
+            ArticleDatabase.getDatabase(BaseApplication.getApplication()).articleListDao()
                 .getAll()
         convertDBData(dataList)
     }
@@ -87,7 +87,7 @@ class ArticleViewModel : ViewModel() {
             saveList.add(item)
         }
         val articleListDao =
-            ArticleListDatabase.getDatabase(BaseApplication.getApplication()).articleListDao()
+            ArticleDatabase.getDatabase(BaseApplication.getApplication()).articleListDao()
         articleListDao.deleteAll()
         articleListDao.insertAll(saveList)
     }

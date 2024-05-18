@@ -6,10 +6,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import top.manpok.blog.api.BlogRetrofit
+import top.manpok.blog.base.BaseApplication
+import top.manpok.blog.db.ArticleDatabase
+import top.manpok.blog.db.entity.BlogArticleDetailForDB
 import top.manpok.blog.pojo.BaseResponse
 import top.manpok.blog.pojo.BlogArticleDetail
 import top.manpok.blog.utils.Constants
@@ -27,6 +32,9 @@ class ArticleDetailViewModel(val id: String?) : ViewModel() {
     var updateTime by mutableStateOf("")
 
     init {
+        viewModelScope.launch {
+            getFromDB()
+        }
         getArticleDetail(id)
     }
 
@@ -49,6 +57,9 @@ class ArticleDetailViewModel(val id: String?) : ViewModel() {
                                 cover = Constants.BASE_IMAGE_URL + data.cover!!
                                 updateTime = data.updateTime!!
                                 setHtmlContent(data.content!!)
+                                viewModelScope.launch {
+                                    saveToDB(data)
+                                }
                             }
                         }
                     }
@@ -63,6 +74,39 @@ class ArticleDetailViewModel(val id: String?) : ViewModel() {
                 })
         }
     }
+
+    suspend fun getFromDB() {
+        val articleDetailDao =
+            ArticleDatabase.getDatabase(BaseApplication.getApplication()).articleDetailDao()
+        val data = articleDetailDao.getOne(id!!)
+        title = data.title!!
+        authorAvatar = Constants.BASE_IMAGE_URL + data.avatar
+        authorName = data.userName!!
+        authorSign = data.sign!!
+        cover = Constants.BASE_IMAGE_URL + data.cover
+        setHtmlContent(data.content!!)
+        updateTime = data.updateTime!!
+    }
+
+    suspend fun saveToDB(data: BlogArticleDetail?) {
+        val articleDetailDao =
+            ArticleDatabase.getDatabase(BaseApplication.getApplication()).articleDetailDao()
+        if (data != null) {
+            val blogArticleDetailForDB = BlogArticleDetailForDB(
+                content = data.content,
+                cover = data.cover,
+                id = data.id!!,
+                title = data.title,
+                updateTime = data.updateTime,
+                avatar = data.user?.avatar,
+                sign = data.user?.sign,
+                userName = data.user?.userName
+            )
+            articleDetailDao.deleteOne(blogArticleDetailForDB)
+            articleDetailDao.insert(blogArticleDetailForDB)
+        }
+    }
+
 
     private fun setHtmlContent(data: String) {
         content = """

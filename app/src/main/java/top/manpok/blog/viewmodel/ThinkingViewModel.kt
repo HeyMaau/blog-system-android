@@ -83,7 +83,9 @@ class ThinkingViewModel : ViewModel() {
                 avatar = it.user?.avatar,
                 userName = it.user?.userName,
                 content = it.content,
-                images = it.images
+                images = it.images,
+                sign = it.user?.sign,
+                updateTime = it.updateTime
             )
             saveList.add(item)
         }
@@ -98,9 +100,14 @@ class ThinkingViewModel : ViewModel() {
             val item = BlogThinking.Data(
                 id = it?.id,
                 title = it?.title,
-                user = BlogThinking.User(avatar = it?.avatar, userName = it?.userName),
+                user = BlogThinking.User(
+                    avatar = it?.avatar,
+                    userName = it?.userName,
+                    sign = it?.sign
+                ),
                 content = it?.content,
-                images = it?.images
+                images = it?.images,
+                updateTime = it?.updateTime
             )
             thinkingList.add(item)
         }

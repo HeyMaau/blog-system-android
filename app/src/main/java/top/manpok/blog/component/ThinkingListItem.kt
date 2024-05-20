@@ -2,6 +2,7 @@ package top.manpok.blog.component
 
 import android.text.TextUtils
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -29,8 +30,12 @@ import top.manpok.blog.pojo.BlogThinking
 import top.manpok.blog.utils.Constants
 
 @Composable
-fun ThinkingListItem(data: BlogThinking.Data?, modifier: Modifier = Modifier) {
-    Surface(color = Color.White, shape = RoundedCornerShape(5)) {
+fun ThinkingListItem(data: BlogThinking.Data?, click: () -> Unit, modifier: Modifier = Modifier) {
+    Surface(
+        color = Color.White,
+        shape = RoundedCornerShape(5),
+        modifier = Modifier.clickable(onClick = click)
+    ) {
         Column {
             data?.images?.let {
                 val split = it.split("-")

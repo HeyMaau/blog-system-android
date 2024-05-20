@@ -23,7 +23,8 @@ data class BlogThinking(
             title: String?,
             user: User?,
             content: String?,
-            images: String?
+            images: String?,
+            updateTime: String?
         ) : this(
             content = content,
             createTime = null,
@@ -32,7 +33,7 @@ data class BlogThinking(
             state = null,
             title = title,
             user = user,
-            updateTime = null,
+            updateTime = updateTime,
             userId = null
         )
     }
@@ -50,7 +51,7 @@ data class BlogThinking(
         val updateTime: String?,
         val userName: String?
     ) {
-        constructor(avatar: String?, userName: String?) : this(
+        constructor(avatar: String?, userName: String?, sign: String?) : this(
             avatar = avatar,
             createTime = null,
             email = null,
@@ -58,7 +59,7 @@ data class BlogThinking(
             id = null,
             major = null,
             roles = null,
-            sign = null,
+            sign = sign,
             state = null,
             updateTime = null,
             userName = userName

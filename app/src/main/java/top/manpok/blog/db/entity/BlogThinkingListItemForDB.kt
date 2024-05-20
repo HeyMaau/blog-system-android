@@ -12,5 +12,7 @@ data class BlogThinkingListItemForDB(
     val images: String?,
     val title: String?,
     val avatar: String?,
-    val userName: String?
+    val userName: String?,
+    val sign: String?,
+    val updateTime: String?
 )

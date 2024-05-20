@@ -39,4 +39,8 @@ object BlogRetrofit {
     val thinkingApi: ThinkingApi by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
         instance.create(ThinkingApi::class.java)
     }
+
+    val categoryApi: CategoryApi by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
+        instance.create(CategoryApi::class.java)
+    }
 }

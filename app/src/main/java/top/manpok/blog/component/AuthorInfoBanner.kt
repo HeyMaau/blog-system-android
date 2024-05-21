@@ -1,5 +1,6 @@
 package top.manpok.blog.component
 
+import androidx.annotation.ColorRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,6 +16,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
@@ -44,6 +46,34 @@ fun AuthorInfoBanner(avatarUrl: String, name: String, sign: String, modifier: Mo
             Text(text = name, fontSize = 16.sp)
             Text(text = sign, fontSize = 14.sp, color = colorResource(id = R.color.gray_878789))
         }
+    }
+}
+
+@Composable
+fun AuthorInfoBanner(
+    modifier: Modifier = Modifier,
+    avatarUrl: String,
+    name: String,
+    fontSize: TextUnit = 14.sp,
+    @ColorRes fontColor: Int = R.color.gray_878789
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier
+    ) {
+        AsyncImage(
+            model = avatarUrl,
+            contentDescription = null,
+            modifier = Modifier
+                .size(20.dp)
+                .clip(CircleShape)
+        )
+        Text(
+            text = name,
+            color = colorResource(id = fontColor),
+            modifier = Modifier.padding(5.dp, 0.dp),
+            fontSize = fontSize
+        )
     }
 }
 

@@ -4,21 +4,15 @@ import android.text.TextUtils
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -70,24 +64,11 @@ fun ThinkingListItem(data: BlogThinking.Data?, click: () -> Unit, modifier: Modi
                 lineHeight = 16.sp,
                 modifier = Modifier.padding(8.dp)
             )
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
+            AuthorInfoBanner(
+                avatarUrl = Constants.BASE_IMAGE_URL + data.user?.avatar,
+                name = data.user?.userName!!,
                 modifier = Modifier.padding(8.dp, 0.dp, 0.dp, 5.dp)
-            ) {
-                AsyncImage(
-                    model = Constants.BASE_IMAGE_URL + data.user?.avatar,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(20.dp)
-                        .clip(CircleShape)
-                )
-                Text(
-                    text = data.user?.userName!!,
-                    color = colorResource(id = R.color.gray_878789),
-                    modifier = Modifier.padding(5.dp, 0.dp),
-                    fontSize = 14.sp
-                )
-            }
+            )
         }
     }
 }

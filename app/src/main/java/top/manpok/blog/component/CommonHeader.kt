@@ -35,7 +35,7 @@ fun CommonHeader(
     Row(
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
     ) {
         if (leftIcon != null) {

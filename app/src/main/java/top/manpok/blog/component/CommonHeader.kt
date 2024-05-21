@@ -79,6 +79,49 @@ fun CommonHeader(
     }
 }
 
+@Composable
+fun CommonHeader(
+    @DrawableRes leftIcon: Int?,
+    @DrawableRes rightIcon: Int?,
+    leftIconClick: () -> Unit,
+    rightIconClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit
+) {
+    Row(
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier
+            .fillMaxWidth()
+    ) {
+        if (leftIcon != null) {
+            Box(
+                modifier = Modifier
+                    .padding(0.dp, 6.dp, 12.dp, 6.dp)
+                    .clickable(onClick = leftIconClick)
+            ) {
+                Icon(
+                    imageVector = ImageVector.vectorResource(id = leftIcon),
+                    contentDescription = null,
+                )
+            }
+        }
+        content()
+        if (rightIcon != null) {
+            Box(
+                modifier = Modifier
+                    .padding(12.dp, 6.dp, 0.dp, 6.dp)
+                    .clickable(onClick = rightIconClick)
+            ) {
+                Icon(
+                    imageVector = ImageVector.vectorResource(id = rightIcon),
+                    contentDescription = null
+                )
+            }
+        }
+    }
+}
+
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
 private fun PreviewCommonHeader() {

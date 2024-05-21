@@ -64,9 +64,11 @@ class ThinkingDetailActivity : ComponentActivity() {
                     scrollState.value > commonHeaderHeight * 2
                 }
             }
-            Box(modifier = Modifier
-                .background(Color.White)
-                .padding(12.dp, 0.dp)) {
+            Box(
+                modifier = Modifier
+                    .background(Color.White)
+                    .padding(12.dp, 0.dp)
+            ) {
                 Column(
                     modifier = Modifier
                         .verticalScroll(state = scrollState)
@@ -152,6 +154,12 @@ class ThinkingDetailActivity : ComponentActivity() {
                 }
                 if (showFloatingHeader) {
                     FloatingHeader(
+                        leftIcon = R.drawable.ic_arrow_back,
+                        rightIcon = R.drawable.ic_more,
+                        leftIconClick = {
+                            finish()
+                        },
+                        rightIconClick = {},
                         modifier = Modifier
                             .statusBarsPadding()
                             .padding(0.dp, 20.dp)

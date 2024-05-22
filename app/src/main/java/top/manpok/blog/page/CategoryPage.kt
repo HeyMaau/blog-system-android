@@ -2,6 +2,8 @@ package top.manpok.blog.page
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -11,9 +13,15 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
@@ -21,6 +29,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import top.manpok.blog.R
 import top.manpok.blog.component.ArticleListItem
 import top.manpok.blog.component.CategoryInfoCard
+import top.manpok.blog.component.CategoryPopup
 import top.manpok.blog.component.CommonHeader
 import top.manpok.blog.utils.Constants
 import top.manpok.blog.viewmodel.ArticleViewModel
@@ -43,8 +52,14 @@ fun CategoryPage(
         }
         onDispose { }
     }
+    var showDropDownMenu by remember {
+        mutableStateOf(false)
+    }
     LazyColumn(modifier = modifier) {
         stickyHeader {
+            var headerHeight by remember {
+                mutableIntStateOf(0)
+            }
             CommonHeader(
                 leftIcon = R.drawable.ic_arrow_back,
                 rightIcon = R.drawable.ic_more,
@@ -54,16 +69,27 @@ fun CategoryPage(
                     .background(Color.White)
                     .padding(12.dp, 0.dp)
             ) {
-                Row {
-                    Text(
-                        text = if (categoryViewModel.currentIndex != -1) categoryViewModel.categoryList[categoryViewModel.currentIndex].name!! else stringResource(
-                            id = R.string.default_category_android
+                Box {
+                    Row(modifier = Modifier
+                        .onGloballyPositioned {
+                            headerHeight = it.size.height
+                        }
+                        .clickable {
+                            showDropDownMenu = !showDropDownMenu
+                        }) {
+                        Text(
+                            text = if (categoryViewModel.currentIndex != -1) categoryViewModel.categoryList[categoryViewModel.currentIndex].name!! else stringResource(
+                                id = R.string.default_category_android
+                            )
                         )
-                    )
-                    Icon(
-                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_arrow_drop_down),
-                        contentDescription = null
-                    )
+                        Icon(
+                            imageVector = ImageVector.vectorResource(id = R.drawable.ic_arrow_drop_down),
+                            contentDescription = null
+                        )
+                    }
+                    CategoryPopup(show = showDropDownMenu, yOffset = headerHeight) {
+                        showDropDownMenu = false
+                    }
                 }
             }
         }

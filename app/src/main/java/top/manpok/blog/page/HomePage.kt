@@ -104,7 +104,7 @@ fun HomePage(modifier: Modifier = Modifier, homePageViewModel: HomePageViewModel
             }
         }
 
-        HorizontalPager(state = pagerState) {
+        HorizontalPager(state = pagerState, beyondBoundsPageCount = 1) {
             when (it) {
                 0 -> HomeArticleListPage(
                     Modifier

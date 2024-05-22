@@ -20,4 +20,11 @@ interface ArticleApi {
     fun getArticleDetail(
         @Path("id") id: String
     ): Call<BaseResponse<BlogArticleDetail>>
+
+    @GET("/portal/article/list")
+    fun getArticleListByCategory(
+        @Query("page") page: Int,
+        @Query("size") size: Int,
+        @Query("categoryID") categoryID: String
+    ): Call<BaseResponse<BlogArticle>>
 }

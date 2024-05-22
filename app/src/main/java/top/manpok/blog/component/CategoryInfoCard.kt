@@ -32,7 +32,7 @@ fun CategoryInfoCard(
             disabledContainerColor = Color.White
         ),
         elevation = CardDefaults.cardElevation(
-            defaultElevation = 10.dp
+            defaultElevation = 5.dp
         ),
         modifier = modifier
     ) {

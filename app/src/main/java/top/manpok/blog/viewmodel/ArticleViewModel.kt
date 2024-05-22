@@ -34,7 +34,6 @@ class ArticleViewModel : ViewModel() {
         viewModelScope.launch {
             getDataFromDB()
         }
-        getArticleList(currentPage, pageSize)
     }
 
     fun getArticleList(page: Int, size: Int) {
@@ -65,6 +64,33 @@ class ArticleViewModel : ViewModel() {
             }
 
         })
+    }
+
+    fun getArticleListByCategory(page: Int, size: Int, categoryID: String) {
+        BlogRetrofit.articleApi.getArticleListByCategory(page, size, categoryID)
+            .enqueue(object : Callback<BaseResponse<BlogArticle>> {
+                override fun onResponse(
+                    call: Call<BaseResponse<BlogArticle>>,
+                    response: Response<BaseResponse<BlogArticle>>
+                ) {
+                    if (response.isSuccessful) {
+                        if (response.body()?.code == Constants.CODE_SUCCESS) {
+                            val blogArticle = response.body()?.data
+                            currentPage = blogArticle?.currentPage!!
+                            noMore = blogArticle.noMore
+                            pageSize = blogArticle.pageSize
+                            total = blogArticle.total
+                            articleList.clear()
+                            blogArticle.data?.let { articleList.addAll(it) }
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<BaseResponse<BlogArticle>>, error: Throwable) {
+                    Log.d(TAG, "onFailure: $error")
+                }
+
+            })
     }
 
     private suspend fun getDataFromDB() {

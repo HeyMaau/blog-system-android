@@ -7,7 +7,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import top.manpok.blog.page.CategoryPage
 import top.manpok.blog.page.HomePage
@@ -41,7 +40,6 @@ fun BlogScaffold(
                 modifier = modifier
                     .padding(it)
                     .background(Color.White)
-                    .padding(12.dp, 0.dp)
             )
         }
     }

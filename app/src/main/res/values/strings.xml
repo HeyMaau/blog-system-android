@@ -13,4 +13,6 @@
     <string name="update_time">编辑于 %s</string>
 
     <string name="category_total_article">%d 篇内容</string>
+
+    <string name="default_category_android">Android</string>
 </resources>

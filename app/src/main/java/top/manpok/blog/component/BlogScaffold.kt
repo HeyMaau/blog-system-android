@@ -10,6 +10,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.viewmodel.compose.viewModel
 import top.manpok.blog.page.CategoryPage
 import top.manpok.blog.page.HomePage
+import top.manpok.blog.page.ToolsPage
 import top.manpok.blog.viewmodel.BlogScaffoldViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -37,6 +38,12 @@ fun BlogScaffold(
             )
 
             1 -> CategoryPage(
+                modifier = modifier
+                    .padding(it)
+                    .background(Color.White)
+            )
+
+            2 -> ToolsPage(
                 modifier = modifier
                     .padding(it)
                     .background(Color.White)

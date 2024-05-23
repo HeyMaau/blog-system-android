@@ -47,4 +47,8 @@ object BlogRetrofit {
     val userApi: UserApi by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
         instance.create(UserApi::class.java)
     }
+
+    val friendLinkApi: FriendLinkApi by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
+        instance.create(FriendLinkApi::class.java)
+    }
 }

@@ -109,7 +109,6 @@ class ArticleDetailActivity : ComponentActivity() {
                                 setSupportZoom(false)
                                 builtInZoomControls = false
                                 displayZoomControls = false
-//                            useWideViewPort = true
                                 javaScriptEnabled = true
                             }
                             webView.apply {

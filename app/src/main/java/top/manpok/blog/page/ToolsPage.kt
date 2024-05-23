@@ -1,5 +1,7 @@
 package top.manpok.blog.page
 
+import android.content.Intent
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,12 +17,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import top.manpok.blog.R
+import top.manpok.blog.activity.CommonWebViewActivity
 import top.manpok.blog.component.FriendLinkItem
 import top.manpok.blog.viewmodel.FriendLinkViewModel
 
@@ -29,6 +33,7 @@ fun ToolsPage(
     modifier: Modifier = Modifier,
     friendLinkViewModel: FriendLinkViewModel = viewModel()
 ) {
+    val context = LocalContext.current
     Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -58,12 +63,18 @@ fun ToolsPage(
                 FriendLinkItem(
                     logoUrl = it?.logo,
                     name = it?.name!!,
-                    modifier = Modifier.padding(
-                        start = 12.dp,
-                        top = 16.dp,
-                        end = 12.dp,
-                        bottom = 16.dp
-                    )
+                    modifier = Modifier
+                        .padding(
+                            start = 12.dp,
+                            top = 16.dp,
+                            end = 12.dp,
+                            bottom = 16.dp
+                        )
+                        .clickable {
+                            val intent = Intent(context, CommonWebViewActivity::class.java)
+                            intent.putExtra(CommonWebViewActivity.INTENT_KEY_URL, it?.url)
+                            context.startActivity(intent)
+                        }
                 )
             }
         }

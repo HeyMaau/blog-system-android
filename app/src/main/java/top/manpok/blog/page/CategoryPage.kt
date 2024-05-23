@@ -1,5 +1,6 @@
 package top.manpok.blog.page
 
+import android.content.Intent
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -30,12 +31,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import top.manpok.blog.R
+import top.manpok.blog.activity.ArticleDetailActivity
 import top.manpok.blog.component.ArticleListItem
 import top.manpok.blog.component.CategoryInfoCard
 import top.manpok.blog.component.CategoryListItem
@@ -68,6 +71,7 @@ fun CategoryPage(
     var commonHeaderHeight by remember {
         mutableIntStateOf(0)
     }
+    val context = LocalContext.current
     LazyColumn(modifier = modifier) {
         stickyHeader {
             var headerHeight by remember {
@@ -159,7 +163,11 @@ fun CategoryPage(
             ArticleListItem(
                 item = item,
                 isLast = index == articleViewModel.articleList.size - 1,
-                click = { /*TODO*/ },
+                click = {
+                    val intent = Intent(context, ArticleDetailActivity::class.java)
+                    intent.putExtra(ArticleDetailActivity.INTENT_KEY_ARTICLE_ID, item?.id)
+                    context.startActivity(intent)
+                },
                 modifier = Modifier.padding(12.dp, 0.dp)
             )
         }

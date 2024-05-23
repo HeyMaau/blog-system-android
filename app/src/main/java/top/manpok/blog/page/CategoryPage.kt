@@ -148,10 +148,11 @@ fun CategoryPage(
         item {
             if (categoryViewModel.categoryList.isNotEmpty()) {
                 CategoryInfoCard(
-                    avatarUrl = Constants.BASE_IMAGE_URL + categoryViewModel.categoryList[0].cover,
-                    userName = categoryViewModel.categoryList[0].name!!,
-                    categoryName = categoryViewModel.categoryList[0].name!!,
-                    categoryDesc = categoryViewModel.categoryList[0].description!!,
+                    avatarUrl = Constants.BASE_IMAGE_URL + categoryViewModel.categoryList[categoryViewModel.currentIndex].cover,
+                    userName = categoryViewModel.categoryList[categoryViewModel.currentIndex].name!!,
+                    coverUrl = Constants.BASE_IMAGE_URL + categoryViewModel.categoryList[categoryViewModel.currentIndex].cover,
+                    categoryName = categoryViewModel.categoryList[categoryViewModel.currentIndex].name!!,
+                    categoryDesc = categoryViewModel.categoryList[categoryViewModel.currentIndex].description!!,
                     totalArticle = 4,
                     modifier = Modifier
                         .fillMaxWidth()

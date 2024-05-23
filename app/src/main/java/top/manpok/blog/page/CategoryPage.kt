@@ -47,13 +47,15 @@ import top.manpok.blog.component.CommonHeader
 import top.manpok.blog.utils.Constants
 import top.manpok.blog.viewmodel.ArticleViewModel
 import top.manpok.blog.viewmodel.CategoryViewModel
+import top.manpok.blog.viewmodel.UserViewModel
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CategoryPage(
     modifier: Modifier = Modifier,
     categoryViewModel: CategoryViewModel = viewModel(),
-    articleViewModel: ArticleViewModel = viewModel(key = "CategoryPage")
+    articleViewModel: ArticleViewModel = viewModel(key = "CategoryPage"),
+    userViewModel: UserViewModel = viewModel()
 ) {
     DisposableEffect(key1 = categoryViewModel.currentIndex) {
         if (categoryViewModel.currentIndex != -1) {
@@ -148,8 +150,8 @@ fun CategoryPage(
         item {
             if (categoryViewModel.categoryList.isNotEmpty()) {
                 CategoryInfoCard(
-                    avatarUrl = Constants.BASE_IMAGE_URL + categoryViewModel.categoryList[categoryViewModel.currentIndex].cover,
-                    userName = categoryViewModel.categoryList[categoryViewModel.currentIndex].name!!,
+                    avatarUrl = userViewModel.authorAvatar,
+                    userName = userViewModel.authorName,
                     coverUrl = Constants.BASE_IMAGE_URL + categoryViewModel.categoryList[categoryViewModel.currentIndex].cover,
                     categoryName = categoryViewModel.categoryList[categoryViewModel.currentIndex].name!!,
                     categoryDesc = categoryViewModel.categoryList[categoryViewModel.currentIndex].description!!,

@@ -126,7 +126,10 @@ fun CategoryPage(
                                         name = blogCategory.name!!,
                                         isFirst = index == 0,
                                         isLast = index == categoryViewModel.categoryList.size - 1,
-                                        modifier = Modifier.padding(0.dp, 10.dp)
+                                        click = {
+                                            categoryViewModel.currentIndex = index
+                                            showCategoryPopup = false
+                                        }
                                     )
                                     if (index != categoryViewModel.categoryList.size - 1) {
                                         HorizontalDivider(modifier = Modifier.width(200.dp))

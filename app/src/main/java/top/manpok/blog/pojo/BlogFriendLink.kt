@@ -8,12 +8,12 @@ data class BlogFriendLink(
     val data: List<Data?>?
 ) : BasePaging() {
     data class Data(
-        val createTime: String,
         val id: String,
-        val linkOrder: Int,
-        val logo: Any,
-        val name: String,
-        val updateTime: String,
-        val url: String,
+        val createTime: String?,
+        val linkOrder: Int?,
+        val logo: String?,
+        val name: String?,
+        val updateTime: String?,
+        val url: String?,
     )
 }

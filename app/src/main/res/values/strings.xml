@@ -15,4 +15,6 @@
     <string name="category_total_article">%d 篇内容</string>
 
     <string name="default_category_android">Android</string>
+
+    <string name="all_tools">全部工具</string>
 </resources>

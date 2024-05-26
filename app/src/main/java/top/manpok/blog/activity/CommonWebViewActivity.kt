@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.LinearProgressIndicator
@@ -79,6 +80,7 @@ class CommonWebViewActivity : ComponentActivity() {
                             },
                             modifier = Modifier
                                 .fillMaxWidth()
+                                .height(2.dp)
                                 .zIndex(1f)
                         )
                     }
@@ -97,6 +99,14 @@ class CommonWebViewActivity : ComponentActivity() {
                                 builtInZoomControls = false
                                 displayZoomControls = false
                                 javaScriptEnabled = true
+
+                                useWideViewPort = true
+                                loadWithOverviewMode = true
+                                domStorageEnabled = true
+                                allowFileAccess = true
+                                allowContentAccess = true
+
+                                userAgentString = userAgentString.replace("; wv","")
                             }
                             webView.apply {
                                 webViewClient = object : WebViewClient() {

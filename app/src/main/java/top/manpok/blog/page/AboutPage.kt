@@ -1,10 +1,11 @@
 package top.manpok.blog.page
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.HorizontalDivider
@@ -16,7 +17,9 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import top.manpok.blog.R
 import top.manpok.blog.component.SettingItem
@@ -27,18 +30,23 @@ import top.manpok.blog.viewmodel.AboutPageViewModel
 fun AboutPage(modifier: Modifier = Modifier, aboutPageViewModel: AboutPageViewModel = viewModel()) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
         modifier = modifier
             .fillMaxSize()
             .padding(12.dp, 0.dp)
     ) {
         val context = LocalContext.current
+        Spacer(modifier = Modifier.height(100.dp))
         Image(
             imageVector = ImageVector.vectorResource(id = R.drawable.thinking_default),
             contentDescription = null,
             modifier = Modifier.size(100.dp)
         )
-        Text(text = stringResource(id = R.string.app_name))
+        Text(
+            text = stringResource(id = R.string.app_name),
+            fontWeight = FontWeight.Bold,
+            fontSize = 20.sp,
+            modifier = Modifier.padding(top = 15.dp)
+        )
         val versionName =
             context.packageManager.getPackageInfo(Constants.PACKAGE_NAME, 0).versionName
         Text(

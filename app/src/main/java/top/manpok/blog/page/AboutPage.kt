@@ -63,7 +63,8 @@ fun AboutPage(modifier: Modifier = Modifier, aboutPageViewModel: AboutPageViewMo
                 isLast = index == aboutPageViewModel.settingItemList.size - 1,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(20.dp, 0.dp)
+                    .padding(20.dp, 0.dp),
+                click = settingItemData.click
             )
         }
         HorizontalDivider(thickness = 0.5.dp)

@@ -21,6 +21,8 @@ class UserViewModel : ViewModel() {
     var authorName by mutableStateOf("")
     var authorSign by mutableStateOf("")
     var authorAvatar by mutableStateOf("")
+    var authorMajor by mutableStateOf("")
+    var authorGithub by mutableStateOf("")
 
     fun getUserInfo() {
         BlogRetrofit.userApi.getUserInfo().enqueue(object : Callback<BaseResponse<BlogUser>> {
@@ -35,6 +37,8 @@ class UserViewModel : ViewModel() {
                         authorName = data?.userName!!
                         authorSign = data.sign!!
                         authorAvatar = Constants.BASE_IMAGE_URL + data.avatar
+                        authorMajor = data.major!!
+                        authorGithub = data.hubSite!!
                     }
                 }
             }

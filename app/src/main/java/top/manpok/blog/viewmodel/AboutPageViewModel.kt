@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.lifecycle.ViewModel
 import okhttp3.internal.immutableListOf
 import top.manpok.blog.R
+import top.manpok.blog.activity.FeedbackActivity
 import top.manpok.blog.activity.PersonalInfoActivity
 import top.manpok.blog.pojo.SettingItemData
 
@@ -21,7 +22,10 @@ class AboutPageViewModel : ViewModel() {
         SettingItemData(
             name = R.string.contact_me,
             rightIcon = R.drawable.ic_arrow_forward,
-            click = {}
+            click = {
+                val intent = Intent(it, FeedbackActivity::class.java)
+                it.startActivity(intent)
+            }
         )
     )
 }

@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.viewmodel.compose.viewModel
+import top.manpok.blog.page.AboutPage
 import top.manpok.blog.page.CategoryPage
 import top.manpok.blog.page.HomePage
 import top.manpok.blog.page.ToolsPage
@@ -45,6 +46,12 @@ fun BlogScaffold(
 
             2 -> ToolsPage(
                 modifier = modifier
+                    .padding(it)
+                    .background(Color.White)
+            )
+
+            3 -> AboutPage(
+                modifier = Modifier
                     .padding(it)
                     .background(Color.White)
             )

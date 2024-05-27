@@ -1,6 +1,9 @@
 package top.manpok.blog.activity
 
 import android.os.Bundle
+import android.util.Log
+import android.view.ViewGroup
+import android.webkit.ConsoleMessage
 import android.webkit.WebChromeClient
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
@@ -103,12 +106,16 @@ class CommonWebViewActivity : ComponentActivity() {
                                 useWideViewPort = true
                                 loadWithOverviewMode = true
                                 domStorageEnabled = true
-                                allowFileAccess = true
-                                allowContentAccess = true
 
                                 userAgentString = userAgentString.replace("; wv","")
                             }
                             webView.apply {
+
+                                layoutParams = ViewGroup.LayoutParams(
+                                    ViewGroup.LayoutParams.MATCH_PARENT,
+                                    ViewGroup.LayoutParams.MATCH_PARENT
+                                )
+
                                 webViewClient = object : WebViewClient() {
                                     override fun shouldOverrideUrlLoading(
                                         view: WebView?,
@@ -130,6 +137,11 @@ class CommonWebViewActivity : ComponentActivity() {
                                         newProgress: Int
                                     ) {
                                         commonWebViewViewModel.progress = newProgress
+                                    }
+
+                                    override fun onConsoleMessage(consoleMessage: ConsoleMessage?): Boolean {
+                                        Log.d(TAG, "onConsoleMessage: ${consoleMessage.toString()}")
+                                        return super.onConsoleMessage(consoleMessage)
                                     }
                                 }
                             }

@@ -6,6 +6,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import top.manpok.blog.utils.Constants
+import java.util.concurrent.TimeUnit
 
 object BlogRetrofit {
 
@@ -20,7 +21,13 @@ object BlogRetrofit {
     }
     private val okHttpClient: OkHttpClient.Builder by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
         val builder = OkHttpClient.Builder()
-        builder.addInterceptor(httpLoggingInterceptor)
+        builder.apply {
+            addInterceptor(httpLoggingInterceptor)
+            connectTimeout(60, TimeUnit.SECONDS)
+            readTimeout(60, TimeUnit.SECONDS)
+            writeTimeout(60, TimeUnit.SECONDS)
+            retryOnConnectionFailure(true)
+        }
         return@lazy builder
     }
     private val instance: Retrofit by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {

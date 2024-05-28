@@ -61,6 +61,7 @@ fun ToolsPage(
         LazyVerticalGrid(columns = GridCells.Fixed(3)) {
             items(friendLinkViewModel.friendLinkList) {
                 FriendLinkItem(
+                    showSkeleton = false,
                     logoUrl = it?.logo,
                     name = it?.name!!,
                     modifier = Modifier

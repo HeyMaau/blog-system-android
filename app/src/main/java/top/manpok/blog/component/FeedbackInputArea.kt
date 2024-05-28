@@ -24,7 +24,7 @@ import top.manpok.blog.pojo.FeedbackItemData
 fun FeedbackInputArea(dataList: List<FeedbackItemData>, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
-            .clip(RoundedCornerShape(10))
+            .clip(RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp))
             .background(Color.White)
             .padding(top = 0.dp, start = 12.dp, end = 12.dp, bottom = 20.dp)
     ) {

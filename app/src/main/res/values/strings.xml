@@ -29,4 +29,6 @@
     <string name="title">标题</string>
     <string name="feedback_content">反馈意见</string>
     <string name="email">Email</string>
+
+    <string name="submit">提交</string>
 </resources>

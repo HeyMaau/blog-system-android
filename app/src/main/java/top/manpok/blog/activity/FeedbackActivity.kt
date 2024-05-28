@@ -14,8 +14,16 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
@@ -54,10 +62,30 @@ class FeedbackActivity : ComponentActivity() {
                     modifier = Modifier.size(100.dp)
                 )
                 Spacer(modifier = Modifier.height(20.dp))
-                FeedbackInputArea(
-                    dataList = feedbackViewModel.itemList,
-                    modifier = Modifier.fillMaxWidth()
-                )
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp))
+                        .verticalScroll(state = rememberScrollState())
+                ) {
+                    FeedbackInputArea(
+                        dataList = feedbackViewModel.itemList,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    Spacer(modifier = Modifier.height(15.dp))
+                    Button(
+                        onClick = { /*TODO*/ },
+                        colors = ButtonColors(
+                            containerColor = colorResource(id = R.color.blue_4285f4),
+                            contentColor = Color.White,
+                            disabledContentColor = Color.White,
+                            disabledContainerColor = colorResource(id = R.color.blue_4285f4)
+                        ),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(text = stringResource(id = R.string.submit))
+                    }
+                }
             }
         }
     }

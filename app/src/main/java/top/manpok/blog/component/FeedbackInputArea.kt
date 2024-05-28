@@ -15,8 +15,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import top.manpok.blog.R
 import top.manpok.blog.pojo.FeedbackItemData
 
@@ -32,6 +34,7 @@ fun FeedbackInputArea(dataList: List<FeedbackItemData>, modifier: Modifier = Mod
             TextField(
                 value = data.text.value,
                 onValueChange = data.onTextChange,
+                textStyle = TextStyle.Default.copy(fontSize = 16.sp),
                 colors = TextFieldDefaults.colors(
                     focusedContainerColor = Color.White,
                     unfocusedContainerColor = Color.White,

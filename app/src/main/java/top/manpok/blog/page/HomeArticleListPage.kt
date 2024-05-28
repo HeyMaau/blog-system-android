@@ -4,7 +4,6 @@ import android.graphics.Color
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -17,10 +16,6 @@ fun HomeArticleListPage(
     modifier: Modifier = Modifier,
     articleViewModel: ArticleViewModel = viewModel(key = "HomeArticleListPage")
 ) {
-    DisposableEffect(key1 = Unit) {
-        articleViewModel.getArticleList(articleViewModel.currentPage, articleViewModel.pageSize)
-        onDispose { }
-    }
     ArticleList(articleViewModel.articleList.toList(), modifier = modifier)
 }
 

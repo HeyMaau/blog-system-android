@@ -45,7 +45,7 @@ import top.manpok.blog.component.CategoryListItem
 import top.manpok.blog.component.CategoryPopup
 import top.manpok.blog.component.CommonHeader
 import top.manpok.blog.utils.Constants
-import top.manpok.blog.viewmodel.ArticleViewModel
+import top.manpok.blog.viewmodel.ArticleCategoryViewModel
 import top.manpok.blog.viewmodel.CategoryViewModel
 import top.manpok.blog.viewmodel.UserViewModel
 
@@ -54,14 +54,14 @@ import top.manpok.blog.viewmodel.UserViewModel
 fun CategoryPage(
     modifier: Modifier = Modifier,
     categoryViewModel: CategoryViewModel = viewModel(),
-    articleViewModel: ArticleViewModel = viewModel(key = "CategoryPage"),
+    articleCategoryViewModel: ArticleCategoryViewModel = viewModel(),
     userViewModel: UserViewModel = viewModel()
 ) {
     DisposableEffect(key1 = categoryViewModel.currentIndex) {
         if (categoryViewModel.currentIndex != -1) {
-            articleViewModel.getArticleListByCategory(
-                articleViewModel.currentPage,
-                articleViewModel.pageSize,
+            articleCategoryViewModel.getArticleListByCategory(
+                articleCategoryViewModel.currentPage,
+                articleCategoryViewModel.pageSize,
                 categoryViewModel.categoryList[categoryViewModel.currentIndex].id
             )
         }
@@ -162,10 +162,10 @@ fun CategoryPage(
                 )
             }
         }
-        itemsIndexed(articleViewModel.articleList) { index, item ->
+        itemsIndexed(articleCategoryViewModel.articleList) { index, item ->
             ArticleListItem(
                 item = item,
-                isLast = index == articleViewModel.articleList.size - 1,
+                isLast = index == articleCategoryViewModel.articleList.size - 1,
                 click = {
                     val intent = Intent(context, ArticleDetailActivity::class.java)
                     intent.putExtra(ArticleDetailActivity.INTENT_KEY_ARTICLE_ID, item?.id)

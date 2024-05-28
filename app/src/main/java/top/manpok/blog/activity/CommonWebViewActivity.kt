@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.LinearProgressIndicator
@@ -95,7 +96,8 @@ class CommonWebViewActivity : ComponentActivity() {
                                 top = 10.dp,
                                 end = 0.dp,
                                 bottom = 0.dp
-                            ), factory = {
+                            )
+                            .imePadding(), factory = {
                             val webView = WebView(it)
                             webView.settings.apply {
                                 setSupportZoom(false)
@@ -107,7 +109,7 @@ class CommonWebViewActivity : ComponentActivity() {
                                 loadWithOverviewMode = true
                                 domStorageEnabled = true
 
-                                userAgentString = userAgentString.replace("; wv","")
+                                userAgentString = userAgentString.replace("; wv", "")
                             }
                             webView.apply {
 

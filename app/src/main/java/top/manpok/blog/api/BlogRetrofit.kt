@@ -1,6 +1,8 @@
 package top.manpok.blog.api
 
+import android.os.Build
 import android.util.Log
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -19,10 +21,24 @@ object BlogRetrofit {
         instance.setLevel(HttpLoggingInterceptor.Level.BODY)
         return@lazy instance
     }
+
+    private val headerInterceptor: Interceptor by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
+        val interceptor = Interceptor { chain ->
+            val build = chain.request().newBuilder()
+                .addHeader(
+                    "User-Agent",
+                    "Android ${Build.VERSION.RELEASE}; ${Build.BRAND} ${Build.MODEL}"
+                ).build()
+            return@Interceptor chain.proceed(build)
+        }
+        return@lazy interceptor
+    }
+
     private val okHttpClient: OkHttpClient.Builder by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
         val builder = OkHttpClient.Builder()
         builder.apply {
-            addInterceptor(httpLoggingInterceptor)
+            addNetworkInterceptor(httpLoggingInterceptor)
+            addInterceptor(headerInterceptor)
             connectTimeout(60, TimeUnit.SECONDS)
             readTimeout(60, TimeUnit.SECONDS)
             writeTimeout(60, TimeUnit.SECONDS)

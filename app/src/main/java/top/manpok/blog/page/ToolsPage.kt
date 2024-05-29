@@ -59,24 +59,34 @@ fun ToolsPage(
             )
         }
         LazyVerticalGrid(columns = GridCells.Fixed(3)) {
-            items(friendLinkViewModel.friendLinkList) {
-                FriendLinkItem(
-                    showSkeleton = false,
-                    logoUrl = it?.logo,
-                    name = it?.name!!,
-                    modifier = Modifier
-                        .padding(
-                            start = 12.dp,
-                            top = 16.dp,
-                            end = 12.dp,
-                            bottom = 16.dp
-                        )
-                        .clickable {
-                            val intent = Intent(context, CommonWebViewActivity::class.java)
-                            intent.putExtra(CommonWebViewActivity.INTENT_KEY_URL, it?.url)
-                            context.startActivity(intent)
-                        }
-                )
+            if (friendLinkViewModel.showSkeleton) {
+                items(9) {
+                    FriendLinkItem(
+                        showSkeleton = friendLinkViewModel.showSkeleton,
+                        logoUrl = null,
+                        name = ""
+                    )
+                }
+            } else {
+                items(friendLinkViewModel.friendLinkList) {
+                    FriendLinkItem(
+                        showSkeleton = friendLinkViewModel.showSkeleton,
+                        logoUrl = it?.logo,
+                        name = it?.name!!,
+                        modifier = Modifier
+                            .padding(
+                                start = 12.dp,
+                                top = 16.dp,
+                                end = 12.dp,
+                                bottom = 16.dp
+                            )
+                            .clickable {
+                                val intent = Intent(context, CommonWebViewActivity::class.java)
+                                intent.putExtra(CommonWebViewActivity.INTENT_KEY_URL, it?.url)
+                                context.startActivity(intent)
+                            }
+                    )
+                }
             }
         }
     }

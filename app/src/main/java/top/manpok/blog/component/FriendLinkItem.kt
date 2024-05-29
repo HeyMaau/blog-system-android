@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -48,7 +49,13 @@ fun FriendLinkItem(
                     modifier = Modifier.size(48.dp)
                 )
             }
-            Text(text = name, fontSize = 14.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
+            Text(
+                text = name,
+                fontSize = 14.sp,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+                textAlign = TextAlign.Center
+            )
         }
     } else {
         Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = modifier) {
@@ -63,7 +70,7 @@ fun FriendLinkItem(
                 color = colorResource(id = R.color.gray_878789),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 10.dp)
+                    .padding(5.dp, 10.dp)
                     .height(10.dp)
             ) {
 

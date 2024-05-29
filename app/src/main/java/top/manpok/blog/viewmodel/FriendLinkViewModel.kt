@@ -7,6 +7,9 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -24,8 +27,16 @@ class FriendLinkViewModel : ViewModel() {
     var pageSize by mutableIntStateOf(10)
     var total by mutableIntStateOf(0)
 
+    var showSkeleton by mutableStateOf(true)
+
     init {
         getFriendLink(currentPage, pageSize)
+        viewModelScope.launch {
+            delay(500L)
+            if (!friendLinkList.isEmpty()) {
+                showSkeleton = false
+            }
+        }
     }
 
     fun getFriendLink(page: Int, size: Int) {
@@ -44,7 +55,10 @@ class FriendLinkViewModel : ViewModel() {
                         pageSize = data.pageSize
                         total = data.total
                         friendLinkList.clear()
-                        data.data?.let { friendLinkList.addAll(it) }
+                        data.data?.let {
+                            friendLinkList.addAll(it)
+                            showSkeleton = false
+                        }
                     }
                 }
             }

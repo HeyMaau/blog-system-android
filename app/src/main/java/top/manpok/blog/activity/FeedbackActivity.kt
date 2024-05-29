@@ -74,7 +74,7 @@ class FeedbackActivity : ComponentActivity() {
                     )
                     Spacer(modifier = Modifier.height(15.dp))
                     Button(
-                        onClick = { /*TODO*/ },
+                        onClick = { feedbackViewModel.submitFeedback() },
                         colors = ButtonColors(
                             containerColor = colorResource(id = R.color.blue_4285f4),
                             contentColor = Color.White,

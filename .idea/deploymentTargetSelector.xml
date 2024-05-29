@@ -4,16 +4,16 @@
     <selectionStates>
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2024-05-15T01:14:27.157099800Z">
+        <DropdownSelection timestamp="2024-05-27T09:12:37.058794400Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="PhysicalDevice" identifier="serial=10AD1E2K65001JH" />
+              <DeviceId pluginId="PhysicalDevice" identifier="serial=57c8defb" />
             </handle>
           </Target>
         </DropdownSelection>
         <DialogSelection />
       </SelectionState>
-      <SelectionState runConfigName="PreviewCategoryListItem">
+      <SelectionState runConfigName="PreviewFeedbackItem">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

@@ -10,10 +10,12 @@ import androidx.lifecycle.ViewModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import top.manpok.blog.R
 import top.manpok.blog.api.BlogRetrofit
 import top.manpok.blog.pojo.BaseResponse
 import top.manpok.blog.pojo.BlogArticle
 import top.manpok.blog.utils.Constants
+import top.manpok.blog.utils.ToastUtil
 
 class ArticleCategoryViewModel : ViewModel() {
     private val TAG = "ArticleCategoryViewModel"
@@ -25,6 +27,8 @@ class ArticleCategoryViewModel : ViewModel() {
     var total by mutableIntStateOf(0)
     var preventGet = false
 
+    var refreshing by mutableStateOf(false)
+
     fun getArticleListByCategory(page: Int, size: Int, categoryID: String) {
         if (preventGet) return
         BlogRetrofit.articleApi.getArticleListByCategory(page, size, categoryID)
@@ -33,6 +37,10 @@ class ArticleCategoryViewModel : ViewModel() {
                     call: Call<BaseResponse<BlogArticle>>,
                     response: Response<BaseResponse<BlogArticle>>
                 ) {
+                    if (refreshing) {
+                        ToastUtil.showShortToast(R.string.refresh_successfully)
+                    }
+                    refreshing = false
                     if (response.isSuccessful) {
                         if (response.body()?.code == Constants.CODE_SUCCESS) {
                             val blogArticle = response.body()?.data
@@ -47,6 +55,10 @@ class ArticleCategoryViewModel : ViewModel() {
                 }
 
                 override fun onFailure(call: Call<BaseResponse<BlogArticle>>, error: Throwable) {
+                    if (refreshing) {
+                        ToastUtil.showShortToast(R.string.refresh_fail)
+                    }
+                    refreshing = false
                     Log.d(TAG, "onFailure: $error")
                 }
 

@@ -4,8 +4,11 @@ import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -19,12 +22,19 @@ class CategoryViewModel : ViewModel() {
 
     val categoryList = mutableStateListOf<BlogCategory>()
     var currentIndex by mutableIntStateOf(-1)
+    var refreshing by mutableStateOf(false)
+
+    private val _refreshState = MutableStateFlow<RefreshState>(RefreshState.Stop)
+    val refreshState = _refreshState.asStateFlow()
 
     init {
         getCategoryList()
     }
 
-    private fun getCategoryList() {
+    fun getCategoryList() {
+        if (refreshing) {
+            _refreshState.value = RefreshState.Refreshing
+        }
         BlogRetrofit.categoryApi.getCategoryList()
             .enqueue(object : Callback<BaseResponse<List<BlogCategory>>> {
                 override fun onResponse(
@@ -36,20 +46,36 @@ class CategoryViewModel : ViewModel() {
                         if (body?.code == Constants.CODE_SUCCESS) {
                             val data = body.data
                             if (data != null) {
+                                categoryList.clear()
                                 categoryList.addAll(data)
                                 currentIndex = 0
                             }
                         }
                     }
+                    if (refreshing) {
+                        _refreshState.value = RefreshState.Finish
+                    }
+                    refreshing = false
                 }
 
                 override fun onFailure(
                     call: Call<BaseResponse<List<BlogCategory>>>,
                     error: Throwable
                 ) {
+                    if (refreshing) {
+                        _refreshState.value = RefreshState.Error
+                    }
+                    refreshing = false
                     Log.d(TAG, "onFailure: $error")
                 }
 
             })
+    }
+
+    sealed class RefreshState {
+        data object Stop : RefreshState()
+        data object Refreshing : RefreshState()
+        data object Finish : RefreshState()
+        data object Error : RefreshState()
     }
 }

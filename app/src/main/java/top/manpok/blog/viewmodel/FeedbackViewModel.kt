@@ -1,7 +1,9 @@
 package top.manpok.blog.viewmodel
 
 import android.util.Log
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import okhttp3.internal.immutableListOf
 import retrofit2.Call
@@ -13,6 +15,7 @@ import top.manpok.blog.pojo.BaseResponse
 import top.manpok.blog.pojo.FeedbackItemData
 import top.manpok.blog.pojo.FeedbackRequest
 import top.manpok.blog.utils.Constants
+import top.manpok.blog.utils.ToastUtil
 
 class FeedbackViewModel : ViewModel() {
     private val TAG = "FeedbackViewModel"
@@ -20,10 +23,11 @@ class FeedbackViewModel : ViewModel() {
     var title = mutableStateOf("")
     var content = mutableStateOf("")
     var email = mutableStateOf("")
+    var showSubmitProgress by mutableStateOf(false)
 
     val itemList = immutableListOf(
         FeedbackItemData(
-            label = R.string.title,
+            label = R.string.feedback_title,
             hint = R.string.please_enter_feedback_title,
             text = title,
             onTextChange = {
@@ -39,7 +43,7 @@ class FeedbackViewModel : ViewModel() {
             }
         ),
         FeedbackItemData(
-            label = R.string.email,
+            label = R.string.feedback_email,
             hint = R.string.please_enter_feedback_email,
             text = email,
             onTextChange = {
@@ -49,6 +53,7 @@ class FeedbackViewModel : ViewModel() {
     )
 
     fun submitFeedback() {
+        showSubmitProgress = true
         BlogRetrofit.feedbackApi.submitFeedback(
             FeedbackRequest(
                 content = this.content.value,
@@ -63,12 +68,15 @@ class FeedbackViewModel : ViewModel() {
                 if (response.isSuccessful) {
                     val body = response.body()
                     if (body?.code == Constants.CODE_SUCCESS) {
-                        Log.d(TAG, "onResponse: 反馈成功")
+                        ToastUtil.showShortToast(R.string.feedback_submit_successfully)
+                        showSubmitProgress = false
                     }
                 }
             }
 
             override fun onFailure(call: Call<BaseResponse<Unit>>, error: Throwable) {
+                ToastUtil.showShortToast(R.string.feedback_submit_fail)
+                showSubmitProgress = false
                 Log.d(TAG, "onFailure: $error")
             }
         })

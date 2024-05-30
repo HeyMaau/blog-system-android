@@ -33,4 +33,7 @@
     <string name="submit">提交</string>
     <string name="feedback_submit_successfully">提交成功，感谢您的反馈</string>
     <string name="feedback_submit_fail">提交失败，请稍后重试</string>
+
+    <string name="refresh_successfully">刷新成功</string>
+    <string name="refresh_fail">刷新失败</string>
 </resources>

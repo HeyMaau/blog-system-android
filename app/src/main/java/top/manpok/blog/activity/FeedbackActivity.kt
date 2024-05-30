@@ -22,6 +22,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -51,6 +52,13 @@ class FeedbackActivity : ComponentActivity() {
             val isContentEmpty by remember {
                 derivedStateOf {
                     feedbackViewModel.content.value.isEmpty()
+                }
+            }
+            LaunchedEffect(key1 = Unit) {
+                feedbackViewModel.submitState.collect {
+                    if (it is FeedbackViewModel.SubmitState.Finish) {
+                        finish()
+                    }
                 }
             }
             Column(

@@ -5,6 +5,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import okhttp3.internal.immutableListOf
 import retrofit2.Call
 import retrofit2.Callback
@@ -24,6 +26,9 @@ class FeedbackViewModel : ViewModel() {
     var content = mutableStateOf("")
     var email = mutableStateOf("")
     var showSubmitProgress by mutableStateOf(false)
+
+    private val _submitState = MutableStateFlow<SubmitState>(SubmitState.Stop)
+    val submitState = _submitState.asStateFlow()
 
     val itemList = immutableListOf(
         FeedbackItemData(
@@ -54,6 +59,7 @@ class FeedbackViewModel : ViewModel() {
 
     fun submitFeedback() {
         showSubmitProgress = true
+        _submitState.value = SubmitState.Submitting
         BlogRetrofit.feedbackApi.submitFeedback(
             FeedbackRequest(
                 content = this.content.value,
@@ -70,6 +76,7 @@ class FeedbackViewModel : ViewModel() {
                     if (body?.code == Constants.CODE_SUCCESS) {
                         ToastUtil.showShortToast(R.string.feedback_submit_successfully)
                         showSubmitProgress = false
+                        _submitState.value = SubmitState.Finish
                     }
                 }
             }
@@ -77,8 +84,16 @@ class FeedbackViewModel : ViewModel() {
             override fun onFailure(call: Call<BaseResponse<Unit>>, error: Throwable) {
                 ToastUtil.showShortToast(R.string.feedback_submit_fail)
                 showSubmitProgress = false
+                _submitState.value = SubmitState.Error
                 Log.d(TAG, "onFailure: $error")
             }
         })
+    }
+
+    sealed class SubmitState {
+        data object Stop : SubmitState()
+        data object Submitting : SubmitState()
+        data object Finish : SubmitState()
+        data object Error : SubmitState()
     }
 }

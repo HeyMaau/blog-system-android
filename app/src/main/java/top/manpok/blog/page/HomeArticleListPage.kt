@@ -12,6 +12,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import top.manpok.blog.component.ArticleList
+import top.manpok.blog.utils.Constants
 import top.manpok.blog.viewmodel.ArticleViewModel
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -23,6 +24,8 @@ fun HomeArticleListPage(
     val pullRefreshState =
         rememberPullRefreshState(refreshing = articleViewModel.refreshing, onRefresh = {
             articleViewModel.refreshing = true
+            articleViewModel.currentPage = Constants.DEFAULT_PAGE
+            articleViewModel.pageSize = Constants.DEFAULT_PAGE_SIZE
             articleViewModel.getArticleList(articleViewModel.currentPage, articleViewModel.pageSize)
         })
     ArticleList(

@@ -65,6 +65,8 @@ fun CategoryPage(
     LaunchedEffect(key1 = Unit) {
         categoryViewModel.refreshState.collect {
             if (it is CategoryViewModel.RefreshState.Finish) {
+                articleCategoryViewModel.currentPage = Constants.DEFAULT_PAGE
+                articleCategoryViewModel.pageSize = Constants.DEFAULT_PAGE_SIZE
                 articleCategoryViewModel.getArticleListByCategory(
                     articleCategoryViewModel.currentPage,
                     articleCategoryViewModel.pageSize,

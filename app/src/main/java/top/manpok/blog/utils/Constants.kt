@@ -15,4 +15,7 @@ object Constants {
 
     const val DB_NAME_ARTICLE: String = "article_database"
     const val DB_NAME_THINKING: String = "thinking_database"
+
+    const val DEFAULT_PAGE = 1
+    const val DEFAULT_PAGE_SIZE = 10
 }

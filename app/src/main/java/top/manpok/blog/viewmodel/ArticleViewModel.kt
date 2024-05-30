@@ -27,9 +27,9 @@ class ArticleViewModel : ViewModel() {
     private val TAG = "ArticleViewModel"
 
     val articleList = mutableStateListOf<BlogArticle.Data?>()
-    var currentPage by mutableIntStateOf(1)
+    var currentPage by mutableIntStateOf(Constants.DEFAULT_PAGE)
     var noMore by mutableStateOf(false)
-    var pageSize by mutableIntStateOf(5)
+    var pageSize by mutableIntStateOf(Constants.DEFAULT_PAGE_SIZE)
     var total by mutableIntStateOf(0)
 
     var refreshing by mutableStateOf(false)

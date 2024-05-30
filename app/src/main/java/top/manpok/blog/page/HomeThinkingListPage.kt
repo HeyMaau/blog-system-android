@@ -22,6 +22,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import top.manpok.blog.R
 import top.manpok.blog.activity.ThinkingDetailActivity
 import top.manpok.blog.component.ThinkingListItem
+import top.manpok.blog.utils.Constants
 import top.manpok.blog.viewmodel.ThinkingViewModel
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -34,6 +35,8 @@ fun HomeThinkingListPage(
     val pullRefreshState =
         rememberPullRefreshState(refreshing = thinkingViewModel.refreshing, onRefresh = {
             thinkingViewModel.refreshing = true
+            thinkingViewModel.currentPage = Constants.DEFAULT_PAGE
+            thinkingViewModel.pageSize = Constants.DEFAULT_PAGE_SIZE
             thinkingViewModel.getThinkingList(
                 thinkingViewModel.currentPage,
                 thinkingViewModel.pageSize

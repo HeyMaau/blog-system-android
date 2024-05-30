@@ -12,6 +12,7 @@ import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import top.manpok.blog.R
 import top.manpok.blog.api.BlogRetrofit
 import top.manpok.blog.base.BaseApplication
 import top.manpok.blog.db.ThinkingListDatabase
@@ -19,6 +20,7 @@ import top.manpok.blog.db.entity.BlogThinkingListItemForDB
 import top.manpok.blog.pojo.BaseResponse
 import top.manpok.blog.pojo.BlogThinking
 import top.manpok.blog.utils.Constants
+import top.manpok.blog.utils.ToastUtil
 
 class ThinkingViewModel : ViewModel() {
 
@@ -30,6 +32,8 @@ class ThinkingViewModel : ViewModel() {
     var pageSize by mutableIntStateOf(5)
     var total by mutableIntStateOf(0)
 
+    var refreshing by mutableStateOf(false)
+
     init {
         viewModelScope.launch {
             getDataFromDB()
@@ -37,13 +41,17 @@ class ThinkingViewModel : ViewModel() {
         getThinkingList(currentPage, pageSize)
     }
 
-    private fun getThinkingList(page: Int, size: Int) {
+    fun getThinkingList(page: Int, size: Int) {
         BlogRetrofit.thinkingApi.getThinkingList(page, size)
             .enqueue(object : Callback<BaseResponse<BlogThinking>> {
                 override fun onResponse(
                     call: Call<BaseResponse<BlogThinking>>,
                     response: Response<BaseResponse<BlogThinking>>
                 ) {
+                    if (refreshing) {
+                        ToastUtil.showShortToast(R.string.refresh_successfully)
+                    }
+                    refreshing = false
                     if (response.isSuccessful) {
                         if (response.body()?.code == Constants.CODE_SUCCESS) {
                             val blogThinking = response.body()?.data
@@ -61,6 +69,10 @@ class ThinkingViewModel : ViewModel() {
                 }
 
                 override fun onFailure(call: Call<BaseResponse<BlogThinking>>, error: Throwable) {
+                    if (refreshing) {
+                        ToastUtil.showShortToast(R.string.refresh_fail)
+                    }
+                    refreshing = false
                     Log.d(TAG, "onFailure: $error")
                 }
 

@@ -73,6 +73,7 @@ fun CategoryPage(
     }
     DisposableEffect(key1 = categoryViewModel.currentIndex) {
         if (categoryViewModel.currentIndex != -1) {
+            articleCategoryViewModel.refreshing = true
             articleCategoryViewModel.currentPage = Constants.DEFAULT_PAGE
             articleCategoryViewModel.pageSize = Constants.DEFAULT_PAGE_SIZE
             articleCategoryViewModel.getArticleListByCategory(

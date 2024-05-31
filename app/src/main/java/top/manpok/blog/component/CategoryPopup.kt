@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
@@ -12,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import top.manpok.blog.pojo.BlogCategory
 import top.manpok.blog.utils.Constants
@@ -19,11 +21,12 @@ import top.manpok.blog.utils.Constants
 @Composable
 fun CategoryPopup(
     dataList: List<BlogCategory>,
-    yOffset: Int = 0,
+    yOffset: Dp = 0.dp,
     onClick: (index: Int) -> Unit
 ) {
     Box(
         contentAlignment = Alignment.TopCenter, modifier = Modifier
+            .offset(y = yOffset)
             .fillMaxWidth()
             .background(
                 color = Color.White,

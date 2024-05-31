@@ -37,6 +37,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.lifecycle.viewmodel.compose.viewModel
 import top.manpok.blog.R
 import top.manpok.blog.activity.ArticleDetailActivity
@@ -137,7 +138,7 @@ fun CategoryPage(
                 modifier = Modifier
                     .fillMaxSize()
                     .statusBarsPadding()
-                    .padding(0.dp, commonHeaderHeight, 0.dp, 0.dp)
+                    .padding(0.dp, 0.dp, 0.dp, 0.dp)
             ) {
             }
         }
@@ -147,7 +148,7 @@ fun CategoryPage(
                 rightIcon = R.drawable.ic_more,
                 leftIconClick = { },
                 rightIconClick = { },
-                modifier = Modifier
+                modifier = Modifier.zIndex(1f)
                     .background(Color.White)
                     .padding(12.dp, 0.dp)
                     .onGloballyPositioned {
@@ -172,7 +173,7 @@ fun CategoryPage(
                 }
             }
             if (showCategoryPopup) {
-                CategoryPopup(dataList = categoryViewModel.categoryList) {
+                CategoryPopup(dataList = categoryViewModel.categoryList, yOffset = 0.dp) {
                     categoryViewModel.currentIndex = it
                     showCategoryPopup = false
                 }

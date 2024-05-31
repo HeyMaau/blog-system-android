@@ -25,12 +25,15 @@ class ArticleCategoryViewModel : ViewModel() {
     var noMore by mutableStateOf(false)
     var pageSize by mutableIntStateOf(Constants.DEFAULT_PAGE_SIZE)
     var total by mutableIntStateOf(0)
-    var preventGet = false
+    var lastCategoryID = ""
 
     var refreshing by mutableStateOf(false)
 
     fun getArticleListByCategory(page: Int, size: Int, categoryID: String) {
-        if (preventGet) return
+        if (lastCategoryID == categoryID) {
+            return
+        }
+        lastCategoryID = categoryID
         BlogRetrofit.articleApi.getArticleListByCategory(page, size, categoryID)
             .enqueue(object : Callback<BaseResponse<BlogArticle>> {
                 override fun onResponse(
@@ -61,8 +64,6 @@ class ArticleCategoryViewModel : ViewModel() {
                     refreshing = false
                     Log.d(TAG, "onFailure: $error")
                 }
-
             })
-        preventGet = true
     }
 }

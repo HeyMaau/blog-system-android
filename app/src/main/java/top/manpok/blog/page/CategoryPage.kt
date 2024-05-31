@@ -95,7 +95,7 @@ fun CategoryPage(
         onRefresh = {
             categoryViewModel.refreshing = true
             articleCategoryViewModel.refreshing = true
-            articleCategoryViewModel.preventGet = false
+            articleCategoryViewModel.lastCategoryID = ""
             categoryViewModel.getCategoryList()
         })
     Box(

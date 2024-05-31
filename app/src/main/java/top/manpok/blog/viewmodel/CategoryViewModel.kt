@@ -48,7 +48,9 @@ class CategoryViewModel : ViewModel() {
                             if (data != null) {
                                 categoryList.clear()
                                 categoryList.addAll(data)
-                                currentIndex = 0
+                                if (currentIndex == -1) {
+                                    currentIndex = 0
+                                }
                             }
                         }
                     }

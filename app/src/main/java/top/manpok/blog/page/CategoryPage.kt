@@ -97,9 +97,6 @@ fun CategoryPage(
     var showCategoryPopup by remember {
         mutableStateOf(false)
     }
-    var commonHeaderHeight by remember {
-        mutableStateOf(0.dp)
-    }
     val context = LocalContext.current
     val density = LocalDensity.current
     val pullRefreshState = rememberPullRefreshState(
@@ -138,10 +135,10 @@ fun CategoryPage(
         }
     }, label = "transition_y") {
         when (it) {
-            PopupState.STOP -> -commonHeaderHeight
-            PopupState.OPEN_FIRST_STAGE -> commonHeaderHeight
+            PopupState.STOP -> -categoryViewModel.commonHeaderHeight
+            PopupState.OPEN_FIRST_STAGE -> categoryViewModel.commonHeaderHeight
             PopupState.OPEN_SECOND_STAGE -> 0.dp
-            PopupState.CLOSE_FIRST_STAGE -> commonHeaderHeight
+            PopupState.CLOSE_FIRST_STAGE -> categoryViewModel.commonHeaderHeight
         }
     }
     val categoryPopupAlpha by updateTransition.animateFloat(transitionSpec = {
@@ -174,7 +171,7 @@ fun CategoryPage(
         contentAlignment = Alignment.TopCenter,
         modifier = modifier.pullRefresh(state = pullRefreshState, enabled = true)
     ) {
-        LazyColumn(modifier = Modifier.padding(top = commonHeaderHeight)) {
+        LazyColumn(modifier = Modifier.padding(top = categoryViewModel.commonHeaderHeight)) {
             item {
                 if (categoryViewModel.categoryList.isNotEmpty()) {
                     CategoryInfoCard(
@@ -226,7 +223,7 @@ fun CategoryPage(
                     .padding(12.dp, 0.dp)
                     .onGloballyPositioned {
                         with(density) {
-                            commonHeaderHeight = it.size.height.toDp()
+                            categoryViewModel.commonHeaderHeight = it.size.height.toDp()
                         }
                     }
             ) {

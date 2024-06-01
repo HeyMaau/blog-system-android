@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -23,6 +24,8 @@ class CategoryViewModel : ViewModel() {
     val categoryList = mutableStateListOf<BlogCategory>()
     var currentIndex by mutableIntStateOf(-1)
     var refreshing by mutableStateOf(false)
+
+    var commonHeaderHeight by mutableStateOf(0.dp)
 
     private val _refreshState = MutableStateFlow<RefreshState>(RefreshState.Stop)
     val refreshState = _refreshState.asStateFlow()

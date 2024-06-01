@@ -31,6 +31,7 @@ class ArticleCategoryViewModel : ViewModel() {
 
     fun getArticleListByCategory(page: Int, size: Int, categoryID: String) {
         if (lastCategoryID == categoryID) {
+            refreshing = false
             return
         }
         lastCategoryID = categoryID

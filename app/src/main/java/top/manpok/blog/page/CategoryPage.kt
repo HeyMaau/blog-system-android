@@ -1,6 +1,11 @@
 package top.manpok.blog.page
 
 import android.content.Intent
+import androidx.compose.animation.core.FastOutLinearInEasing
+import androidx.compose.animation.core.animateDp
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -28,6 +33,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.onGloballyPositioned
@@ -49,6 +55,10 @@ import top.manpok.blog.utils.Constants
 import top.manpok.blog.viewmodel.ArticleCategoryViewModel
 import top.manpok.blog.viewmodel.CategoryViewModel
 import top.manpok.blog.viewmodel.UserViewModel
+
+private const val TAG = "CategoryPage"
+private const val ANIMATION_FIRST_STAGE_TIME = 300
+private const val ANIMATION_SECOND_STAGE_TIME = 200
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -100,6 +110,66 @@ fun CategoryPage(
             articleCategoryViewModel.lastCategoryID = ""
             categoryViewModel.getCategoryList()
         })
+
+    var popupState: PopupState by remember {
+        mutableStateOf(PopupState.STOP)
+    }
+    val updateTransition = updateTransition(targetState = popupState, label = "popup_transition")
+    val categoryPopupY by updateTransition.animateDp(transitionSpec = {
+        when {
+            PopupState.STOP isTransitioningTo PopupState.OPEN_FIRST_STAGE -> tween(durationMillis = ANIMATION_FIRST_STAGE_TIME)
+            PopupState.OPEN_FIRST_STAGE isTransitioningTo PopupState.OPEN_SECOND_STAGE -> tween(
+                durationMillis = ANIMATION_SECOND_STAGE_TIME,
+                easing = FastOutLinearInEasing
+            )
+
+            PopupState.OPEN_SECOND_STAGE isTransitioningTo PopupState.CLOSE_FIRST_STAGE -> tween(
+                durationMillis = ANIMATION_FIRST_STAGE_TIME
+            )
+
+            PopupState.CLOSE_FIRST_STAGE isTransitioningTo PopupState.STOP -> tween(
+                durationMillis = ANIMATION_SECOND_STAGE_TIME,
+                easing = FastOutLinearInEasing
+            )
+
+            else -> {
+                tween(500)
+            }
+        }
+    }, label = "transition_y") {
+        when (it) {
+            PopupState.STOP -> -commonHeaderHeight
+            PopupState.OPEN_FIRST_STAGE -> commonHeaderHeight
+            PopupState.OPEN_SECOND_STAGE -> 0.dp
+            PopupState.CLOSE_FIRST_STAGE -> commonHeaderHeight
+        }
+    }
+    val categoryPopupAlpha by updateTransition.animateFloat(transitionSpec = {
+        when {
+            PopupState.STOP isTransitioningTo PopupState.OPEN_FIRST_STAGE -> tween(durationMillis = ANIMATION_FIRST_STAGE_TIME)
+            PopupState.CLOSE_FIRST_STAGE isTransitioningTo PopupState.STOP -> tween(durationMillis = ANIMATION_SECOND_STAGE_TIME)
+            else -> {
+                tween(durationMillis = ANIMATION_FIRST_STAGE_TIME)
+            }
+        }
+
+    }, label = "transition_alpha") {
+        when (it) {
+            PopupState.STOP -> 0.0f
+            PopupState.OPEN_FIRST_STAGE -> 1.0f
+            PopupState.OPEN_SECOND_STAGE -> 1.0f
+            PopupState.CLOSE_FIRST_STAGE -> 1.0f
+        }
+    }
+    LaunchedEffect(key1 = updateTransition.currentState) {
+        when (updateTransition.currentState) {
+            PopupState.OPEN_FIRST_STAGE -> popupState = PopupState.OPEN_SECOND_STAGE
+            PopupState.CLOSE_FIRST_STAGE -> popupState = PopupState.STOP
+            PopupState.STOP -> showCategoryPopup = false
+            else -> {}
+        }
+    }
+
     Box(
         contentAlignment = Alignment.TopCenter,
         modifier = modifier.pullRefresh(state = pullRefreshState, enabled = true)
@@ -140,6 +210,7 @@ fun CategoryPage(
                     .fillMaxSize()
                     .statusBarsPadding()
                     .padding(0.dp, 0.dp, 0.dp, 0.dp)
+                    .alpha(categoryPopupAlpha)
             ) {
             }
         }
@@ -149,7 +220,8 @@ fun CategoryPage(
                 rightIcon = R.drawable.ic_more,
                 leftIconClick = { },
                 rightIconClick = { },
-                modifier = Modifier.zIndex(1f)
+                modifier = Modifier
+                    .zIndex(1f)
                     .background(Color.White)
                     .padding(12.dp, 0.dp)
                     .onGloballyPositioned {
@@ -160,7 +232,16 @@ fun CategoryPage(
             ) {
                 Row(modifier = Modifier
                     .clickable {
-                        showCategoryPopup = !showCategoryPopup
+                        if (!showCategoryPopup) {
+                            showCategoryPopup = true
+                        }
+                        when (popupState) {
+                            PopupState.STOP -> popupState = PopupState.OPEN_FIRST_STAGE
+                            PopupState.OPEN_SECOND_STAGE -> popupState =
+                                PopupState.CLOSE_FIRST_STAGE
+
+                            else -> {}
+                        }
                     }) {
                     Text(
                         text = if (categoryViewModel.currentIndex != -1) categoryViewModel.categoryList[categoryViewModel.currentIndex].name!! else stringResource(
@@ -174,9 +255,13 @@ fun CategoryPage(
                 }
             }
             if (showCategoryPopup) {
-                CategoryPopup(dataList = categoryViewModel.categoryList, yOffset = 0.dp) {
+                CategoryPopup(
+                    dataList = categoryViewModel.categoryList,
+                    yOffset = categoryPopupY,
+                    alpha = categoryPopupAlpha
+                ) {
                     categoryViewModel.currentIndex = it
-                    showCategoryPopup = false
+                    popupState = PopupState.CLOSE_FIRST_STAGE
                 }
             }
         }
@@ -187,4 +272,11 @@ fun CategoryPage(
             contentColor = colorResource(id = R.color.blue_4285f4)
         )
     }
+}
+
+sealed class PopupState {
+    data object STOP : PopupState()
+    data object OPEN_FIRST_STAGE : PopupState()
+    data object OPEN_SECOND_STAGE : PopupState()
+    data object CLOSE_FIRST_STAGE : PopupState()
 }

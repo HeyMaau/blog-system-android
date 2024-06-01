@@ -11,6 +11,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -22,11 +23,13 @@ import top.manpok.blog.utils.Constants
 fun CategoryPopup(
     dataList: List<BlogCategory>,
     yOffset: Dp = 0.dp,
+    alpha: Float = 1.0f,
     onClick: (index: Int) -> Unit
 ) {
     Box(
         contentAlignment = Alignment.TopCenter, modifier = Modifier
             .offset(y = yOffset)
+            .alpha(alpha)
             .fillMaxWidth()
             .background(
                 color = Color.White,

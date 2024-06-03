@@ -28,14 +28,16 @@ class FriendLinkViewModel : ViewModel() {
     var total by mutableIntStateOf(0)
 
     var showSkeleton by mutableStateOf(true)
+    var loadingTimeOut  = false
 
     init {
         getFriendLink(currentPage, pageSize)
         viewModelScope.launch {
             delay(500L)
-            if (!friendLinkList.isEmpty()) {
+            if (friendLinkList.isNotEmpty()) {
                 showSkeleton = false
             }
+            loadingTimeOut = true
         }
     }
 
@@ -57,7 +59,9 @@ class FriendLinkViewModel : ViewModel() {
                         friendLinkList.clear()
                         data.data?.let {
                             friendLinkList.addAll(it)
-                            showSkeleton = false
+                            if (loadingTimeOut) {
+                                showSkeleton = false
+                            }
                         }
                     }
                 }

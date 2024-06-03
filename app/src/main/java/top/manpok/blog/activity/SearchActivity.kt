@@ -53,25 +53,44 @@ class SearchActivity : ComponentActivity() {
                     .fillMaxSize()
                     .statusBarsPadding()
             ) {
-                LazyColumn(
-                    modifier = Modifier
-                        .background(colorResource(id = R.color.gray_f7f6fb))
-                        .fillMaxSize()
-                        .padding(top = searchViewModel.commonHeaderHeight)
-                ) {
-                    items(searchViewModel.searchList) {
-                        SearchResultItem(
-                            title = it?.title,
-                            content = it?.content,
-                            cover = Constants.BASE_IMAGE_URL + it?.cover,
-                            updateTime = it?.updateTime,
-                            onClick = {
-                                val intent = Intent(context, ArticleDetailActivity::class.java)
-                                intent.putExtra(ArticleDetailActivity.INTENT_KEY_ARTICLE_ID, it?.id)
-                                context.startActivity(intent)
+                if (searchViewModel.beginSearch) {
+                    LazyColumn(
+                        modifier = Modifier
+                            .background(colorResource(id = R.color.gray_f7f6fb))
+                            .fillMaxSize()
+                            .padding(top = searchViewModel.commonHeaderHeight)
+                    ) {
+                        if (searchViewModel.isLoading) {
+                            items(8) {
+                                SearchResultItem(
+                                    title = null,
+                                    content = null,
+                                    cover = null,
+                                    updateTime = null,
+                                    useSkeleton = searchViewModel.isLoading
+                                ) {}
                             }
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
+                        } else {
+                            items(searchViewModel.searchList) {
+                                SearchResultItem(
+                                    title = it?.title,
+                                    content = it?.content,
+                                    cover = Constants.BASE_IMAGE_URL + it?.cover,
+                                    updateTime = it?.updateTime,
+                                    useSkeleton = searchViewModel.isLoading,
+                                    onClick = {
+                                        val intent =
+                                            Intent(context, ArticleDetailActivity::class.java)
+                                        intent.putExtra(
+                                            ArticleDetailActivity.INTENT_KEY_ARTICLE_ID,
+                                            it?.id
+                                        )
+                                        context.startActivity(intent)
+                                    }
+                                )
+                                Spacer(modifier = Modifier.height(8.dp))
+                            }
+                        }
                     }
                 }
                 CommonHeader(
@@ -79,6 +98,7 @@ class SearchActivity : ComponentActivity() {
                     rightButtonText = R.string.search,
                     leftIconClick = { finish() },
                     rightButtonClick = {
+                        searchViewModel.beginSearch = true
                         searchViewModel.doSearch()
                         focusManager.clearFocus()
                     },

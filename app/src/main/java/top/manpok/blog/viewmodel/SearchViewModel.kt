@@ -8,6 +8,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -26,9 +29,25 @@ class SearchViewModel : ViewModel() {
     var pageSize by mutableIntStateOf(Constants.DEFAULT_PAGE_SIZE)
     var total by mutableIntStateOf(0)
 
+    var isLoading by mutableStateOf(false)
+    var beginSearch by mutableStateOf(false)
+    var loadingTimeOut = false
+
     var commonHeaderHeight by mutableStateOf(0.dp)
 
     fun doSearch() {
+
+        loadingTimeOut = false
+        isLoading = true
+
+        viewModelScope.launch {
+            delay(500L)
+            if (searchList.isNotEmpty()) {
+                isLoading = false
+            }
+            loadingTimeOut = true
+        }
+
         BlogRetrofit.searchApi.getArticleList(currentPage, pageSize, keywords).enqueue(object :
             Callback<BaseResponse<BlogSearchResult>> {
             override fun onResponse(
@@ -46,6 +65,9 @@ class SearchViewModel : ViewModel() {
                         data.data?.let {
                             searchList.clear()
                             searchList.addAll(it)
+                            if (loadingTimeOut) {
+                                isLoading = false
+                            }
                         }
                     }
                 }

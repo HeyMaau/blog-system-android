@@ -60,14 +60,14 @@ fun FriendLinkItem(
     } else {
         Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = modifier) {
             Image(
-                painter = ColorPainter(colorResource(id = R.color.gray_878789)),
+                painter = ColorPainter(colorResource(id = R.color.gray_cccccc)),
                 contentDescription = null,
                 modifier = Modifier
                     .size(48.dp)
                     .clip(CircleShape)
             )
             Surface(
-                color = colorResource(id = R.color.gray_878789),
+                color = colorResource(id = R.color.gray_cccccc),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(5.dp, 10.dp)

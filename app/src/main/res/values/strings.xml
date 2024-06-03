@@ -36,4 +36,7 @@
 
     <string name="refresh_successfully">刷新成功</string>
     <string name="refresh_fail">刷新失败</string>
+
+    <string name="search">搜索</string>
+    <string name="please_enter_search_keywords">请输入搜索内容</string>
 </resources>

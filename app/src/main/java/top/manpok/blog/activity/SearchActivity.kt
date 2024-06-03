@@ -43,7 +43,7 @@ class SearchActivity : ComponentActivity() {
                     leftIcon = R.drawable.ic_arrow_back,
                     rightButtonText = R.string.search,
                     leftIconClick = { finish() },
-                    rightButtonClick = { /*TODO*/ }) {
+                    rightButtonClick = { searchViewModel.doSearch() }) {
                     SearchInput(
                         text = searchViewModel.keywords,
                         hint = stringResource(id = R.string.please_enter_search_keywords),

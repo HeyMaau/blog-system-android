@@ -1,6 +1,7 @@
 package top.manpok.blog.component
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -32,13 +33,15 @@ fun SearchResultItem(
     title: String?,
     content: String?,
     cover: String?,
-    updateTime: String?
+    updateTime: String?,
+    onClick: () -> Unit
 ) {
     Column(
         modifier
             .background(Color.White)
             .fillMaxWidth()
             .padding(bottom = 12.dp, start = 12.dp, end = 12.dp)
+            .clickable(onClick = onClick)
     ) {
         Text(
             text = title ?: "",

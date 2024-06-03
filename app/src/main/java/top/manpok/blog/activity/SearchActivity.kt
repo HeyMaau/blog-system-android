@@ -1,5 +1,6 @@
 package top.manpok.blog.activity
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -19,6 +20,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
@@ -42,6 +44,7 @@ class SearchActivity : ComponentActivity() {
             }
             val searchViewModel: SearchViewModel = viewModel()
             val density = LocalDensity.current
+            val context = LocalContext.current
             Box(
                 modifier = Modifier
                     .background(Color.White)
@@ -59,7 +62,12 @@ class SearchActivity : ComponentActivity() {
                             title = it?.title,
                             content = it?.content,
                             cover = Constants.BASE_IMAGE_URL + it?.cover,
-                            updateTime = it?.updateTime
+                            updateTime = it?.updateTime,
+                            onClick = {
+                                val intent = Intent(context, ArticleDetailActivity::class.java)
+                                intent.putExtra(ArticleDetailActivity.INTENT_KEY_ARTICLE_ID, it?.id)
+                                context.startActivity(intent)
+                            }
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                     }

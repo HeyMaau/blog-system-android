@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -45,6 +46,7 @@ class SearchActivity : ComponentActivity() {
             val searchViewModel: SearchViewModel = viewModel()
             val density = LocalDensity.current
             val context = LocalContext.current
+            val focusManager = LocalFocusManager.current
             Box(
                 modifier = Modifier
                     .background(Color.White)
@@ -76,7 +78,10 @@ class SearchActivity : ComponentActivity() {
                     leftIcon = R.drawable.ic_arrow_back,
                     rightButtonText = R.string.search,
                     leftIconClick = { finish() },
-                    rightButtonClick = { searchViewModel.doSearch() },
+                    rightButtonClick = {
+                        searchViewModel.doSearch()
+                        focusManager.clearFocus()
+                    },
                     modifier = Modifier
                         .background(Color.White)
                         .padding(start = 12.dp, end = 12.dp, bottom = 8.dp)

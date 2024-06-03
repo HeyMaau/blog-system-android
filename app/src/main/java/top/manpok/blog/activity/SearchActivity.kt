@@ -5,26 +5,32 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import top.manpok.blog.R
@@ -48,6 +54,7 @@ class SearchActivity : ComponentActivity() {
             val context = LocalContext.current
             val focusManager = LocalFocusManager.current
             Box(
+                contentAlignment = Alignment.TopCenter,
                 modifier = Modifier
                     .background(Color.White)
                     .fillMaxSize()
@@ -91,6 +98,16 @@ class SearchActivity : ComponentActivity() {
                                 Spacer(modifier = Modifier.height(8.dp))
                             }
                         }
+                    }
+                } else {
+                    Column {
+                        Spacer(modifier = Modifier.height(searchViewModel.commonHeaderHeight + 100.dp))
+                        Image(
+                            imageVector = ImageVector.vectorResource(id = R.drawable.logo_search),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(200.dp)
+                        )
                     }
                 }
                 CommonHeader(

@@ -1,5 +1,6 @@
 package top.manpok.blog.viewmodel
 
+import android.text.TextUtils
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -13,6 +14,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.jsoup.Jsoup
+import org.jsoup.safety.Safelist
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -82,6 +85,14 @@ class SearchViewModel : ViewModel() {
                         pageSize = data.pageSize
                         total = data.total
                         data.data?.let {
+                            data.data.forEach {
+                                if (!TextUtils.isEmpty(it?.content)) {
+                                    it?.content = Jsoup.clean(it?.content!!, Safelist.none())
+                                }
+                                if (!TextUtils.isEmpty(it?.title)) {
+                                    it?.title = Jsoup.clean(it?.title!!, Safelist.none())
+                                }
+                            }
                             searchList.clear()
                             searchList.addAll(it)
                             if (loadingTimeOut) {

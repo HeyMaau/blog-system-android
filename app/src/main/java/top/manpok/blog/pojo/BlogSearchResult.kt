@@ -9,13 +9,13 @@ data class BlogSearchResult(
 ) : BasePaging() {
     data class Data(
         val categoryID: String?,
-        val content: String?,
+        var content: String?,
         val cover: String?,
         val createTime: String?,
         val id: String?,
         val labels: String?,
         val searchItem: List<String?>?,
-        val title: String?,
+        var title: String?,
         val updateTime: String?,
         val viewCount: Int?
     )

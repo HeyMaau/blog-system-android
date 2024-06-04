@@ -1,6 +1,7 @@
 package top.manpok.blog.component
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -26,7 +27,11 @@ import top.manpok.blog.R
 import top.manpok.blog.db.entity.BlogSearchHistory
 
 @Composable
-fun SearchHistoryPanel(dataList: List<BlogSearchHistory>, modifier: Modifier = Modifier) {
+fun SearchHistoryPanel(
+    dataList: List<BlogSearchHistory>,
+    onItemClick: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
     Column(modifier = modifier) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -58,7 +63,11 @@ fun SearchHistoryPanel(dataList: List<BlogSearchHistory>, modifier: Modifier = M
                     Text(
                         text = it.keyword,
                         fontSize = 16.sp,
-                        modifier = Modifier.padding(vertical = 8.dp)
+                        modifier = Modifier
+                            .clickable {
+                                onItemClick(it.keyword)
+                            }
+                            .padding(vertical = 8.dp)
                     )
                 }
             } else {
@@ -66,7 +75,11 @@ fun SearchHistoryPanel(dataList: List<BlogSearchHistory>, modifier: Modifier = M
                     Text(
                         text = dataList[it].keyword,
                         fontSize = 16.sp,
-                        modifier = Modifier.padding(vertical = 8.dp)
+                        modifier = Modifier
+                            .clickable {
+                                onItemClick(dataList[it].keyword)
+                            }
+                            .padding(vertical = 8.dp)
                     )
                 }
             }
@@ -77,7 +90,7 @@ fun SearchHistoryPanel(dataList: List<BlogSearchHistory>, modifier: Modifier = M
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
 private fun PreviewSearchHistoryPanel() {
-    SearchHistoryPanel(
+    /*SearchHistoryPanel(
         dataList = immutableListOf(
             BlogSearchHistory(
                 keyword = "哈哈哈1",
@@ -105,5 +118,5 @@ private fun PreviewSearchHistoryPanel() {
                 updateTime = System.currentTimeMillis()
             )
         )
-    )
+    )*/
 }

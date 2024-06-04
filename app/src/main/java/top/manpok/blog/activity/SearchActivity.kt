@@ -112,6 +112,12 @@ class SearchActivity : ComponentActivity() {
                         if (searchViewModel.searchHistoryList.isNotEmpty()) {
                             SearchHistoryPanel(
                                 dataList = searchViewModel.searchHistoryList.toList(),
+                                onItemClick = {
+                                    searchViewModel.keywords = it
+                                    searchViewModel.beginSearch = true
+                                    focusManager.clearFocus()
+                                    searchViewModel.doSearch()
+                                }
                             )
                         }
                         Spacer(modifier = Modifier.height(50.dp))

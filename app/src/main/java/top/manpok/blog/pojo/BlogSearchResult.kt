@@ -17,7 +17,9 @@ data class BlogSearchResult(
         val searchItem: List<String?>?,
         var title: String?,
         val updateTime: String?,
-        val viewCount: Int?
+        val viewCount: Int?,
+        var titleList: List<String>?,
+        var contentList: List<String>?,
     )
 }
 

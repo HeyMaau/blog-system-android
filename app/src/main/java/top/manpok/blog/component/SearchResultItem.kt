@@ -20,8 +20,11 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
@@ -33,8 +36,9 @@ private val CONTENT_HEIGHT = 70.dp
 @Composable
 fun SearchResultItem(
     modifier: Modifier = Modifier,
-    title: String?,
-    content: String?,
+    keyword: String,
+    titleList: List<String>?,
+    contentList: List<String>?,
     cover: String?,
     updateTime: String?,
     useSkeleton: Boolean = false,
@@ -103,7 +107,16 @@ fun SearchResultItem(
                 .clickable(onClick = onClick)
         ) {
             Text(
-                text = title ?: "",
+                text = buildAnnotatedString {
+                    titleList?.forEachIndexed { index, s ->
+                        append(s)
+                        if (index != titleList.size - 1 && s != "。" && s != "，" && s != "、" && s != "；" && s != "." && s != "," && s != ";" && s != "\'") {
+                            withStyle(style = SpanStyle(color = colorResource(id = R.color.orange_ff8c00))) {
+                                append(keyword)
+                            }
+                        }
+                    }
+                },
                 fontSize = 16.sp,
                 lineHeight = 1.2.em,
                 fontWeight = FontWeight(550),
@@ -117,7 +130,16 @@ fun SearchResultItem(
                         .height(CONTENT_HEIGHT)
                 ) {
                     Text(
-                        text = content ?: "",
+                        text = buildAnnotatedString {
+                            contentList?.forEachIndexed { index, s ->
+                                append(s)
+                                if (index != contentList.size - 1 && s != "。" && s != "，" && s != "、" && s != "；" && s != "." && s != "," && s != ";" && s != "\'") {
+                                    withStyle(style = SpanStyle(color = colorResource(id = R.color.orange_ff8c00))) {
+                                        append(keyword)
+                                    }
+                                }
+                            }
+                        },
                         maxLines = 2,
                         fontSize = 12.sp,
                         lineHeight = 1.5.em,

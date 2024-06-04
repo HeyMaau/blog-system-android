@@ -93,8 +93,9 @@ class SearchActivity : ComponentActivity() {
                             if (searchViewModel.isLoading) {
                                 items(8) {
                                     SearchResultItem(
-                                        title = null,
-                                        content = null,
+                                        keyword = searchViewModel.keywords,
+                                        titleList = null,
+                                        contentList = null,
                                         cover = null,
                                         updateTime = null,
                                         useSkeleton = searchViewModel.isLoading
@@ -103,8 +104,9 @@ class SearchActivity : ComponentActivity() {
                             } else {
                                 items(searchViewModel.searchList) {
                                     SearchResultItem(
-                                        title = it?.title,
-                                        content = it?.content,
+                                        keyword = searchViewModel.keywords,
+                                        titleList = it?.titleList,
+                                        contentList = it?.contentList,
                                         cover = Constants.BASE_IMAGE_URL + it?.cover,
                                         updateTime = it?.updateTime,
                                         useSkeleton = searchViewModel.isLoading,

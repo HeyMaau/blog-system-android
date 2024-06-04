@@ -92,6 +92,8 @@ class SearchViewModel : ViewModel() {
                                 if (!TextUtils.isEmpty(it?.title)) {
                                     it?.title = Jsoup.clean(it?.title!!, Safelist.none())
                                 }
+                                it?.titleList = it?.title?.split(keywords)
+                                it?.contentList = it?.content?.split(keywords)
                             }
                             searchList.clear()
                             searchList.addAll(it)

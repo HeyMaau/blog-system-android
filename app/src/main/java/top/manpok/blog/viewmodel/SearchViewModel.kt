@@ -9,12 +9,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import top.manpok.blog.api.BlogRetrofit
+import top.manpok.blog.base.BaseApplication
+import top.manpok.blog.db.SearchDatabase
+import top.manpok.blog.db.entity.BlogSearchHistory
 import top.manpok.blog.pojo.BaseResponse
 import top.manpok.blog.pojo.BlogSearchResult
 import top.manpok.blog.utils.Constants
@@ -48,6 +53,12 @@ class SearchViewModel : ViewModel() {
             loadingTimeOut = true
         }
 
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                saveDB(keyword = keywords)
+            }
+        }
+
         BlogRetrofit.searchApi.getArticleList(currentPage, pageSize, keywords).enqueue(object :
             Callback<BaseResponse<BlogSearchResult>> {
             override fun onResponse(
@@ -77,5 +88,18 @@ class SearchViewModel : ViewModel() {
                 Log.d(TAG, "onFailure: $error")
             }
         })
+    }
+
+    private suspend fun saveDB(keyword: String) {
+        val searchHistoryDao =
+            SearchDatabase.getDatabase(BaseApplication.getApplication()).searchHistoryDao()
+        var searchHistory = searchHistoryDao.getByKeyword(keyword)
+        if (searchHistory == null) {
+            searchHistory = BlogSearchHistory(keyword = keyword, count = 1)
+            searchHistoryDao.insert(searchHistory)
+        } else {
+            searchHistory.count++
+            searchHistoryDao.update(searchHistory)
+        }
     }
 }

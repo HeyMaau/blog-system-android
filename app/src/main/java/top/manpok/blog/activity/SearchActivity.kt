@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -35,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import top.manpok.blog.R
 import top.manpok.blog.component.CommonHeader
+import top.manpok.blog.component.SearchHistoryPanel
 import top.manpok.blog.component.SearchInput
 import top.manpok.blog.component.SearchResultItem
 import top.manpok.blog.utils.Constants
@@ -100,8 +102,19 @@ class SearchActivity : ComponentActivity() {
                         }
                     }
                 } else {
-                    Column {
-                        Spacer(modifier = Modifier.height(searchViewModel.commonHeaderHeight + 100.dp))
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 12.dp)
+                            .padding(top = searchViewModel.commonHeaderHeight + 20.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        if (searchViewModel.searchHistoryList.isNotEmpty()) {
+                            SearchHistoryPanel(
+                                dataList = searchViewModel.searchHistoryList.toList(),
+                            )
+                        }
+                        Spacer(modifier = Modifier.height(50.dp))
                         Image(
                             imageVector = ImageVector.vectorResource(id = R.drawable.logo_search),
                             contentDescription = null,

@@ -9,5 +9,6 @@ data class BlogSearchHistory(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
     val keyword: String,
-    var count: Long
+    var count: Long,
+    var updateTime: Long
 )

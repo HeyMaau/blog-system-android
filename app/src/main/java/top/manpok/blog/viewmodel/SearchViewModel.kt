@@ -38,7 +38,15 @@ class SearchViewModel : ViewModel() {
     var beginSearch by mutableStateOf(false)
     var loadingTimeOut = false
 
+    var searchHistoryList = mutableStateListOf<BlogSearchHistory>()
+
     var commonHeaderHeight by mutableStateOf(0.dp)
+
+    init {
+        viewModelScope.launch {
+            loadDB()
+        }
+    }
 
     fun doSearch() {
 
@@ -47,7 +55,7 @@ class SearchViewModel : ViewModel() {
 
         viewModelScope.launch {
             delay(500L)
-            if (searchList.isNotEmpty()) {
+            if (searchList.isNotEmpty() || (searchList.isEmpty() && noMore)) {
                 isLoading = false
             }
             loadingTimeOut = true
@@ -95,11 +103,27 @@ class SearchViewModel : ViewModel() {
             SearchDatabase.getDatabase(BaseApplication.getApplication()).searchHistoryDao()
         var searchHistory = searchHistoryDao.getByKeyword(keyword)
         if (searchHistory == null) {
-            searchHistory = BlogSearchHistory(keyword = keyword, count = 1)
+            searchHistory = BlogSearchHistory(
+                keyword = keyword,
+                count = 1,
+                updateTime = System.currentTimeMillis()
+            )
             searchHistoryDao.insert(searchHistory)
         } else {
             searchHistory.count++
+            searchHistory.updateTime = System.currentTimeMillis()
             searchHistoryDao.update(searchHistory)
+        }
+    }
+
+    private suspend fun loadDB() {
+        val searchHistoryDao =
+            SearchDatabase.getDatabase(BaseApplication.getApplication()).searchHistoryDao()
+        val searchHistoryListFromDB = searchHistoryDao.getAll()
+        searchHistoryListFromDB?.let {
+            if (searchHistoryListFromDB.isNotEmpty()) {
+                searchHistoryList.addAll(searchHistoryListFromDB)
+            }
         }
     }
 }

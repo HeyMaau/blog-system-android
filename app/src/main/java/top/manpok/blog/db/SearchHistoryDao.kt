@@ -20,8 +20,8 @@ interface SearchHistoryDao {
     @Delete
     suspend fun delete(blogSearchHistory: BlogSearchHistory)
 
-    @Query("SELECT * FROM ${Constants.TABLE_NAME_SEARCH_HISTORY}")
-    suspend fun getAll(): List<BlogSearchHistory>
+    @Query("SELECT * FROM ${Constants.TABLE_NAME_SEARCH_HISTORY}  ORDER BY updateTime DESC")
+    suspend fun getAll(): List<BlogSearchHistory>?
 
     @Query("SELECT * FROM ${Constants.TABLE_NAME_SEARCH_HISTORY} WHERE keyword = :keyword")
     suspend fun getByKeyword(keyword: String): BlogSearchHistory?

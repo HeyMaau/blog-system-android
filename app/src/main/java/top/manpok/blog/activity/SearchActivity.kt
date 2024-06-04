@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Text
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,6 +34,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import top.manpok.blog.R
 import top.manpok.blog.component.CommonHeader
@@ -63,41 +65,61 @@ class SearchActivity : ComponentActivity() {
                     .statusBarsPadding()
             ) {
                 if (searchViewModel.beginSearch) {
-                    LazyColumn(
-                        modifier = Modifier
-                            .background(colorResource(id = R.color.gray_f7f6fb))
-                            .fillMaxSize()
-                            .padding(top = searchViewModel.commonHeaderHeight)
-                    ) {
-                        if (searchViewModel.isLoading) {
-                            items(8) {
-                                SearchResultItem(
-                                    title = null,
-                                    content = null,
-                                    cover = null,
-                                    updateTime = null,
-                                    useSkeleton = searchViewModel.isLoading
-                                ) {}
-                            }
-                        } else {
-                            items(searchViewModel.searchList) {
-                                SearchResultItem(
-                                    title = it?.title,
-                                    content = it?.content,
-                                    cover = Constants.BASE_IMAGE_URL + it?.cover,
-                                    updateTime = it?.updateTime,
-                                    useSkeleton = searchViewModel.isLoading,
-                                    onClick = {
-                                        val intent =
-                                            Intent(context, ArticleDetailActivity::class.java)
-                                        intent.putExtra(
-                                            ArticleDetailActivity.INTENT_KEY_ARTICLE_ID,
-                                            it?.id
-                                        )
-                                        context.startActivity(intent)
-                                    }
-                                )
-                                Spacer(modifier = Modifier.height(8.dp))
+                    if (searchViewModel.searchList.isEmpty() && !searchViewModel.isLoading) {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = Modifier
+                                .background(Color.White)
+                                .fillMaxSize()
+                                .padding(top = searchViewModel.commonHeaderHeight + 20.dp)
+                        ) {
+                            Image(
+                                imageVector = ImageVector.vectorResource(id = R.drawable.logo_empty_search_result),
+                                contentDescription = null,
+                                modifier = Modifier.size(200.dp)
+                            )
+                            Text(
+                                text = stringResource(id = R.string.empty_search_result),
+                                fontSize = 20.sp
+                            )
+                        }
+                    } else {
+                        LazyColumn(
+                            modifier = Modifier
+                                .background(colorResource(id = R.color.gray_f7f6fb))
+                                .fillMaxSize()
+                                .padding(top = searchViewModel.commonHeaderHeight)
+                        ) {
+                            if (searchViewModel.isLoading) {
+                                items(8) {
+                                    SearchResultItem(
+                                        title = null,
+                                        content = null,
+                                        cover = null,
+                                        updateTime = null,
+                                        useSkeleton = searchViewModel.isLoading
+                                    ) {}
+                                }
+                            } else {
+                                items(searchViewModel.searchList) {
+                                    SearchResultItem(
+                                        title = it?.title,
+                                        content = it?.content,
+                                        cover = Constants.BASE_IMAGE_URL + it?.cover,
+                                        updateTime = it?.updateTime,
+                                        useSkeleton = searchViewModel.isLoading,
+                                        onClick = {
+                                            val intent =
+                                                Intent(context, ArticleDetailActivity::class.java)
+                                            intent.putExtra(
+                                                ArticleDetailActivity.INTENT_KEY_ARTICLE_ID,
+                                                it?.id
+                                            )
+                                            context.startActivity(intent)
+                                        }
+                                    )
+                                    Spacer(modifier = Modifier.height(8.dp))
+                                }
                             }
                         }
                     }

@@ -36,7 +36,7 @@ class SearchViewModel : ViewModel() {
 
     var isLoading by mutableStateOf(false)
     var beginSearch by mutableStateOf(false)
-    var loadingTimeOut = false
+    private var loadingTimeOut = false
 
     var searchHistoryList = mutableStateListOf<BlogSearchHistory>()
 

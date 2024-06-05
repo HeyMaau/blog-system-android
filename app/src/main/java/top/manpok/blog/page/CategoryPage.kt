@@ -181,7 +181,7 @@ fun CategoryPage(
                         coverUrl = Constants.BASE_IMAGE_URL + categoryViewModel.categoryList[categoryViewModel.currentIndex].cover,
                         categoryName = categoryViewModel.categoryList[categoryViewModel.currentIndex].name!!,
                         categoryDesc = categoryViewModel.categoryList[categoryViewModel.currentIndex].description!!,
-                        totalArticle = 4,
+                        totalArticle = articleCategoryViewModel.total,
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(12.dp, 10.dp)

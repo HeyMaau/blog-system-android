@@ -28,10 +28,12 @@ class ArticleCategoryViewModel : ViewModel() {
     var lastCategoryID = ""
 
     var refreshing by mutableStateOf(false)
+    var pureLoading by mutableStateOf(false)
 
     fun getArticleListByCategory(page: Int, size: Int, categoryID: String) {
         if (lastCategoryID == categoryID) {
             refreshing = false
+            pureLoading = false
             return
         }
         lastCategoryID = categoryID
@@ -41,10 +43,11 @@ class ArticleCategoryViewModel : ViewModel() {
                     call: Call<BaseResponse<BlogArticle>>,
                     response: Response<BaseResponse<BlogArticle>>
                 ) {
-                    if (refreshing) {
+                    if (refreshing && !pureLoading) {
                         ToastUtil.showShortToast(R.string.refresh_successfully)
                     }
                     refreshing = false
+                    pureLoading = false
                     if (response.isSuccessful) {
                         if (response.body()?.code == Constants.CODE_SUCCESS) {
                             val blogArticle = response.body()?.data
@@ -59,10 +62,11 @@ class ArticleCategoryViewModel : ViewModel() {
                 }
 
                 override fun onFailure(call: Call<BaseResponse<BlogArticle>>, error: Throwable) {
-                    if (refreshing) {
+                    if (refreshing && !pureLoading) {
                         ToastUtil.showShortToast(R.string.refresh_fail)
                     }
                     refreshing = false
+                    pureLoading = false
                     Log.d(TAG, "onFailure: $error")
                 }
             })

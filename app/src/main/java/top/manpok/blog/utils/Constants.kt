@@ -21,5 +21,5 @@ object Constants {
     const val DEFAULT_PAGE = 1
     const val DEFAULT_PAGE_SIZE = 10
 
-    const val autoLoadMoreThreshold = 3
+    const val AUTO_LOAD_MORE_THRESHOLD = 3
 }

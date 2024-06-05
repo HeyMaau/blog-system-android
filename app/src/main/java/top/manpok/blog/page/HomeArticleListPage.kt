@@ -34,8 +34,8 @@ fun HomeArticleListPage(
         })
 
     val listState = rememberLazyListState()
-    LaunchedEffect(key1 = listState.reachBottom(Constants.autoLoadMoreThreshold)) {
-        if (listState.reachBottom(Constants.autoLoadMoreThreshold) && !articleViewModel.loading && !articleViewModel.noMore) {
+    LaunchedEffect(key1 = listState.reachBottom(Constants.AUTO_LOAD_MORE_THRESHOLD)) {
+        if (listState.reachBottom(Constants.AUTO_LOAD_MORE_THRESHOLD) && !articleViewModel.loading && !articleViewModel.noMore) {
             articleViewModel.getArticleList(
                 ++articleViewModel.currentPage,
                 articleViewModel.pageSize

@@ -22,7 +22,7 @@ class ArticleCategoryViewModel : ViewModel() {
 
     val articleList = mutableStateListOf<BlogArticle.Data?>()
     var currentPage by mutableIntStateOf(Constants.DEFAULT_PAGE)
-    var noMore by mutableStateOf(false)
+    var noMore by mutableStateOf(true)
     var pageSize by mutableIntStateOf(Constants.DEFAULT_PAGE_SIZE)
     var total by mutableIntStateOf(0)
     var lastCategoryID = ""

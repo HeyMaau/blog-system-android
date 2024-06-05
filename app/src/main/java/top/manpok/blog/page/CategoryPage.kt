@@ -56,6 +56,7 @@ import top.manpok.blog.component.CommonHeader
 import top.manpok.blog.utils.Constants
 import top.manpok.blog.utils.reachBottom
 import top.manpok.blog.viewmodel.ArticleCategoryViewModel
+import top.manpok.blog.viewmodel.BlogScaffoldViewModel
 import top.manpok.blog.viewmodel.CategoryViewModel
 import top.manpok.blog.viewmodel.UserViewModel
 
@@ -69,7 +70,8 @@ fun CategoryPage(
     modifier: Modifier = Modifier,
     categoryViewModel: CategoryViewModel = viewModel(),
     articleCategoryViewModel: ArticleCategoryViewModel = viewModel(),
-    userViewModel: UserViewModel = viewModel()
+    userViewModel: UserViewModel = viewModel(),
+    blogScaffoldViewModel: BlogScaffoldViewModel = viewModel()
 ) {
     LaunchedEffect(key1 = Unit) {
         categoryViewModel.refreshState.collect {
@@ -244,7 +246,9 @@ fun CategoryPage(
             CommonHeader(
                 leftIcon = R.drawable.ic_arrow_back,
                 rightIcon = R.drawable.ic_more,
-                leftIconClick = { },
+                leftIconClick = {
+                    blogScaffoldViewModel.selectedBottomItemIndex = 0
+                },
                 rightIconClick = { },
                 modifier = Modifier
                     .zIndex(1f)

@@ -20,4 +20,6 @@ object Constants {
 
     const val DEFAULT_PAGE = 1
     const val DEFAULT_PAGE_SIZE = 10
+
+    const val autoLoadMoreThreshold = 3
 }

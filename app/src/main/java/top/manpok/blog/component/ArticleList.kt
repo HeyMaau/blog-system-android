@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.ExperimentalMaterialApi
@@ -22,15 +23,17 @@ import top.manpok.blog.activity.ArticleDetailActivity
 import top.manpok.blog.activity.SearchActivity
 import top.manpok.blog.pojo.BlogArticle
 
+private const val TAG = "ArticleList"
+
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ArticleList(
+    modifier: Modifier = Modifier,
     articleList: List<BlogArticle.Data?>?,
     refreshing: Boolean = false,
     refreshState: PullRefreshState? = null,
-    modifier: Modifier = Modifier
+    listState: LazyListState = rememberLazyListState()
 ) {
-    val listState = rememberLazyListState()
     val context = LocalContext.current
     if (articleList != null) {
         Box(contentAlignment = Alignment.TopCenter, modifier = modifier) {

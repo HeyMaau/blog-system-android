@@ -33,6 +33,7 @@ class ArticleViewModel : ViewModel() {
     var total by mutableIntStateOf(0)
 
     var refreshing by mutableStateOf(false)
+    var loading by mutableStateOf(false)
 
     init {
         viewModelScope.launch {
@@ -42,6 +43,7 @@ class ArticleViewModel : ViewModel() {
     }
 
     fun getArticleList(page: Int, size: Int) {
+        loading = true
         BlogRetrofit.articleApi.getArticleList(page, size).enqueue(object :
             Callback<BaseResponse<BlogArticle>> {
             override fun onResponse(
@@ -50,8 +52,9 @@ class ArticleViewModel : ViewModel() {
             ) {
                 if (refreshing) {
                     ToastUtil.showShortToast(R.string.refresh_successfully)
+                    refreshing = false
                 }
-                refreshing = false
+                loading = false
                 if (response.isSuccessful) {
                     if (response.body()?.code == Constants.CODE_SUCCESS) {
                         val blogArticle = response.body()?.data
@@ -59,7 +62,9 @@ class ArticleViewModel : ViewModel() {
                         noMore = blogArticle.noMore
                         pageSize = blogArticle.pageSize
                         total = blogArticle.total
-                        articleList.clear()
+                        if (currentPage == Constants.DEFAULT_PAGE) {
+                            articleList.clear()
+                        }
                         blogArticle.data?.let { articleList.addAll(it) }
                         viewModelScope.launch {
                             saveToDB(blogArticle.data)
@@ -71,8 +76,9 @@ class ArticleViewModel : ViewModel() {
             override fun onFailure(call: Call<BaseResponse<BlogArticle>>, error: Throwable) {
                 if (refreshing) {
                     ToastUtil.showShortToast(R.string.refresh_fail)
+                    refreshing = false
                 }
-                refreshing = false
+                loading = false
                 Log.d(TAG, "onFailure: $error")
             }
 

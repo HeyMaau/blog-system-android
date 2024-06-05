@@ -30,8 +30,13 @@ class ArticleCategoryViewModel : ViewModel() {
     var refreshing by mutableStateOf(false)
     var pureLoading by mutableStateOf(false)
 
-    fun getArticleListByCategory(page: Int, size: Int, categoryID: String) {
-        if (lastCategoryID == categoryID) {
+    fun getArticleListByCategory(
+        page: Int,
+        size: Int,
+        categoryID: String,
+        loadMore: Boolean = false
+    ) {
+        if (lastCategoryID == categoryID && !loadMore) {
             refreshing = false
             pureLoading = false
             return
@@ -55,7 +60,9 @@ class ArticleCategoryViewModel : ViewModel() {
                             noMore = blogArticle.noMore
                             pageSize = blogArticle.pageSize
                             total = blogArticle.total
-                            articleList.clear()
+                            if (currentPage == Constants.DEFAULT_PAGE) {
+                                articleList.clear()
+                            }
                             blogArticle.data?.let { articleList.addAll(it) }
                         }
                     }

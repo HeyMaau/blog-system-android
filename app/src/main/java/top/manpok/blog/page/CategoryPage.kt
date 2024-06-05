@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
@@ -53,6 +54,7 @@ import top.manpok.blog.component.CategoryInfoCard
 import top.manpok.blog.component.CategoryPopup
 import top.manpok.blog.component.CommonHeader
 import top.manpok.blog.utils.Constants
+import top.manpok.blog.utils.reachBottom
 import top.manpok.blog.viewmodel.ArticleCategoryViewModel
 import top.manpok.blog.viewmodel.CategoryViewModel
 import top.manpok.blog.viewmodel.UserViewModel
@@ -88,6 +90,7 @@ fun CategoryPage(
             articleCategoryViewModel.pureLoading = true
             articleCategoryViewModel.currentPage = Constants.DEFAULT_PAGE
             articleCategoryViewModel.pageSize = Constants.DEFAULT_PAGE_SIZE
+            articleCategoryViewModel.noMore = false
             articleCategoryViewModel.getArticleListByCategory(
                 articleCategoryViewModel.currentPage,
                 articleCategoryViewModel.pageSize,
@@ -108,6 +111,7 @@ fun CategoryPage(
             articleCategoryViewModel.refreshing = true
             articleCategoryViewModel.pureLoading = false
             articleCategoryViewModel.lastCategoryID = ""
+            articleCategoryViewModel.noMore = false
             categoryViewModel.getCategoryList()
         })
 
@@ -170,11 +174,28 @@ fun CategoryPage(
         }
     }
 
+    val listState = rememberLazyListState()
+    LaunchedEffect(key1 = listState.reachBottom(Constants.AUTO_LOAD_MORE_THRESHOLD)) {
+        if (listState.reachBottom(Constants.AUTO_LOAD_MORE_THRESHOLD) && !articleCategoryViewModel.noMore
+            && !articleCategoryViewModel.refreshing && !articleCategoryViewModel.pureLoading
+        ) {
+            articleCategoryViewModel.getArticleListByCategory(
+                ++articleCategoryViewModel.currentPage,
+                articleCategoryViewModel.pageSize,
+                articleCategoryViewModel.lastCategoryID,
+                true
+            )
+        }
+    }
+
     Box(
         contentAlignment = Alignment.TopCenter,
         modifier = modifier.pullRefresh(state = pullRefreshState, enabled = true)
     ) {
-        LazyColumn(modifier = Modifier.padding(top = categoryViewModel.commonHeaderHeight)) {
+        LazyColumn(
+            modifier = Modifier.padding(top = categoryViewModel.commonHeaderHeight),
+            state = listState
+        ) {
             item {
                 if (categoryViewModel.categoryList.isNotEmpty()) {
                     CategoryInfoCard(

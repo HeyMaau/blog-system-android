@@ -48,7 +48,7 @@ fun CategoryListItem(
                     ), shape = RoundedCornerShape(10)
                 )
         )
-        Text(text = name, fontSize = 16.sp, modifier = Modifier.padding(10.dp, 0.dp))
+        Text(text = name, fontSize = 16.sp, modifier = Modifier.padding(start = 10.dp, end = 40.dp))
     }
 }
 

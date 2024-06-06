@@ -64,11 +64,11 @@ class ArticleViewModel : ViewModel() {
                         total = blogArticle.total
                         if (currentPage == Constants.DEFAULT_PAGE) {
                             articleList.clear()
+                            viewModelScope.launch {
+                                saveToDB(blogArticle.data)
+                            }
                         }
                         blogArticle.data?.let { articleList.addAll(it) }
-                        viewModelScope.launch {
-                            saveToDB(blogArticle.data)
-                        }
                     }
                 }
             }

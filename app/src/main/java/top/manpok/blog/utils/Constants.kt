@@ -22,4 +22,7 @@ object Constants {
     const val DEFAULT_PAGE_SIZE = 10
 
     const val AUTO_LOAD_MORE_THRESHOLD = 3
+
+    const val COMMENT_TYPE_ARTICLE = 0
+    const val COMMENT_TYPE_THINKING = 1
 }

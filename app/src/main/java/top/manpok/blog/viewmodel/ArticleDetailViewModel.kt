@@ -19,7 +19,7 @@ import top.manpok.blog.pojo.BaseResponse
 import top.manpok.blog.pojo.BlogArticleDetail
 import top.manpok.blog.utils.Constants
 
-class ArticleDetailViewModel(val id: String?) : ViewModel() {
+class ArticleDetailViewModel : ViewModel() {
 
     private val TAG = "ArticleDetailViewModel"
 
@@ -30,13 +30,6 @@ class ArticleDetailViewModel(val id: String?) : ViewModel() {
     var cover by mutableStateOf("")
     var content by mutableStateOf("")
     var updateTime by mutableStateOf("")
-
-    init {
-        viewModelScope.launch {
-            getFromDB()
-        }
-        getArticleDetail(id)
-    }
 
     fun getArticleDetail(id: String?) {
         if (id != null && !TextUtils.isEmpty(id)) {
@@ -75,10 +68,13 @@ class ArticleDetailViewModel(val id: String?) : ViewModel() {
         }
     }
 
-    suspend fun getFromDB() {
+    suspend fun getFromDB(id: String?) {
+        if (id == null || TextUtils.isEmpty(id)) {
+            return
+        }
         val articleDetailDao =
             ArticleDatabase.getDatabase(BaseApplication.getApplication()).articleDetailDao()
-        val data = articleDetailDao.getOne(id!!)
+        val data = articleDetailDao.getOne(id)
         if (data != null) {
             title = data.title!!
             authorAvatar = Constants.BASE_IMAGE_URL + data.avatar

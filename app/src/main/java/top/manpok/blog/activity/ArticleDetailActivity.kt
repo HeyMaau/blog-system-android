@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -30,12 +31,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import top.manpok.blog.R
 import top.manpok.blog.component.AuthorInfoBanner
 import top.manpok.blog.component.CommonHeader
 import top.manpok.blog.component.FloatingHeader
+import top.manpok.blog.utils.Constants
 import top.manpok.blog.viewmodel.ArticleDetailViewModel
+import top.manpok.blog.viewmodel.CommentViewModel
 import top.manpok.blog.webview.BlogWebChromeClient
 import top.manpok.blog.webview.BlogWebViewClient
 
@@ -45,14 +49,24 @@ class ArticleDetailActivity : ComponentActivity() {
         const val INTENT_KEY_ARTICLE_ID = "intent_key_article_id"
     }
 
-    lateinit var viewModel: ArticleDetailViewModel
-
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         val id = intent.getStringExtra(INTENT_KEY_ARTICLE_ID)
-        viewModel = ArticleDetailViewModel(id)
         setContent {
+            val articleDetailViewModel: ArticleDetailViewModel = viewModel()
+            val commentViewModel: CommentViewModel = viewModel()
+            LaunchedEffect(key1 = Unit) {
+                articleDetailViewModel.getFromDB(id)
+                articleDetailViewModel.getArticleDetail(id)
+                commentViewModel.getCommentList(
+                    commentViewModel.currentPage,
+                    commentViewModel.pageSize,
+                    Constants.COMMENT_TYPE_ARTICLE,
+                    id
+                )
+            }
+
             val scrollState = rememberScrollState()
             var commonHeaderHeight by remember {
                 mutableIntStateOf(0)
@@ -73,7 +87,7 @@ class ArticleDetailActivity : ComponentActivity() {
                         .statusBarsPadding()
                 ) {
                     CommonHeader(
-                        title = viewModel.title,
+                        title = articleDetailViewModel.title,
                         leftIcon = R.drawable.ic_arrow_back,
                         rightIcon = R.drawable.ic_more,
                         leftIconClick = {
@@ -84,25 +98,25 @@ class ArticleDetailActivity : ComponentActivity() {
                             commonHeaderHeight = it.size.height
                         })
                     Text(
-                        text = viewModel.title,
+                        text = articleDetailViewModel.title,
                         fontSize = 18.sp,
                         modifier = Modifier.padding(0.dp, 15.dp)
                     )
                     AuthorInfoBanner(
-                        avatarUrl = viewModel.authorAvatar,
-                        name = viewModel.authorName,
-                        sign = viewModel.authorSign
+                        avatarUrl = articleDetailViewModel.authorAvatar,
+                        name = articleDetailViewModel.authorName,
+                        sign = articleDetailViewModel.authorSign
                     )
-                    if (!TextUtils.isEmpty(viewModel.cover)) {
+                    if (!TextUtils.isEmpty(articleDetailViewModel.cover)) {
                         AsyncImage(
-                            model = viewModel.cover,
+                            model = articleDetailViewModel.cover,
                             contentDescription = null,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(0.dp, 12.dp)
                         )
                     }
-                    if (!TextUtils.isEmpty(viewModel.content)) {
+                    if (!TextUtils.isEmpty(articleDetailViewModel.content)) {
                         AndroidView(modifier = Modifier.fillMaxSize(), factory = {
                             val webView = WebView(it)
                             webView.settings.apply {
@@ -116,7 +130,7 @@ class ArticleDetailActivity : ComponentActivity() {
                                 webChromeClient = BlogWebChromeClient()
                                 loadDataWithBaseURL(
                                     "file:///android_asset/",
-                                    viewModel.content,
+                                    articleDetailViewModel.content,
                                     "text/html",
                                     "utf-8",
                                     null
@@ -124,9 +138,12 @@ class ArticleDetailActivity : ComponentActivity() {
                             }
                         })
                     }
-                    if (!TextUtils.isEmpty(viewModel.updateTime)) {
+                    if (!TextUtils.isEmpty(articleDetailViewModel.updateTime)) {
                         Text(
-                            text = stringResource(id = R.string.update_time, viewModel.updateTime),
+                            text = stringResource(
+                                id = R.string.update_time,
+                                articleDetailViewModel.updateTime
+                            ),
                             color = colorResource(id = R.color.gray_878789),
                             modifier = Modifier.padding(0.dp, 15.dp, 0.dp, 30.dp)
                         )

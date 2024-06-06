@@ -10,27 +10,34 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.compose.ui.zIndex
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import top.manpok.blog.R
@@ -71,6 +78,10 @@ class ArticleDetailActivity : ComponentActivity() {
             var commonHeaderHeight by remember {
                 mutableIntStateOf(0)
             }
+            val density = LocalDensity.current
+            var commonHeaderHeightDP by remember {
+                mutableStateOf(0.dp)
+            }
             val showFloatingHeader by remember {
                 derivedStateOf {
                     scrollState.value > commonHeaderHeight * 2
@@ -94,9 +105,14 @@ class ArticleDetailActivity : ComponentActivity() {
                             finish()
                         },
                         rightIconClick = { /*TODO*/ },
-                        modifier = Modifier.onGloballyPositioned {
-                            commonHeaderHeight = it.size.height
-                        })
+                        modifier = Modifier
+                            .zIndex(1f)
+                            .onGloballyPositioned {
+                                commonHeaderHeight = it.size.height
+                                with(density) {
+                                    commonHeaderHeightDP = it.size.height.toDp()
+                                }
+                            })
                     Text(
                         text = articleDetailViewModel.title,
                         fontSize = 18.sp,
@@ -161,6 +177,36 @@ class ArticleDetailActivity : ComponentActivity() {
                             .statusBarsPadding()
                             .padding(0.dp, 20.dp)
                     )
+                }
+                if (articleDetailViewModel.loading) {
+                    Column(
+                        modifier = Modifier
+                            .statusBarsPadding()
+                            .padding(top = commonHeaderHeightDP)
+                            .background(Color.White)
+                            .fillMaxSize()
+                    ) {
+                        Surface(
+                            color = colorResource(id = R.color.gray_cccccc),
+                            shape = RoundedCornerShape(40),
+                            modifier = Modifier
+                                .padding(vertical = 15.dp)
+                                .height(15.dp)
+                                .fillMaxWidth()
+                        ) {}
+                        AuthorInfoBanner(avatarUrl = "", name = "", sign = "", showSkeleton = true)
+                        Spacer(modifier = Modifier.height(30.dp))
+                        for (i in 0..3) {
+                            Surface(
+                                color = colorResource(id = R.color.gray_cccccc),
+                                shape = RoundedCornerShape(30),
+                                modifier = Modifier
+                                    .padding(vertical = 10.dp)
+                                    .height(10.dp)
+                                    .fillMaxWidth()
+                            ) {}
+                        }
+                    }
                 }
             }
         }

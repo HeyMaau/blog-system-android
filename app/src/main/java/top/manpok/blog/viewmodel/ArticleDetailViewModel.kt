@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
@@ -31,6 +32,19 @@ class ArticleDetailViewModel : ViewModel() {
     var content by mutableStateOf("")
     var updateTime by mutableStateOf("")
 
+    var loading by mutableStateOf(true)
+    private var timeOut by mutableStateOf(false)
+
+    init {
+        viewModelScope.launch {
+            delay(1000)
+            if (!TextUtils.isEmpty(content)) {
+                loading = false
+            }
+            timeOut = true
+        }
+    }
+
     fun getArticleDetail(id: String?) {
         if (id != null && !TextUtils.isEmpty(id)) {
             BlogRetrofit.articleApi.getArticleDetail(id)
@@ -50,6 +64,9 @@ class ArticleDetailViewModel : ViewModel() {
                                 cover = Constants.BASE_IMAGE_URL + data.cover!!
                                 updateTime = data.updateTime!!
                                 setHtmlContent(data.content!!)
+                                if (timeOut) {
+                                    loading = false
+                                }
                                 viewModelScope.launch {
                                     saveToDB(data)
                                 }
@@ -61,6 +78,9 @@ class ArticleDetailViewModel : ViewModel() {
                         call: Call<BaseResponse<BlogArticleDetail>>,
                         error: Throwable
                     ) {
+                        if (timeOut) {
+                            loading = false
+                        }
                         Log.d(TAG, "onFailure: $error")
                     }
 

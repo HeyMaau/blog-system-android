@@ -62,13 +62,15 @@ class ArticleViewModel : ViewModel() {
                         noMore = blogArticle.noMore
                         pageSize = blogArticle.pageSize
                         total = blogArticle.total
-                        if (currentPage == Constants.DEFAULT_PAGE) {
-                            articleList.clear()
-                            viewModelScope.launch {
-                                saveToDB(blogArticle.data)
+                        blogArticle.data?.let {
+                            if (currentPage == Constants.DEFAULT_PAGE) {
+                                articleList.clear()
+                                viewModelScope.launch {
+                                    saveToDB(blogArticle.data)
+                                }
                             }
+                            articleList.addAll(it)
                         }
-                        blogArticle.data?.let { articleList.addAll(it) }
                     }
                 }
             }

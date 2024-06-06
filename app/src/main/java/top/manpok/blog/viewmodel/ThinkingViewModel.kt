@@ -62,12 +62,14 @@ class ThinkingViewModel : ViewModel() {
                             noMore = blogThinking.noMore
                             pageSize = blogThinking.pageSize
                             total = blogThinking.total
-                            if (currentPage == Constants.DEFAULT_PAGE) {
-                                thinkingList.clear()
-                            }
-                            blogThinking.data?.let { thinkingList.addAll(it) }
-                            viewModelScope.launch {
-                                saveToDB(blogThinking.data)
+                            blogThinking.data?.let {
+                                if (currentPage == Constants.DEFAULT_PAGE) {
+                                    thinkingList.clear()
+                                    viewModelScope.launch {
+                                        saveToDB(blogThinking.data)
+                                    }
+                                }
+                                thinkingList.addAll(it)
                             }
                         }
                     }

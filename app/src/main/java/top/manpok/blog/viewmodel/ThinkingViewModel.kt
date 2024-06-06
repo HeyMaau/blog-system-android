@@ -33,6 +33,7 @@ class ThinkingViewModel : ViewModel() {
     var total by mutableIntStateOf(0)
 
     var refreshing by mutableStateOf(false)
+    var loading by mutableStateOf(false)
 
     init {
         viewModelScope.launch {
@@ -42,6 +43,7 @@ class ThinkingViewModel : ViewModel() {
     }
 
     fun getThinkingList(page: Int, size: Int) {
+        loading = true
         BlogRetrofit.thinkingApi.getThinkingList(page, size)
             .enqueue(object : Callback<BaseResponse<BlogThinking>> {
                 override fun onResponse(
@@ -51,6 +53,7 @@ class ThinkingViewModel : ViewModel() {
                     if (refreshing) {
                         ToastUtil.showShortToast(R.string.refresh_successfully)
                     }
+                    loading = false
                     refreshing = false
                     if (response.isSuccessful) {
                         if (response.body()?.code == Constants.CODE_SUCCESS) {
@@ -59,7 +62,9 @@ class ThinkingViewModel : ViewModel() {
                             noMore = blogThinking.noMore
                             pageSize = blogThinking.pageSize
                             total = blogThinking.total
-                            thinkingList.clear()
+                            if (currentPage == Constants.DEFAULT_PAGE) {
+                                thinkingList.clear()
+                            }
                             blogThinking.data?.let { thinkingList.addAll(it) }
                             viewModelScope.launch {
                                 saveToDB(blogThinking.data)
@@ -72,6 +77,7 @@ class ThinkingViewModel : ViewModel() {
                     if (refreshing) {
                         ToastUtil.showShortToast(R.string.refresh_fail)
                     }
+                    loading = false
                     refreshing = false
                     Log.d(TAG, "onFailure: $error")
                 }

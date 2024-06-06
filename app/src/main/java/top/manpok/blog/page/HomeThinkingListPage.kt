@@ -7,11 +7,13 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
+import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -23,7 +25,10 @@ import top.manpok.blog.R
 import top.manpok.blog.activity.ThinkingDetailActivity
 import top.manpok.blog.component.ThinkingListItem
 import top.manpok.blog.utils.Constants
+import top.manpok.blog.utils.reachBottom
 import top.manpok.blog.viewmodel.ThinkingViewModel
+
+private const val TAG = "HomeThinkingListPage"
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -42,6 +47,19 @@ fun HomeThinkingListPage(
                 thinkingViewModel.pageSize
             )
         })
+
+    val staggeredGridState = rememberLazyStaggeredGridState()
+    LaunchedEffect(key1 = staggeredGridState.reachBottom(Constants.AUTO_LOAD_MORE_THRESHOLD)) {
+        if (staggeredGridState.reachBottom(Constants.AUTO_LOAD_MORE_THRESHOLD)
+            && !thinkingViewModel.loading && !thinkingViewModel.refreshing && !thinkingViewModel.noMore
+        ) {
+            thinkingViewModel.getThinkingList(
+                ++thinkingViewModel.currentPage,
+                thinkingViewModel.pageSize
+            )
+        }
+    }
+
     Box(
         contentAlignment = Alignment.TopCenter,
         modifier = modifier.pullRefresh(state = pullRefreshState, enabled = true)
@@ -50,7 +68,8 @@ fun HomeThinkingListPage(
             columns = StaggeredGridCells.Fixed(2),
             contentPadding = PaddingValues(12.dp),
             verticalItemSpacing = 10.dp,
-            horizontalArrangement = Arrangement.spacedBy(10.dp)
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
+            state = staggeredGridState
         ) {
             items(thinkingViewModel.thinkingList.toList(), key = {
                 it.id!!

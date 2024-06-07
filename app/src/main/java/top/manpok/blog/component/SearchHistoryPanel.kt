@@ -22,7 +22,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import okhttp3.internal.immutableListOf
 import top.manpok.blog.R
 import top.manpok.blog.db.entity.BlogSearchHistory
 
@@ -43,7 +42,7 @@ fun SearchHistoryPanel(
                     .width(4.dp)
                     .background(
                         brush = Brush.verticalGradient(
-                            colors = immutableListOf(
+                            colors = listOf(
                                 colorResource(id = R.color.blue_1364e5),
                                 colorResource(id = R.color.blue_0185fa)
                             )

@@ -7,7 +7,6 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import okhttp3.internal.immutableListOf
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -30,7 +29,7 @@ class FeedbackViewModel : ViewModel() {
     private val _submitState = MutableStateFlow<SubmitState>(SubmitState.Stop)
     val submitState = _submitState.asStateFlow()
 
-    val itemList = immutableListOf(
+    val itemList = listOf(
         FeedbackItemData(
             label = R.string.feedback_title,
             hint = R.string.please_enter_feedback_title,

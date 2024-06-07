@@ -41,4 +41,6 @@
     <string name="please_enter_search_keywords">请输入搜索内容</string>
     <string name="search_history">历史搜索</string>
     <string name="empty_search_result">暂无搜索结果</string>
+
+    <string name="write_comment">写评论</string>
 </resources>

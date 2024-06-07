@@ -42,6 +42,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import top.manpok.blog.R
 import top.manpok.blog.component.AuthorInfoBanner
+import top.manpok.blog.component.CommentInput
 import top.manpok.blog.component.CommonHeader
 import top.manpok.blog.component.FloatingHeader
 import top.manpok.blog.utils.Constants
@@ -165,6 +166,7 @@ class ArticleDetailActivity : ComponentActivity() {
                             modifier = Modifier.padding(0.dp, 15.dp, 0.dp, 30.dp)
                         )
                     }
+                    CommentInput()
                 }
                 if (showFloatingHeader) {
                     FloatingHeader(

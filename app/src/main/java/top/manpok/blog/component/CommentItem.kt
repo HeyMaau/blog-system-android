@@ -1,17 +1,23 @@
 package top.manpok.blog.component
 
+import android.text.TextUtils
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -33,13 +39,41 @@ fun CommentItem(data: BlogComment.Data?, modifier: Modifier = Modifier) {
                     .clip(CircleShape)
             )
             Column(modifier = Modifier.padding(start = 8.dp)) {
-                Text(
-                    text = data.userName,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    fontWeight = FontWeight(500),
-                    modifier = Modifier.padding(bottom = 10.dp)
-                )
+                if (data.replyUserName != null && !TextUtils.isEmpty(data.replyUserName)) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(
+                            text = data.userName,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            fontWeight = FontWeight(500),
+                            modifier = Modifier.padding(end = 5.dp)
+                        )
+                        Icon(
+                            imageVector = ImageVector.vectorResource(id = R.drawable.ic_reply_to),
+                            contentDescription = null,
+                            tint = colorResource(id = R.color.gray_878789)
+                        )
+                        Text(
+                            text = data.replyUserName,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            fontWeight = FontWeight(500),
+                            modifier = Modifier.padding(start = 5.dp)
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(10.dp))
+                } else {
+                    Text(
+                        text = data.userName,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        fontWeight = FontWeight(500),
+                        modifier = Modifier.padding(bottom = 10.dp)
+                    )
+                }
                 Text(
                     text = data.content,
                     modifier = Modifier.padding(bottom = 8.dp),

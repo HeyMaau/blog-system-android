@@ -44,7 +44,7 @@ import coil.compose.AsyncImage
 import top.manpok.blog.R
 import top.manpok.blog.component.AuthorInfoBanner
 import top.manpok.blog.component.CommentInput
-import top.manpok.blog.component.CommentItem
+import top.manpok.blog.component.CommentList
 import top.manpok.blog.component.CommonHeader
 import top.manpok.blog.component.FloatingHeader
 import top.manpok.blog.utils.Constants
@@ -178,9 +178,12 @@ class ArticleDetailActivity : ComponentActivity() {
                     )
                     Spacer(modifier = Modifier.height(15.dp))
                     CommentInput()
-                    commentViewModel.commentList.forEach {
-                        CommentItem(data = it)
-                    }
+                    CommentList(
+                        dataList = commentViewModel.commentList,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 15.dp, bottom = 30.dp)
+                    )
                 }
                 if (showFloatingHeader) {
                     FloatingHeader(

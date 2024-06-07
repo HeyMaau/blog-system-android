@@ -34,6 +34,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -43,6 +44,7 @@ import coil.compose.AsyncImage
 import top.manpok.blog.R
 import top.manpok.blog.component.AuthorInfoBanner
 import top.manpok.blog.component.CommentInput
+import top.manpok.blog.component.CommentItem
 import top.manpok.blog.component.CommonHeader
 import top.manpok.blog.component.FloatingHeader
 import top.manpok.blog.utils.Constants
@@ -163,10 +165,22 @@ class ArticleDetailActivity : ComponentActivity() {
                                 articleDetailViewModel.updateTime
                             ),
                             color = colorResource(id = R.color.gray_878789),
-                            modifier = Modifier.padding(0.dp, 15.dp, 0.dp, 30.dp)
+                            modifier = Modifier.padding(vertical = 15.dp)
                         )
                     }
+                    Text(
+                        text = stringResource(
+                            id = R.string.comment_number,
+                            commentViewModel.total
+                        ),
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight(500),
+                    )
+                    Spacer(modifier = Modifier.height(15.dp))
                     CommentInput()
+                    if (commentViewModel.commentList.isNotEmpty()) {
+                        CommentItem(data = commentViewModel.commentList[0])
+                    }
                 }
                 if (showFloatingHeader) {
                     FloatingHeader(

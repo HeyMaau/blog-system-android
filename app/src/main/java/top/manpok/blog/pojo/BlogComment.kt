@@ -17,6 +17,7 @@ data class BlogComment(
         val userEmail: String,
         val userName: String,
         val userAvatar: String,
-        val updateTime: String
+        val updateTime: String,
+        val children: List<Data>?
     )
 }

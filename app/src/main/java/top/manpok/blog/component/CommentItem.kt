@@ -29,7 +29,7 @@ fun CommentItem(data: BlogComment.Data?, modifier: Modifier = Modifier) {
                 model = Constants.BASE_COMMENT_AVATAR_URL + data.userAvatar,
                 contentDescription = null,
                 modifier = modifier
-                    .size(40.dp)
+                    .size(30.dp)
                     .clip(CircleShape)
             )
             Column(modifier = Modifier.padding(start = 8.dp)) {
@@ -47,8 +47,21 @@ fun CommentItem(data: BlogComment.Data?, modifier: Modifier = Modifier) {
                 Text(
                     text = data.updateTime,
                     fontSize = 12.sp,
-                    color = colorResource(id = R.color.gray_878789)
+                    color = colorResource(
+                        id = R.color.gray_878789
+                    ),
+                    modifier = Modifier.padding(bottom = 12.dp)
                 )
+                if (data.children != null) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    ) {
+                        data.children.forEach {
+                            CommentItem(data = it)
+                        }
+                    }
+                }
             }
         }
     }

@@ -178,8 +178,8 @@ class ArticleDetailActivity : ComponentActivity() {
                     )
                     Spacer(modifier = Modifier.height(15.dp))
                     CommentInput()
-                    if (commentViewModel.commentList.isNotEmpty()) {
-                        CommentItem(data = commentViewModel.commentList[0])
+                    commentViewModel.commentList.forEach {
+                        CommentItem(data = it)
                     }
                 }
                 if (showFloatingHeader) {

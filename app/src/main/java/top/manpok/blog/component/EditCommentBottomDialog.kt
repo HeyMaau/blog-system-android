@@ -1,6 +1,7 @@
 package top.manpok.blog.component
 
 import android.text.TextUtils
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -15,6 +16,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -24,12 +27,17 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -37,9 +45,11 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import top.manpok.blog.R
+import top.manpok.blog.utils.Constants
 import top.manpok.blog.utils.Emoji
+import kotlin.math.ceil
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun EditCommentBottomDialog(
     modifier: Modifier = Modifier,
@@ -48,10 +58,20 @@ fun EditCommentBottomDialog(
     onEmojiClick: (String) -> Unit,
     onDismiss: () -> Unit
 ) {
-    val focusRequester = FocusRequester()
+    val focusRequester = remember {
+        FocusRequester()
+    }
     LaunchedEffect(key1 = Unit) {
         focusRequester.requestFocus()
     }
+
+    var showEmojiPanel by remember {
+        mutableStateOf(false)
+    }
+    val pagerState = rememberPagerState {
+        ceil(Emoji.list.size.toDouble() / Constants.EMOJI_NUM_PER_PAGE).toInt()
+    }
+
     ModalBottomSheet(
         onDismissRequest = onDismiss,
         dragHandle = null,
@@ -94,10 +114,16 @@ fun EditCommentBottomDialog(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.padding(horizontal = 12.dp)
             ) {
+                val keyboardController = LocalSoftwareKeyboardController.current
                 Image(
                     imageVector = ImageVector.vectorResource(id = R.drawable.ic_emoji_panel),
                     contentDescription = null,
-                    modifier = Modifier.size(20.dp)
+                    modifier = Modifier
+                        .size(20.dp)
+                        .clickable {
+                            keyboardController?.hide()
+                            showEmojiPanel = true
+                        }
                 )
                 Surface(
                     color = colorResource(id = R.color.gray_878789), modifier = Modifier
@@ -131,6 +157,19 @@ fun EditCommentBottomDialog(
                     .padding(12.dp)
             ) {
                 Text(text = stringResource(id = R.string.commit))
+            }
+            if (showEmojiPanel) {
+                HorizontalPager(state = pagerState) {
+                    EmojiPanelPage(
+                        data = Emoji.list.subList(
+                            Constants.EMOJI_NUM_PER_PAGE * it,
+                            if (it == pagerState.pageCount - 1) Emoji.list.size else Constants.EMOJI_NUM_PER_PAGE * (it + 1),
+                        ),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 12.dp)
+                    )
+                }
             }
         }
     }

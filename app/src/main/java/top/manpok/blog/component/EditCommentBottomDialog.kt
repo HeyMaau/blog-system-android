@@ -159,15 +159,21 @@ fun EditCommentBottomDialog(
                 Text(text = stringResource(id = R.string.commit))
             }
             if (showEmojiPanel) {
-                HorizontalPager(state = pagerState) {
-                    EmojiPanelPage(
-                        data = Emoji.list.subList(
-                            Constants.EMOJI_NUM_PER_PAGE * it,
-                            if (it == pagerState.pageCount - 1) Emoji.list.size else Constants.EMOJI_NUM_PER_PAGE * (it + 1),
-                        ),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 12.dp)
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    HorizontalPager(state = pagerState) {
+                        EmojiPanelPage(
+                            data = Emoji.list.subList(
+                                Constants.EMOJI_NUM_PER_PAGE * it,
+                                if (it == pagerState.pageCount - 1) Emoji.list.size else Constants.EMOJI_NUM_PER_PAGE * (it + 1),
+                            ),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 12.dp, vertical = 16.dp)
+                        )
+                    }
+                    PagerIndicator(
+                        total = pagerState.pageCount,
+                        current = pagerState.currentPage
                     )
                 }
             }

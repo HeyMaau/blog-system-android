@@ -1,6 +1,7 @@
 package top.manpok.blog.component
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,11 +20,12 @@ import top.manpok.blog.R
 import top.manpok.blog.utils.Emoji
 
 @Composable
-fun CommentInput(modifier: Modifier = Modifier) {
+fun CommentInput(modifier: Modifier = Modifier, onClick: () -> Unit) {
     Row(
         modifier = modifier
             .background(color = colorResource(id = R.color.gray_f8f8fa), shape = CircleShape)
             .fillMaxWidth()
+            .clickable(onClick = onClick)
             .padding(vertical = 10.dp, horizontal = 12.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
@@ -42,5 +44,5 @@ fun CommentInput(modifier: Modifier = Modifier) {
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
 private fun PreviewCommentInput() {
-    CommentInput()
+    CommentInput {}
 }

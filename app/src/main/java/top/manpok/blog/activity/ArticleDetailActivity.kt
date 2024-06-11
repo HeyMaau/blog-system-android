@@ -34,7 +34,9 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -46,6 +48,7 @@ import top.manpok.blog.component.AuthorInfoBanner
 import top.manpok.blog.component.CommentInput
 import top.manpok.blog.component.CommentList
 import top.manpok.blog.component.CommonHeader
+import top.manpok.blog.component.EditCommentBottomDialog
 import top.manpok.blog.component.FloatingHeader
 import top.manpok.blog.utils.Constants
 import top.manpok.blog.viewmodel.ArticleDetailViewModel
@@ -90,6 +93,11 @@ class ArticleDetailActivity : ComponentActivity() {
                     scrollState.value > commonHeaderHeight * 2
                 }
             }
+
+            var showCommentBottomDialog by remember {
+                mutableStateOf(false)
+            }
+
             Box(
                 modifier = Modifier
                     .background(Color.White)
@@ -177,7 +185,9 @@ class ArticleDetailActivity : ComponentActivity() {
                         fontWeight = FontWeight(500),
                     )
                     Spacer(modifier = Modifier.height(15.dp))
-                    CommentInput()
+                    CommentInput {
+                        showCommentBottomDialog = true
+                    }
                     CommentList(
                         dataList = commentViewModel.commentList,
                         modifier = Modifier
@@ -225,6 +235,18 @@ class ArticleDetailActivity : ComponentActivity() {
                             ) {}
                         }
                     }
+                }
+            }
+
+            if (showCommentBottomDialog) {
+                EditCommentBottomDialog(text = commentViewModel.contentInputState, onTextChange = {
+                    commentViewModel.contentInputState = it
+                }, onEmojiClick = {
+                    val result = commentViewModel.contentInputState.text.plus(it)
+                    commentViewModel.contentInputState =
+                        TextFieldValue(text = result, selection = TextRange(result.length))
+                }) {
+                    showCommentBottomDialog = false
                 }
             }
         }

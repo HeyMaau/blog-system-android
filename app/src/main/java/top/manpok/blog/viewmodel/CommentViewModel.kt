@@ -7,6 +7,8 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import retrofit2.Call
 import retrofit2.Callback
@@ -25,6 +27,10 @@ class CommentViewModel : ViewModel() {
     var noMore by mutableStateOf(true)
     var pageSize by mutableIntStateOf(Constants.DEFAULT_PAGE_SIZE)
     var total by mutableIntStateOf(0)
+
+    var contentInputState by mutableStateOf(
+        TextFieldValue(text = "", TextRange(0))
+    )
 
     fun getCommentList(page: Int, size: Int, type: Int, articleID: String?) {
         if (articleID == null || TextUtils.isEmpty(articleID)) {

@@ -116,13 +116,18 @@ fun EditCommentBottomDialog(
             ) {
                 val keyboardController = LocalSoftwareKeyboardController.current
                 Image(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_emoji_panel),
+                    imageVector = ImageVector.vectorResource(id = if (showEmojiPanel) R.drawable.ic_keyboard else R.drawable.ic_emoji_panel),
                     contentDescription = null,
                     modifier = Modifier
                         .size(20.dp)
                         .clickable {
-                            keyboardController?.hide()
-                            showEmojiPanel = true
+                            if (showEmojiPanel) {
+                                keyboardController?.show()
+                                showEmojiPanel = false
+                            } else {
+                                keyboardController?.hide()
+                                showEmojiPanel = true
+                            }
                         }
                 )
                 Surface(
@@ -166,6 +171,9 @@ fun EditCommentBottomDialog(
                                 Constants.EMOJI_NUM_PER_PAGE * it,
                                 if (it == pagerState.pageCount - 1) Emoji.list.size else Constants.EMOJI_NUM_PER_PAGE * (it + 1),
                             ),
+                            onClick = {
+                                onEmojiClick(it)
+                            },
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(horizontal = 12.dp, vertical = 16.dp)

@@ -1,6 +1,7 @@
 package top.manpok.blog.component
 
 import android.text.TextUtils
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -78,14 +79,25 @@ fun CommentItem(data: BlogComment.Data?, modifier: Modifier = Modifier) {
                     text = data.content,
                     modifier = Modifier.padding(bottom = 8.dp),
                 )
-                Text(
-                    text = data.updateTime,
-                    fontSize = 12.sp,
-                    color = colorResource(
-                        id = R.color.gray_878789
-                    ),
-                    modifier = Modifier.padding(bottom = 12.dp)
-                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 12.dp)
+                ) {
+                    Text(
+                        text = data.updateTime,
+                        fontSize = 12.sp,
+                        color = colorResource(
+                            id = R.color.gray_878789
+                        ),
+                    )
+                    Icon(
+                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_reply_comment),
+                        contentDescription = null
+                    )
+                }
                 if (data.children != null) {
                     Column(
                         modifier = Modifier

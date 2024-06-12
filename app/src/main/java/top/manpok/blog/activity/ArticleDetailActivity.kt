@@ -35,7 +35,6 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -45,8 +44,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import top.manpok.blog.R
 import top.manpok.blog.component.AuthorInfoBanner
-import top.manpok.blog.component.CommentInput
-import top.manpok.blog.component.CommentList
+import top.manpok.blog.component.CommentWindow
 import top.manpok.blog.component.CommonHeader
 import top.manpok.blog.component.EditCommentBottomDialog
 import top.manpok.blog.component.FloatingHeader
@@ -176,24 +174,12 @@ class ArticleDetailActivity : ComponentActivity() {
                             modifier = Modifier.padding(vertical = 15.dp)
                         )
                     }
-                    Text(
-                        text = stringResource(
-                            id = R.string.comment_number,
-                            commentViewModel.total
-                        ),
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight(500),
-                    )
-                    Spacer(modifier = Modifier.height(15.dp))
-                    CommentInput {
+                    CommentWindow(
+                        commentTotal = commentViewModel.total,
+                        commentList = commentViewModel.commentList
+                    ) {
                         showCommentBottomDialog = true
                     }
-                    CommentList(
-                        dataList = commentViewModel.commentList,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 15.dp, bottom = 30.dp)
-                    )
                 }
                 if (showFloatingHeader) {
                     FloatingHeader(

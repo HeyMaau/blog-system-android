@@ -87,7 +87,7 @@ fun CommentItem(data: BlogComment.Data?, modifier: Modifier = Modifier) {
                         .padding(bottom = 12.dp)
                 ) {
                     Text(
-                        text = data.updateTime,
+                        text = data.updateTime ?: "",
                         fontSize = 12.sp,
                         color = colorResource(
                             id = R.color.gray_878789

@@ -13,10 +13,12 @@ import androidx.lifecycle.ViewModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import top.manpok.blog.R
 import top.manpok.blog.api.BlogRetrofit
 import top.manpok.blog.pojo.BaseResponse
 import top.manpok.blog.pojo.BlogComment
 import top.manpok.blog.utils.Constants
+import top.manpok.blog.utils.ToastUtil
 
 class CommentViewModel : ViewModel() {
 
@@ -73,6 +75,48 @@ class CommentViewModel : ViewModel() {
                 }
 
             })
+    }
+
+    fun commitComment(articleId: String?, type: Int) {
+        if (articleId == null) {
+            return
+        }
+        val data = BlogComment.Data(
+            articleId = articleId,
+            content = contentInputState.text,
+            parentCommentId = null,
+            replyUserName = null,
+            replyCommentId = null,
+            type = type,
+            userEmail = emailInputState.text,
+            userName = nicknameInputState.text,
+            userAvatar = null,
+            updateTime = null,
+            children = null
+        )
+        BlogRetrofit.commentApi.addComment(data).enqueue(object : Callback<BaseResponse<Unit>> {
+            override fun onResponse(
+                call: Call<BaseResponse<Unit>>,
+                response: Response<BaseResponse<Unit>>
+            ) {
+                if (response.isSuccessful) {
+                    val body = response.body()
+                    if (body?.code == Constants.CODE_SUCCESS) {
+                        ToastUtil.showShortToast(R.string.commit_comment_successfully)
+                        getCommentList(
+                            currentPage,
+                            pageSize,
+                            Constants.COMMENT_TYPE_ARTICLE,
+                            articleId
+                        )
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<BaseResponse<Unit>>, error: Throwable) {
+                ToastUtil.showShortToast(R.string.commit_comment_fail)
+            }
+        })
     }
 
 }

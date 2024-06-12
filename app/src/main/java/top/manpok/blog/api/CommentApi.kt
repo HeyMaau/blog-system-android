@@ -12,7 +12,7 @@ import top.manpok.blog.pojo.BlogComment
 interface CommentApi {
 
     @POST("/portal/comment")
-    fun addComment(@Body blogComment: BlogComment): Call<BaseResponse<Unit>>
+    fun addComment(@Body blogComment: BlogComment.Data): Call<BaseResponse<Unit>>
 
     @GET("/portal/comment/list/{type}/{articleID}")
     fun getCommentList(

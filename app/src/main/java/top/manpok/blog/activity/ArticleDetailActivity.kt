@@ -243,7 +243,12 @@ class ArticleDetailActivity : ComponentActivity() {
                         commentViewModel.contentInputState =
                             TextFieldValue(text = result, selection = TextRange(result.length))
                     },
-                    onCommitClick = {}) {
+                    onCommitClick = {
+                        commentViewModel.commitComment(
+                            articleId = id,
+                            type = Constants.COMMENT_TYPE_ARTICLE
+                        )
+                    }) {
                     showCommentBottomDialog = false
                 }
             }

@@ -18,6 +18,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
@@ -51,6 +52,7 @@ import kotlin.math.ceil
 @Composable
 fun EditCommentBottomDialog(
     modifier: Modifier = Modifier,
+    loading: Boolean,
     contentText: TextFieldValue,
     nicknameText: TextFieldValue,
     emailText: TextFieldValue,
@@ -181,6 +183,7 @@ fun EditCommentBottomDialog(
             }
             Spacer(modifier = Modifier.height(16.dp))
             Row(
+                verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.End, modifier = Modifier
                     .background(
                         colorResource(id = R.color.gray_f8f8fa)
@@ -188,17 +191,25 @@ fun EditCommentBottomDialog(
                     .fillMaxWidth()
                     .padding(12.dp)
             ) {
+                if (loading) {
+                    CircularProgressIndicator(
+                        color = colorResource(id = R.color.blue_0185fa),
+                        strokeWidth = 2.dp,
+                        modifier = Modifier.size(16.dp)
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                }
                 Text(
                     text = stringResource(id = R.string.commit),
                     color = if (TextUtils.isEmpty(contentText.text) || TextUtils.isEmpty(
                             nicknameText.text
-                        ) || TextUtils.isEmpty(emailText.text)
+                        ) || TextUtils.isEmpty(emailText.text) || loading
                     ) colorResource(
                         id = R.color.blue_444285f4
                     ) else colorResource(id = R.color.blue_4285f4),
-                    modifier = Modifier.clickable {
+                    modifier = Modifier.clickable(enabled = !loading, onClick = {
                         onCommitClick()
-                    }
+                    })
                 )
             }
             if (showEmojiPanel) {

@@ -95,6 +95,23 @@ class ArticleDetailActivity : ComponentActivity() {
             var showCommentBottomDialog by remember {
                 mutableStateOf(false)
             }
+            var committingComment by remember {
+                mutableStateOf(false)
+            }
+            LaunchedEffect(key1 = Unit) {
+                commentViewModel.commitState.collect {
+                    when (it) {
+                        CommentViewModel.CommitState.Success -> {
+                            showCommentBottomDialog = false
+                            committingComment = false
+                        }
+
+                        CommentViewModel.CommitState.Committing -> committingComment = true
+                        CommentViewModel.CommitState.Error -> committingComment = false
+                        else -> {}
+                    }
+                }
+            }
 
             Box(
                 modifier = Modifier
@@ -179,6 +196,7 @@ class ArticleDetailActivity : ComponentActivity() {
                         commentList = commentViewModel.commentList
                     ) {
                         showCommentBottomDialog = true
+                        commentViewModel.updateCommitState(CommentViewModel.CommitState.Stop)
                     }
                 }
                 if (showFloatingHeader) {
@@ -226,6 +244,7 @@ class ArticleDetailActivity : ComponentActivity() {
 
             if (showCommentBottomDialog) {
                 EditCommentBottomDialog(
+                    loading = committingComment,
                     contentText = commentViewModel.contentInputState,
                     onContentTextChange = {
                         commentViewModel.contentInputState = it

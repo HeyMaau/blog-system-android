@@ -10,6 +10,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -23,6 +25,9 @@ import top.manpok.blog.utils.ToastUtil
 class CommentViewModel : ViewModel() {
 
     private val TAG = "CommentViewModel"
+
+    private var _commitState: MutableStateFlow<CommitState> = MutableStateFlow(CommitState.Stop)
+    val commitState = _commitState.asStateFlow()
 
     val commentList = mutableStateListOf<BlogComment.Data?>()
     var currentPage by mutableIntStateOf(Constants.DEFAULT_PAGE)
@@ -81,6 +86,7 @@ class CommentViewModel : ViewModel() {
         if (articleId == null) {
             return
         }
+        _commitState.value = CommitState.Committing
         val data = BlogComment.Data(
             articleId = articleId,
             content = contentInputState.text,
@@ -109,14 +115,29 @@ class CommentViewModel : ViewModel() {
                             Constants.COMMENT_TYPE_ARTICLE,
                             articleId
                         )
+                        _commitState.value = CommitState.Success
+                        contentInputState = TextFieldValue(text = "", TextRange(0))
+                        nicknameInputState = TextFieldValue(text = "", TextRange(0))
+                        emailInputState = TextFieldValue(text = "", TextRange(0))
                     }
                 }
             }
 
             override fun onFailure(call: Call<BaseResponse<Unit>>, error: Throwable) {
+                _commitState.value = CommitState.Error
                 ToastUtil.showShortToast(R.string.commit_comment_fail)
             }
         })
     }
 
+    fun updateCommitState(commitState: CommitState) {
+        _commitState.value = commitState
+    }
+
+    sealed class CommitState {
+        data object Stop : CommitState()
+        data object Committing : CommitState()
+        data object Success : CommitState()
+        data object Error : CommitState()
+    }
 }

@@ -45,6 +45,10 @@ class CommentViewModel : ViewModel() {
         TextFieldValue(text = "", TextRange(0))
     )
 
+    var replyCommentId: String? = null
+    var parentCommentId: String? = null
+    var replyUserName: String? = null
+
     fun getCommentList(page: Int, size: Int, type: Int, articleID: String?) {
         if (articleID == null || TextUtils.isEmpty(articleID)) {
             return
@@ -88,11 +92,12 @@ class CommentViewModel : ViewModel() {
         }
         _commitState.value = CommitState.Committing
         val data = BlogComment.Data(
+            id = null,
             articleId = articleId,
             content = contentInputState.text,
-            parentCommentId = null,
-            replyUserName = null,
-            replyCommentId = null,
+            parentCommentId = parentCommentId,
+            replyUserName = replyUserName,
+            replyCommentId = replyCommentId,
             type = type,
             userEmail = emailInputState.text,
             userName = nicknameInputState.text,
@@ -100,6 +105,9 @@ class CommentViewModel : ViewModel() {
             updateTime = null,
             children = null
         )
+        if (TextUtils.isEmpty(replyCommentId)) {
+            data.replyUserName = null
+        }
         BlogRetrofit.commentApi.addComment(data).enqueue(object : Callback<BaseResponse<Unit>> {
             override fun onResponse(
                 call: Call<BaseResponse<Unit>>,

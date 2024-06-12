@@ -193,8 +193,26 @@ class ArticleDetailActivity : ComponentActivity() {
                     }
                     CommentWindow(
                         commentTotal = commentViewModel.total,
-                        commentList = commentViewModel.commentList
+                        commentList = commentViewModel.commentList,
+                        onReplyClick = { parentCommentId, replyCommentId, replyUserName ->
+                            if (replyUserName != null) {
+                                commentViewModel.replyUserName = replyUserName
+                            }
+                            if (parentCommentId != null) {
+                                commentViewModel.parentCommentId = parentCommentId
+                            }
+                            commentViewModel.replyCommentId = replyCommentId
+                            if (parentCommentId == null && replyCommentId != null) {
+                                commentViewModel.parentCommentId = replyCommentId
+                                commentViewModel.replyCommentId = null
+                            }
+                            showCommentBottomDialog = true
+                            commentViewModel.updateCommitState(CommentViewModel.CommitState.Stop)
+                        }
                     ) {
+                        commentViewModel.replyUserName = null
+                        commentViewModel.replyCommentId = null
+                        commentViewModel.parentCommentId = null
                         showCommentBottomDialog = true
                         commentViewModel.updateCommitState(CommentViewModel.CommitState.Stop)
                     }
@@ -243,8 +261,14 @@ class ArticleDetailActivity : ComponentActivity() {
             }
 
             if (showCommentBottomDialog) {
+                val hintText: String = if (!TextUtils.isEmpty(commentViewModel.replyUserName)) {
+                    stringResource(id = R.string.reply_to_who, commentViewModel.replyUserName!!)
+                } else {
+                    stringResource(id = R.string.welcome_to_congratulate)
+                }
                 EditCommentBottomDialog(
                     loading = committingComment,
+                    contentHintText = hintText,
                     contentText = commentViewModel.contentInputState,
                     onContentTextChange = {
                         commentViewModel.contentInputState = it
@@ -269,6 +293,9 @@ class ArticleDetailActivity : ComponentActivity() {
                         )
                     }) {
                     showCommentBottomDialog = false
+                    commentViewModel.replyUserName = null
+                    commentViewModel.replyCommentId = null
+                    commentViewModel.parentCommentId = null
                 }
             }
         }

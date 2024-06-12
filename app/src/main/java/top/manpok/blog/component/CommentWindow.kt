@@ -20,6 +20,7 @@ fun CommentWindow(
     modifier: Modifier = Modifier,
     commentTotal: Int,
     commentList: List<BlogComment.Data?>,
+    onReplyClick: (parentCommentId: String?, replyCommentId: String?, replyUserName: String?) -> Unit,
     onInputClick: () -> Unit
 ) {
     Column {
@@ -39,6 +40,7 @@ fun CommentWindow(
         }
         CommentList(
             dataList = commentList,
+            onReplyClick = onReplyClick,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 15.dp, bottom = 30.dp)

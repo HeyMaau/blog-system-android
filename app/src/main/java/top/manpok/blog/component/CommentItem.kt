@@ -1,6 +1,7 @@
 package top.manpok.blog.component
 
 import android.text.TextUtils
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -29,7 +30,11 @@ import top.manpok.blog.pojo.BlogComment
 import top.manpok.blog.utils.Constants
 
 @Composable
-fun CommentItem(data: BlogComment.Data?, modifier: Modifier = Modifier) {
+fun CommentItem(
+    data: BlogComment.Data?,
+    modifier: Modifier = Modifier,
+    onReplyClick: (parentCommentId: String?, replyCommentId: String?, replyUserName: String?) -> Unit
+) {
     if (data != null) {
         Row(verticalAlignment = Alignment.Top, modifier = modifier.fillMaxWidth()) {
             AsyncImage(
@@ -58,7 +63,7 @@ fun CommentItem(data: BlogComment.Data?, modifier: Modifier = Modifier) {
                             tint = colorResource(id = R.color.gray_878789)
                         )
                         Text(
-                            text = data.replyUserName,
+                            text = data.replyUserName ?: "",
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                             fontWeight = FontWeight(500),
@@ -95,7 +100,10 @@ fun CommentItem(data: BlogComment.Data?, modifier: Modifier = Modifier) {
                     )
                     Icon(
                         imageVector = ImageVector.vectorResource(id = R.drawable.ic_reply_comment),
-                        contentDescription = null
+                        contentDescription = null,
+                        modifier = Modifier.clickable {
+                            onReplyClick(data.parentCommentId, data.id, data.userName)
+                        }
                     )
                 }
                 if (data.children != null) {
@@ -104,7 +112,10 @@ fun CommentItem(data: BlogComment.Data?, modifier: Modifier = Modifier) {
                             .fillMaxWidth()
                     ) {
                         data.children.forEach {
-                            CommentItem(data = it)
+                            CommentItem(
+                                data = it,
+                                onReplyClick = onReplyClick
+                            )
                         }
                     }
                 }

@@ -53,6 +53,7 @@ import kotlin.math.ceil
 fun EditCommentBottomDialog(
     modifier: Modifier = Modifier,
     loading: Boolean,
+    contentHintText: String,
     contentText: TextFieldValue,
     nicknameText: TextFieldValue,
     emailText: TextFieldValue,
@@ -91,13 +92,14 @@ fun EditCommentBottomDialog(
                     CommentBasicTextField(
                         minLines = 2,
                         text = contentText,
-                        hintText = R.string.welcome_to_congratulate,
+                        hintText = contentHintText,
                         modifier = Modifier
                             .fillMaxWidth()
                             .focusRequester(focusRequester)
                     ) {
                         onContentTextChange(it)
                     }
+
                     Surface(
                         modifier = Modifier
                             .fillMaxWidth()

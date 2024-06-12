@@ -8,11 +8,12 @@ data class BlogComment(
     val data: List<Data?>?
 ) : BasePaging() {
     data class Data(
+        val id: String?,
         val articleId: String,
         val content: String,
         val parentCommentId: String?,
         val replyCommentId: String?,
-        val replyUserName: String?,
+        var replyUserName: String?,
         val type: Int,
         val userEmail: String,
         val userName: String,

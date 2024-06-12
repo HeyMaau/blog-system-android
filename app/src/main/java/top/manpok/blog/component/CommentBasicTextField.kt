@@ -41,3 +41,33 @@ fun CommentBasicTextField(
             }
         })
 }
+
+@Composable
+fun CommentBasicTextField(
+    modifier: Modifier = Modifier,
+    minLines: Int,
+    text: TextFieldValue,
+    hintText: String,
+    onTextChange: (TextFieldValue) -> Unit
+) {
+    BasicTextField(
+        modifier = modifier,
+        minLines = minLines,
+        value = text,
+        onValueChange = {
+            onTextChange(it)
+        },
+        decorationBox = { innerTextField ->
+            Box {
+                if (TextUtils.isEmpty(text.text)) {
+                    Text(
+                        text = hintText,
+                        color = colorResource(
+                            id = R.color.gray_878789
+                        )
+                    )
+                }
+                innerTextField()
+            }
+        })
+}

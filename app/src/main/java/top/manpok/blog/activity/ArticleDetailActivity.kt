@@ -225,13 +225,25 @@ class ArticleDetailActivity : ComponentActivity() {
             }
 
             if (showCommentBottomDialog) {
-                EditCommentBottomDialog(text = commentViewModel.contentInputState, onTextChange = {
-                    commentViewModel.contentInputState = it
-                }, onEmojiClick = {
-                    val result = commentViewModel.contentInputState.text.plus(it)
-                    commentViewModel.contentInputState =
-                        TextFieldValue(text = result, selection = TextRange(result.length))
-                }, onCommitClick = {}) {
+                EditCommentBottomDialog(
+                    contentText = commentViewModel.contentInputState,
+                    onContentTextChange = {
+                        commentViewModel.contentInputState = it
+                    },
+                    nicknameText = commentViewModel.nicknameInputState,
+                    onNicknameTextChange = {
+                        commentViewModel.nicknameInputState = it
+                    },
+                    emailText = commentViewModel.emailInputState,
+                    onEmailTextChange = {
+                        commentViewModel.emailInputState = it
+                    },
+                    onEmojiClick = {
+                        val result = commentViewModel.contentInputState.text.plus(it)
+                        commentViewModel.contentInputState =
+                            TextFieldValue(text = result, selection = TextRange(result.length))
+                    },
+                    onCommitClick = {}) {
                     showCommentBottomDialog = false
                 }
             }

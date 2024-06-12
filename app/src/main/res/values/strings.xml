@@ -45,5 +45,7 @@
     <string name="write_comment">写评论</string>
     <string name="comment_number">评论 %d</string>
     <string name="welcome_to_congratulate">欢迎参与讨论</string>
+    <string name="enter_your_email_to_generate_avatar">您的邮箱（仅用于生成头像）</string>
+    <string name="enter_your_nickname">您的昵称</string>
     <string name="commit">发布</string>
 </resources>

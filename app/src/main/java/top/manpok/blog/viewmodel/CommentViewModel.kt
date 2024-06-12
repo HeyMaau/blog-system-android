@@ -31,6 +31,12 @@ class CommentViewModel : ViewModel() {
     var contentInputState by mutableStateOf(
         TextFieldValue(text = "", TextRange(0))
     )
+    var nicknameInputState by mutableStateOf(
+        TextFieldValue(text = "", TextRange(0))
+    )
+    var emailInputState by mutableStateOf(
+        TextFieldValue(text = "", TextRange(0))
+    )
 
     fun getCommentList(page: Int, size: Int, type: Int, articleID: String?) {
         if (articleID == null || TextUtils.isEmpty(articleID)) {

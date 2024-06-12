@@ -51,8 +51,12 @@ import kotlin.math.ceil
 @Composable
 fun EditCommentBottomDialog(
     modifier: Modifier = Modifier,
-    text: TextFieldValue,
-    onTextChange: (TextFieldValue) -> Unit,
+    contentText: TextFieldValue,
+    nicknameText: TextFieldValue,
+    emailText: TextFieldValue,
+    onContentTextChange: (TextFieldValue) -> Unit,
+    onNicknameTextChange: (TextFieldValue) -> Unit,
+    onEmailTextChange: (TextFieldValue) -> Unit,
     onEmojiClick: (String) -> Unit,
     onCommitClick: () -> Unit,
     onDismiss: () -> Unit
@@ -81,13 +85,51 @@ fun EditCommentBottomDialog(
             Row(
                 modifier = Modifier.padding(start = 12.dp, end = 12.dp, bottom = 12.dp)
             ) {
-                CommentBasicTextField(
-                    minLines = 2,
-                    text = text,
-                    hintText = R.string.welcome_to_congratulate,
-                    modifier = Modifier.weight(1f).focusRequester(focusRequester)
-                ) {
-                    onTextChange(it)
+                Column(modifier = Modifier.weight(1f)) {
+                    CommentBasicTextField(
+                        minLines = 2,
+                        text = contentText,
+                        hintText = R.string.welcome_to_congratulate,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .focusRequester(focusRequester)
+                    ) {
+                        onContentTextChange(it)
+                    }
+                    Surface(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 4.dp)
+                            .height(0.5.dp), color = colorResource(id = R.color.gray_cccccc)
+                    ) {
+
+                    }
+                    CommentBasicTextField(
+                        minLines = 2,
+                        text = nicknameText,
+                        hintText = R.string.enter_your_nickname,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    ) {
+                        onNicknameTextChange(it)
+                    }
+                    Surface(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 4.dp)
+                            .height(0.5.dp), color = colorResource(id = R.color.gray_cccccc)
+                    ) {
+
+                    }
+                    CommentBasicTextField(
+                        minLines = 2,
+                        text = emailText,
+                        hintText = R.string.enter_your_email_to_generate_avatar,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    ) {
+                        onEmailTextChange(it)
+                    }
                 }
                 Icon(
                     imageVector = ImageVector.vectorResource(id = R.drawable.ic_full_screen),
@@ -148,7 +190,10 @@ fun EditCommentBottomDialog(
             ) {
                 Text(
                     text = stringResource(id = R.string.commit),
-                    color = if (TextUtils.isEmpty(text.text)) colorResource(
+                    color = if (TextUtils.isEmpty(contentText.text) || TextUtils.isEmpty(
+                            nicknameText.text
+                        ) || TextUtils.isEmpty(emailText.text)
+                    ) colorResource(
                         id = R.color.blue_444285f4
                     ) else colorResource(id = R.color.blue_4285f4),
                     modifier = Modifier.clickable {

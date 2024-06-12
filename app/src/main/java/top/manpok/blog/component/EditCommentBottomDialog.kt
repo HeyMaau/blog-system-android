@@ -78,7 +78,7 @@ fun EditCommentBottomDialog(
         containerColor = Color.White,
         shape = RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp)
     ) {
-        Column(modifier = Modifier.padding(top = 16.dp)) {
+        Column(modifier = Modifier.padding(vertical = 16.dp)) {
             Row(
                 modifier = Modifier.padding(start = 12.dp, end = 12.dp, bottom = 12.dp)
             ) {

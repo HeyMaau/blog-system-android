@@ -6,7 +6,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -19,7 +18,6 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
@@ -56,6 +54,7 @@ fun EditCommentBottomDialog(
     text: TextFieldValue,
     onTextChange: (TextFieldValue) -> Unit,
     onEmojiClick: (String) -> Unit,
+    onCommitClick: () -> Unit,
     onDismiss: () -> Unit
 ) {
     val focusRequester = remember {
@@ -82,28 +81,14 @@ fun EditCommentBottomDialog(
             Row(
                 modifier = Modifier.padding(start = 12.dp, end = 12.dp, bottom = 12.dp)
             ) {
-                BasicTextField(
-                    modifier = Modifier
-                        .weight(1f)
-                        .focusRequester(focusRequester),
+                CommentBasicTextField(
                     minLines = 2,
-                    value = text,
-                    onValueChange = {
-                        onTextChange(it)
-                    },
-                    decorationBox = { innerTextField ->
-                        Box {
-                            if (TextUtils.isEmpty(text.text)) {
-                                Text(
-                                    text = stringResource(id = R.string.welcome_to_congratulate),
-                                    color = colorResource(
-                                        id = R.color.gray_878789
-                                    )
-                                )
-                            }
-                            innerTextField()
-                        }
-                    })
+                    text = text,
+                    hintText = R.string.welcome_to_congratulate,
+                    modifier = Modifier.weight(1f).focusRequester(focusRequester)
+                ) {
+                    onTextChange(it)
+                }
                 Icon(
                     imageVector = ImageVector.vectorResource(id = R.drawable.ic_full_screen),
                     contentDescription = null,
@@ -161,7 +146,15 @@ fun EditCommentBottomDialog(
                     .fillMaxWidth()
                     .padding(12.dp)
             ) {
-                Text(text = stringResource(id = R.string.commit))
+                Text(
+                    text = stringResource(id = R.string.commit),
+                    color = if (TextUtils.isEmpty(text.text)) colorResource(
+                        id = R.color.blue_444285f4
+                    ) else colorResource(id = R.color.blue_4285f4),
+                    modifier = Modifier.clickable {
+                        onCommitClick()
+                    }
+                )
             }
             if (showEmojiPanel) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {

@@ -231,7 +231,7 @@ class ArticleDetailActivity : ComponentActivity() {
                     val result = commentViewModel.contentInputState.text.plus(it)
                     commentViewModel.contentInputState =
                         TextFieldValue(text = result, selection = TextRange(result.length))
-                }) {
+                }, onCommitClick = {}) {
                     showCommentBottomDialog = false
                 }
             }

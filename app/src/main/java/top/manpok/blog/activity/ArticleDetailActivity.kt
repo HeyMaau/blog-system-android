@@ -210,10 +210,8 @@ class ArticleDetailActivity : ComponentActivity() {
                             commentViewModel.updateCommitState(CommentViewModel.CommitState.Stop)
                         }
                     ) {
-                        commentViewModel.replyUserName = null
-                        commentViewModel.replyCommentId = null
-                        commentViewModel.parentCommentId = null
                         showCommentBottomDialog = true
+                        commentViewModel.clearReplyState()
                         commentViewModel.updateCommitState(CommentViewModel.CommitState.Stop)
                     }
                 }
@@ -293,9 +291,7 @@ class ArticleDetailActivity : ComponentActivity() {
                         )
                     }) {
                     showCommentBottomDialog = false
-                    commentViewModel.replyUserName = null
-                    commentViewModel.replyCommentId = null
-                    commentViewModel.parentCommentId = null
+                    commentViewModel.clearReplyState()
                 }
             }
         }

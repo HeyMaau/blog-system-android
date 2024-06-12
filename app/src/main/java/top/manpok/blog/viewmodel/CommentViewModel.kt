@@ -124,9 +124,7 @@ class CommentViewModel : ViewModel() {
                             articleId
                         )
                         _commitState.value = CommitState.Success
-                        contentInputState = TextFieldValue(text = "", TextRange(0))
-                        nicknameInputState = TextFieldValue(text = "", TextRange(0))
-                        emailInputState = TextFieldValue(text = "", TextRange(0))
+                        clearCommentState()
                     }
                 }
             }
@@ -140,6 +138,18 @@ class CommentViewModel : ViewModel() {
 
     fun updateCommitState(commitState: CommitState) {
         _commitState.value = commitState
+    }
+
+    fun clearReplyState() {
+        replyCommentId = null
+        replyUserName = null
+        parentCommentId = null
+    }
+
+    fun clearCommentState() {
+        contentInputState = TextFieldValue(text = "", TextRange(0))
+        nicknameInputState = TextFieldValue(text = "", TextRange(0))
+        emailInputState = TextFieldValue(text = "", TextRange(0))
     }
 
     sealed class CommitState {

@@ -22,8 +22,10 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.SheetState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -52,6 +54,7 @@ import kotlin.math.ceil
 @Composable
 fun EditCommentBottomDialog(
     modifier: Modifier = Modifier,
+    sheetState: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
     loading: Boolean,
     contentHintText: String,
     contentText: TextFieldValue,
@@ -80,9 +83,11 @@ fun EditCommentBottomDialog(
 
     ModalBottomSheet(
         onDismissRequest = onDismiss,
+        sheetState = sheetState,
         dragHandle = null,
         containerColor = Color.White,
-        shape = RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp)
+        shape = RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp),
+        modifier = modifier
     ) {
         Column(modifier = Modifier.padding(vertical = 16.dp)) {
             Row(

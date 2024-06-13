@@ -32,7 +32,7 @@ class CommentViewModel : ViewModel() {
     val commentList = mutableStateListOf<BlogComment.Data?>()
     var currentPage by mutableIntStateOf(Constants.DEFAULT_PAGE)
     var noMore by mutableStateOf(true)
-    var pageSize by mutableIntStateOf(Constants.DEFAULT_PAGE_SIZE)
+    var pageSize by mutableIntStateOf(Constants.DEFAULT_PAGE_SIZE + 10)
     var total by mutableIntStateOf(0)
 
     var contentInputState by mutableStateOf(
@@ -120,7 +120,7 @@ class CommentViewModel : ViewModel() {
                         getCommentList(
                             currentPage,
                             pageSize,
-                            Constants.COMMENT_TYPE_ARTICLE,
+                            type,
                             articleId
                         )
                         _commitState.value = CommitState.Success

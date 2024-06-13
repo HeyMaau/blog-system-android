@@ -76,6 +76,7 @@ fun HomeThinkingListPage(
             }) {
                 ThinkingListItem(data = it, click = {
                     val intent = Intent(context, ThinkingDetailActivity::class.java)
+                    intent.putExtra(ThinkingDetailActivity.INTENT_KEY_THINKING_ID, it.id)
                     intent.putExtra(
                         ThinkingDetailActivity.INTENT_KEY_AUTHOR_NAME,
                         it.user?.userName

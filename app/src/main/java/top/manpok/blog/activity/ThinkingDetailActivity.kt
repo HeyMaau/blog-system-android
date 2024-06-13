@@ -8,6 +8,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -128,6 +129,7 @@ class ThinkingDetailActivity : ComponentActivity() {
                         modifier = Modifier.onGloballyPositioned {
                             commonHeaderHeight = it.size.height
                         })
+                    Spacer(modifier = Modifier.height(8.dp))
                     AuthorInfoBanner(
                         avatarUrl = Constants.BASE_IMAGE_URL + intent.getStringExtra(
                             INTENT_KEY_AUTHOR_AVATAR

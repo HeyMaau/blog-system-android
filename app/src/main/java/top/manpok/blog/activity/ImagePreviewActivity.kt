@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.rememberTransformableState
 import androidx.compose.foundation.gestures.transformable
 import androidx.compose.foundation.layout.Arrangement
@@ -12,15 +13,22 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import top.manpok.blog.R
+
 
 class ImagePreviewActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,12 +42,14 @@ class ImagePreviewActivity : ComponentActivity() {
                     .statusBarsPadding()
             ) {
                 // set up all transformation states
-                var scale by remember { mutableStateOf(1f) }
+                var scale by remember { mutableFloatStateOf(1f) }
                 val state =
                     rememberTransformableState { zoomChange, _, _ ->
                         val tempScale = scale * zoomChange
                         scale = if (tempScale <= 1) {
                             1f
+                        } else if (tempScale >= 10) {
+                            10f
                         } else {
                             tempScale
                         }
@@ -63,6 +73,17 @@ class ImagePreviewActivity : ComponentActivity() {
                             .fillMaxWidth()
                     )
                 }
+
+                Icon(
+                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_arrow_back),
+                    contentDescription = null,
+                    tint = Color.White,
+                    modifier = Modifier
+                        .padding(start = 12.dp, top = 4.dp)
+                        .clickable {
+                            finish()
+                        }
+                )
             }
         }
     }

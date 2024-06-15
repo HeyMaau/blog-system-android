@@ -1,11 +1,13 @@
 package top.manpok.blog.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -155,6 +157,9 @@ class ThinkingDetailActivity : ComponentActivity() {
                             modifier = Modifier
                                 .padding(0.dp, 10.dp)
                                 .clip(RoundedCornerShape(5))
+                                .clickable {
+                                    previewImage(splitImage, 0)
+                                }
                         )
                     } else if (splitImage != null && splitImage.size >= 2) {
                         LazyRow(
@@ -168,6 +173,9 @@ class ThinkingDetailActivity : ComponentActivity() {
                                         modifier = Modifier
                                             .padding(0.dp, 10.dp, 5.dp, 10.dp)
                                             .clip(RoundedCornerShape(5))
+                                            .clickable {
+                                                previewImage(splitImage, it)
+                                            }
                                     )
                                 } else if (it != splitImage.size - 1) {
                                     AsyncImage(
@@ -176,6 +184,9 @@ class ThinkingDetailActivity : ComponentActivity() {
                                         modifier = Modifier
                                             .padding(5.dp, 10.dp)
                                             .clip(RoundedCornerShape(5))
+                                            .clickable {
+                                                previewImage(splitImage, it)
+                                            }
                                     )
                                 } else {
                                     AsyncImage(
@@ -184,6 +195,9 @@ class ThinkingDetailActivity : ComponentActivity() {
                                         modifier = Modifier
                                             .padding(5.dp, 10.dp, 0.dp, 10.dp)
                                             .clip(RoundedCornerShape(5))
+                                            .clickable {
+                                                previewImage(splitImage, it)
+                                            }
                                     )
                                 }
                             }
@@ -274,5 +288,18 @@ class ThinkingDetailActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    private fun previewImage(imageList: List<String>, index: Int) {
+        val intent = Intent(
+            this,
+            ImagePreviewActivity::class.java
+        )
+        intent.putStringArrayListExtra(
+            ImagePreviewActivity.INTENT_KEY_IMAGE_LIST,
+            imageList as ArrayList<String>?
+        )
+        intent.putExtra(ImagePreviewActivity.INTENT_KEY_CURRENT_INDEX, index)
+        startActivity(intent)
     }
 }

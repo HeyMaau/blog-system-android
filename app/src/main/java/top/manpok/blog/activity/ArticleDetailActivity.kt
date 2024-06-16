@@ -54,6 +54,7 @@ import top.manpok.blog.viewmodel.ArticleDetailViewModel
 import top.manpok.blog.viewmodel.CommentViewModel
 import top.manpok.blog.webview.BlogWebChromeClient
 import top.manpok.blog.webview.BlogWebViewClient
+import top.manpok.blog.webview.ImageJSInterface
 
 class ArticleDetailActivity : ComponentActivity() {
 
@@ -179,6 +180,12 @@ class ArticleDetailActivity : ComponentActivity() {
                                     "text/html",
                                     "utf-8",
                                     null
+                                )
+                                addJavascriptInterface(
+                                    ImageJSInterface(
+                                        this@ArticleDetailActivity,
+                                        articleDetailViewModel
+                                    ), "img_api"
                                 )
                             }
                         })

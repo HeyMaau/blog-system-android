@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.jsoup.Jsoup
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -34,6 +35,9 @@ class ArticleDetailViewModel : ViewModel() {
 
     var loading by mutableStateOf(true)
     private var timeOut by mutableStateOf(false)
+
+    val imageMap = mutableMapOf<String, Int>()
+    val imageList = mutableListOf<String>()
 
     init {
         viewModelScope.launch {
@@ -69,6 +73,7 @@ class ArticleDetailViewModel : ViewModel() {
                                 }
                                 viewModelScope.launch {
                                     saveToDB(data)
+                                    initImageMap(data.content)
                                 }
                             }
                         }
@@ -125,6 +130,15 @@ class ArticleDetailViewModel : ViewModel() {
         }
     }
 
+    private fun initImageMap(htmlContent: String) {
+        val document = Jsoup.parse(htmlContent)
+        val elements = document.select("img")
+        elements.forEachIndexed { index, element ->
+            imageMap[element.attr("src")] = index
+            imageList.add(element.attr("src"))
+        }
+    }
+
 
     private fun setHtmlContent(data: String) {
         content = """
@@ -147,6 +161,12 @@ class ArticleDetailViewModel : ViewModel() {
             <script>
                 function blogHighlightAll() {
                     hljs.highlightAll()
+                }
+            </script>
+            <script src="image-utils.js"></script>
+            <script>
+                function callAddImageOnClick() {
+                    addImageOnClick()
                 }
             </script>
             </html>

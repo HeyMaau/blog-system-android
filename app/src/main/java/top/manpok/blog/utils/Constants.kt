@@ -6,7 +6,7 @@ object Constants {
 
     const val CODE_SUCCESS: Int = 20000
 
-    const val BASE_URL: String = "http://192.168.137.129:8080"
+    const val BASE_URL: String = "https://m.manpok.top"
     const val BASE_IMAGE_URL: String = "$BASE_URL/image/"
     const val BASE_COMMENT_AVATAR_URL: String = BASE_IMAGE_URL + "comment/"
 

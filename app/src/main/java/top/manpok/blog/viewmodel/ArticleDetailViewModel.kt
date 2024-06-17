@@ -134,8 +134,9 @@ class ArticleDetailViewModel : ViewModel() {
         val document = Jsoup.parse(htmlContent)
         val elements = document.select("img")
         elements.forEachIndexed { index, element ->
-            imageMap[element.attr("src")] = index
-            imageList.add(element.attr("src"))
+            val src = element.attr("src")
+            imageMap[src] = index
+            imageList.add(src.substring(src.lastIndexOf("/") + 1))
         }
     }
 

@@ -13,10 +13,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -37,9 +37,9 @@ fun AboutPage(modifier: Modifier = Modifier, aboutPageViewModel: AboutPageViewMo
         val context = LocalContext.current
         Spacer(modifier = Modifier.height(100.dp))
         Image(
-            imageVector = ImageVector.vectorResource(id = R.drawable.thinking_default),
+            bitmap = ImageBitmap.imageResource(id = R.mipmap.logo_about),
             contentDescription = null,
-            modifier = Modifier.size(100.dp)
+            modifier = Modifier.size(150.dp)
         )
         Text(
             text = stringResource(id = R.string.app_name),

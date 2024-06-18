@@ -1,3 +1,5 @@
+import java.time.LocalDateTime
+
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
@@ -19,6 +21,11 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        val now = LocalDateTime.now()
+        val fileName =
+            "manpok_blog_V${versionName}_${now.year}${now.monthValue}${now.dayOfMonth}${now.hour}${now.minute}${now.second}"
+        setProperty("archivesBaseName", fileName)
     }
 
     buildTypes {
@@ -31,6 +38,7 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8

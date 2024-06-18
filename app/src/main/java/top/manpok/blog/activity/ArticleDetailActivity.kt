@@ -120,12 +120,12 @@ class ArticleDetailActivity : ComponentActivity() {
                 modifier = Modifier
                     .background(Color.White)
                     .fillMaxSize()
-                    .statusBarsPadding()
                     .padding(12.dp, 0.dp)
             ) {
                 Column(
                     modifier = Modifier
                         .verticalScroll(scrollState)
+                        .statusBarsPadding()
                 ) {
                     CommonHeader(
                         title = articleDetailViewModel.title,
@@ -233,12 +233,14 @@ class ArticleDetailActivity : ComponentActivity() {
                         },
                         rightIconClick = {},
                         modifier = Modifier
+                            .statusBarsPadding()
                             .padding(0.dp, 20.dp)
                     )
                 }
                 if (articleDetailViewModel.loading) {
                     Column(
                         modifier = Modifier
+                            .statusBarsPadding()
                             .padding(top = commonHeaderHeightDP)
                             .background(Color.White)
                             .fillMaxSize()

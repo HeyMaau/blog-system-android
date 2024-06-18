@@ -67,7 +67,6 @@ class ImagePreviewActivity : ComponentActivity() {
                         imageList.size
                     }
                     HorizontalPager(state = pagerState, modifier = Modifier.fillMaxSize()) {
-                        currentIndexState = it
                         AsyncImage(
                             model = Constants.BASE_IMAGE_URL + imageList[it],
                             contentDescription = null,
@@ -76,6 +75,7 @@ class ImagePreviewActivity : ComponentActivity() {
                                 .zoomable(zoomState = rememberZoomState())
                         )
                     }
+                    currentIndexState = pagerState.currentPage
                 }
 
                 Row(

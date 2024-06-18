@@ -213,7 +213,9 @@ fun CategoryPage(
                     )
                 }
             }
-            itemsIndexed(articleCategoryViewModel.articleList) { index, item ->
+            itemsIndexed(items = articleCategoryViewModel.articleList, key = { _, item ->
+                item?.id!!
+            }) { index, item ->
                 ArticleListItem(
                     item = item,
                     isLast = index == articleCategoryViewModel.articleList.size - 1,

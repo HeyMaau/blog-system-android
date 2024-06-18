@@ -102,7 +102,9 @@ class SearchActivity : ComponentActivity() {
                                     ) {}
                                 }
                             } else {
-                                items(searchViewModel.searchList) {
+                                items(items = searchViewModel.searchList, key = {
+                                    it?.id!!
+                                }) {
                                     SearchResultItem(
                                         keyword = searchViewModel.keywords,
                                         titleList = it?.titleList,

@@ -3,9 +3,7 @@ package top.manpok.blog.activity
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -51,7 +49,7 @@ import top.manpok.blog.component.FloatingHeader
 import top.manpok.blog.utils.Constants
 import top.manpok.blog.viewmodel.CommentViewModel
 
-class ThinkingDetailActivity : ComponentActivity() {
+class ThinkingDetailActivity : BaseActivity() {
 
     companion object {
         const val INTENT_KEY_THINKING_ID = "intent_key_thinking_id"
@@ -66,7 +64,6 @@ class ThinkingDetailActivity : ComponentActivity() {
 
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
-        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         val images = intent.getStringExtra(INTENT_KEY_THINKING_IMAGES)
         val id = intent.getStringExtra(INTENT_KEY_THINKING_ID)

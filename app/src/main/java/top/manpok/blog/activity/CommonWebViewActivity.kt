@@ -8,9 +8,7 @@ import android.webkit.WebChromeClient
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -37,7 +35,7 @@ import top.manpok.blog.component.CommonHeader
 import top.manpok.blog.utils.Constants
 import top.manpok.blog.viewmodel.CommonWebViewViewModel
 
-class CommonWebViewActivity : ComponentActivity() {
+class CommonWebViewActivity : BaseActivity() {
     private val TAG = "CommonWebViewActivity"
 
     companion object {
@@ -47,7 +45,6 @@ class CommonWebViewActivity : ComponentActivity() {
     val commonWebViewViewModel = CommonWebViewViewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 
         val url = intent?.getStringExtra(INTENT_KEY_URL) ?: Constants.BASE_URL

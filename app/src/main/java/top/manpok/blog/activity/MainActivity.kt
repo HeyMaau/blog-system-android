@@ -1,9 +1,7 @@
 package top.manpok.blog.activity
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -18,12 +16,11 @@ import top.manpok.blog.component.BlogScaffold
 import top.manpok.blog.component.LaunchPage
 import top.manpok.blog.ui.theme.BlogSystemAndroidTheme
 
-class MainActivity : ComponentActivity() {
+class MainActivity : BaseActivity() {
 
     private var launching by mutableStateOf(true)
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         lifecycleScope.launch {
             delay(2000)

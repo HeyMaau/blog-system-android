@@ -1,9 +1,7 @@
 package top.manpok.blog.activity
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -37,7 +35,7 @@ import top.manpok.blog.R
 import top.manpok.blog.utils.Constants
 
 
-class ImagePreviewActivity : ComponentActivity() {
+class ImagePreviewActivity : BaseActivity() {
 
     companion object {
         const val INTENT_KEY_IMAGE_LIST = "intent_key_image_list"
@@ -46,10 +44,9 @@ class ImagePreviewActivity : ComponentActivity() {
 
     @OptIn(ExperimentalFoundationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
-        enableEdgeToEdge()
+        super.onCreate(savedInstanceState)
         val windowInsetsControllerCompat = WindowInsetsControllerCompat(window, window.decorView)
         windowInsetsControllerCompat.isAppearanceLightStatusBars = false
-        super.onCreate(savedInstanceState)
         val imageList = intent?.getStringArrayListExtra(INTENT_KEY_IMAGE_LIST)
         val currentIndex = intent?.getIntExtra(INTENT_KEY_CURRENT_INDEX, 0)
         setContent {

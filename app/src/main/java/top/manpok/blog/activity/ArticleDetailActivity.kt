@@ -4,9 +4,7 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.view.KeyEvent
 import android.webkit.WebView
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -56,7 +54,7 @@ import top.manpok.blog.webview.BlogWebChromeClient
 import top.manpok.blog.webview.BlogWebViewClient
 import top.manpok.blog.webview.ImageJSInterface
 
-class ArticleDetailActivity : ComponentActivity() {
+class ArticleDetailActivity : BaseActivity() {
 
     companion object {
         const val INTENT_KEY_ARTICLE_ID = "intent_key_article_id"
@@ -64,7 +62,6 @@ class ArticleDetailActivity : ComponentActivity() {
 
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
-        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         val id = intent.getStringExtra(INTENT_KEY_ARTICLE_ID)
         setContent {

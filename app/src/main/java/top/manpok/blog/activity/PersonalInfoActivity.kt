@@ -1,9 +1,7 @@
 package top.manpok.blog.activity
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -28,9 +26,8 @@ import top.manpok.blog.component.AuthorInfoColumn
 import top.manpok.blog.component.CommonHeader
 import top.manpok.blog.viewmodel.UserViewModel
 
-class PersonalInfoActivity : ComponentActivity() {
+class PersonalInfoActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         setContent {
             val userViewModel: UserViewModel = viewModel()

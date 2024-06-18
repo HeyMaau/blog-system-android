@@ -2,9 +2,7 @@ package top.manpok.blog.activity
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -44,9 +42,8 @@ import top.manpok.blog.component.SearchResultItem
 import top.manpok.blog.utils.Constants
 import top.manpok.blog.viewmodel.SearchViewModel
 
-class SearchActivity : ComponentActivity() {
+class SearchActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         val focusRequester = FocusRequester()
         setContent {

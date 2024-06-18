@@ -295,10 +295,17 @@ class ThinkingDetailActivity : ComponentActivity() {
             this,
             ImagePreviewActivity::class.java
         )
-        intent.putStringArrayListExtra(
-            ImagePreviewActivity.INTENT_KEY_IMAGE_LIST,
-            imageList as ArrayList<String>?
-        )
+        if (imageList.size == 1) {
+            intent.putStringArrayListExtra(
+                ImagePreviewActivity.INTENT_KEY_IMAGE_LIST,
+                arrayListOf(imageList[0])
+            )
+        } else {
+            intent.putStringArrayListExtra(
+                ImagePreviewActivity.INTENT_KEY_IMAGE_LIST,
+                imageList as ArrayList<String>?
+            )
+        }
         intent.putExtra(ImagePreviewActivity.INTENT_KEY_CURRENT_INDEX, index)
         startActivity(intent)
     }

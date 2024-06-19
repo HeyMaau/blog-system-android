@@ -61,7 +61,6 @@ class CommonWebViewActivity : BaseActivity() {
                     .fillMaxSize()
                     .background(Color.White)
                     .statusBarsPadding()
-                    .padding(12.dp, 0.dp)
             ) {
                 CommonHeader(
                     title = commonWebViewViewModel.title,
@@ -69,7 +68,9 @@ class CommonWebViewActivity : BaseActivity() {
                     rightIcon = R.drawable.ic_more,
                     leftIconClick = { finish() },
                     rightIconClick = { /*TODO*/ },
-                    modifier = Modifier.zIndex(2f)
+                    modifier = Modifier
+                        .zIndex(2f)
+                        .padding(12.dp, 0.dp)
                 )
                 Box {
                     if (showProgressBar) {

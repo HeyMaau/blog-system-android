@@ -10,11 +10,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import top.manpok.blog.component.BlogScaffold
 import top.manpok.blog.component.LaunchPage
 import top.manpok.blog.ui.theme.BlogSystemAndroidTheme
+import top.manpok.blog.viewmodel.ArticleViewModel
 
 class MainActivity : BaseActivity() {
 
@@ -27,6 +29,7 @@ class MainActivity : BaseActivity() {
             launching = false
         }
         setContent {
+            val articleViewModel: ArticleViewModel = viewModel()
             if (launching) {
                 LaunchPage()
             } else {

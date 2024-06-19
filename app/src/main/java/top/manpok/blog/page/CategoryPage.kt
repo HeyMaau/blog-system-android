@@ -263,7 +263,9 @@ fun CategoryPage(
                     }
             ) {
                 Row(modifier = Modifier
-                    .clickable {
+                    .clickable(interactionSource = remember {
+                        MutableInteractionSource()
+                    }, indication = null) {
                         if (!showCategoryPopup) {
                             showCategoryPopup = true
                         }

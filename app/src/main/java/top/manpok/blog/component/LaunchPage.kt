@@ -3,7 +3,6 @@ package top.manpok.blog.component
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,22 +22,18 @@ import top.manpok.blog.R
 
 @Composable
 fun LaunchPage(modifier: Modifier = Modifier) {
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = modifier
-            .background(Color.White)
-            .fillMaxSize()
-    ) {
         Column(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .background(Color.White)
+                .fillMaxSize()
         ) {
             Image(
                 bitmap = ImageBitmap.imageResource(id = R.drawable.logo_start),
                 contentDescription = null
             )
-            Spacer(modifier = Modifier.height(50.dp))
+            Spacer(modifier = Modifier.height(30.dp))
             Text(
                 text = stringResource(id = R.string.app_name),
                 fontSize = 30.sp,
@@ -47,5 +42,5 @@ fun LaunchPage(modifier: Modifier = Modifier) {
                 )
             )
         }
-    }
+
 }

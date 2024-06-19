@@ -1,11 +1,13 @@
 package top.manpok.blog.component
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
@@ -23,23 +25,31 @@ fun ArticleListItem(
     click: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Column(modifier = modifier.clickable(onClick = click)) {
-        Text(text = "${item?.title}", fontWeight = FontWeight(500), fontSize = 18.sp)
-        AuthorInfoBanner(
-            avatarUrl = Constants.BASE_IMAGE_URL + item?.user?.avatar,
-            name = "${item?.user?.userName}",
-            modifier = Modifier.padding(5.dp),
-            fontSize = 16.sp,
-            fontColor = R.color.gray_585858
-        )
-        Text(
-            text = "${item?.content}",
-            overflow = TextOverflow.Ellipsis,
-            maxLines = 2,
-            color = colorResource(
-                id = R.color.gray_585858
+    Column(modifier = modifier) {
+        Column(
+            modifier = Modifier.clickable(
+                interactionSource = remember {
+                    MutableInteractionSource()
+                }, indication = null, onClick = click
             )
-        )
+        ) {
+            Text(text = "${item?.title}", fontWeight = FontWeight(500), fontSize = 18.sp)
+            AuthorInfoBanner(
+                avatarUrl = Constants.BASE_IMAGE_URL + item?.user?.avatar,
+                name = "${item?.user?.userName}",
+                modifier = Modifier.padding(5.dp),
+                fontSize = 16.sp,
+                fontColor = R.color.gray_585858
+            )
+            Text(
+                text = "${item?.content}",
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 2,
+                color = colorResource(
+                    id = R.color.gray_585858
+                )
+            )
+        }
         if (!isLast) {
             HorizontalDivider(
                 thickness = 0.5.dp,

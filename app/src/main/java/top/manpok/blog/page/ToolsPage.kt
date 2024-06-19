@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -54,8 +55,9 @@ fun ToolsPage(
             )
             Text(
                 text = stringResource(id = R.string.all_tools),
-                fontSize = 18.sp,
-                modifier = Modifier.padding(10.dp, 0.dp)
+                fontSize = 20.sp,
+                modifier = Modifier.padding(10.dp, 0.dp),
+                fontWeight = FontWeight(400)
             )
         }
         LazyVerticalGrid(columns = GridCells.Fixed(3)) {

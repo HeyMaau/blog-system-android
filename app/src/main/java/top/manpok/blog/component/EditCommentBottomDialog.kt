@@ -1,6 +1,7 @@
 package top.manpok.blog.component
 
 import android.text.TextUtils
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -81,6 +82,10 @@ fun EditCommentBottomDialog(
         ceil(Emoji.list.size.toDouble() / Constants.EMOJI_NUM_PER_PAGE).toInt()
     }
 
+    var fullScreen by remember {
+        mutableStateOf(false)
+    }
+
     ModalBottomSheet(
         onDismissRequest = onDismiss,
         sheetState = sheetState,
@@ -89,13 +94,19 @@ fun EditCommentBottomDialog(
         shape = RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp),
         modifier = modifier
     ) {
-        Column(modifier = Modifier.padding(vertical = 16.dp)) {
+        Column(
+            modifier = Modifier
+                .padding(vertical = 16.dp)
+                .animateContentSize()
+        ) {
             Row(
-                modifier = Modifier.padding(start = 12.dp, end = 12.dp, bottom = 12.dp)
+                modifier = Modifier
+                    .padding(start = 12.dp, end = 12.dp, bottom = 12.dp)
+                    .then(if (fullScreen) Modifier.weight(1f) else Modifier)
             ) {
                 Column(modifier = Modifier.weight(1f)) {
                     CommentBasicTextField(
-                        minLines = 2,
+                        minLines = if (fullScreen) 10 else 2,
                         text = contentText,
                         hintText = contentHintText,
                         modifier = Modifier
@@ -141,9 +152,13 @@ fun EditCommentBottomDialog(
                     }
                 }
                 Icon(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_full_screen),
+                    imageVector = ImageVector.vectorResource(id = if (fullScreen) R.drawable.ic_exit_full_screen else R.drawable.ic_full_screen),
                     contentDescription = null,
-                    modifier = Modifier.size(20.dp)
+                    modifier = Modifier
+                        .size(20.dp)
+                        .clickable {
+                            fullScreen = !fullScreen
+                        }
                 )
             }
             Row(

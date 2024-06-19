@@ -2,6 +2,7 @@ package top.manpok.blog.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.TextUtils
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -40,6 +41,7 @@ import top.manpok.blog.component.SearchHistoryPanel
 import top.manpok.blog.component.SearchInput
 import top.manpok.blog.component.SearchResultItem
 import top.manpok.blog.utils.Constants
+import top.manpok.blog.utils.ToastUtil
 import top.manpok.blog.viewmodel.SearchViewModel
 
 class SearchActivity : BaseActivity() {
@@ -157,6 +159,10 @@ class SearchActivity : BaseActivity() {
                     rightButtonText = R.string.search,
                     leftIconClick = { finish() },
                     rightButtonClick = {
+                        if (TextUtils.isEmpty(searchViewModel.keywords)) {
+                            ToastUtil.showShortToast(R.string.please_enter_search_keywords)
+                            return@CommonHeader
+                        }
                         searchViewModel.beginSearch = true
                         searchViewModel.doSearch()
                         focusManager.clearFocus()

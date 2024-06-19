@@ -44,6 +44,8 @@ class CommonWebViewActivity : BaseActivity() {
 
     val commonWebViewViewModel = CommonWebViewViewModel()
 
+    private lateinit var webView: WebView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -66,7 +68,13 @@ class CommonWebViewActivity : BaseActivity() {
                     title = commonWebViewViewModel.title,
                     leftIcon = R.drawable.ic_arrow_back,
                     rightIcon = R.drawable.ic_more,
-                    leftIconClick = { finish() },
+                    leftIconClick = {
+                        if (webView.canGoBack()) {
+                            webView.goBack()
+                        } else {
+                            finish()
+                        }
+                    },
                     rightIconClick = { /*TODO*/ },
                     modifier = Modifier
                         .zIndex(2f)
@@ -96,7 +104,7 @@ class CommonWebViewActivity : BaseActivity() {
                                 bottom = 0.dp
                             )
                             .imePadding(), factory = {
-                            val webView = WebView(it)
+                            webView = WebView(it)
                             webView.settings.apply {
                                 setSupportZoom(false)
                                 builtInZoomControls = false

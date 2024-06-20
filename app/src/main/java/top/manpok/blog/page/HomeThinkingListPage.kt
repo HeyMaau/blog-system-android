@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
@@ -69,7 +70,8 @@ fun HomeThinkingListPage(
             contentPadding = PaddingValues(12.dp),
             verticalItemSpacing = 10.dp,
             horizontalArrangement = Arrangement.spacedBy(10.dp),
-            state = staggeredGridState
+            state = staggeredGridState,
+            modifier = Modifier.fillMaxSize()
         ) {
             items(thinkingViewModel.thinkingList.toList(), key = {
                 it.id!!

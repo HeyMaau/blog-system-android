@@ -195,7 +195,9 @@ fun CategoryPage(
         modifier = modifier.pullRefresh(state = pullRefreshState, enabled = true)
     ) {
         LazyColumn(
-            modifier = Modifier.padding(top = categoryViewModel.commonHeaderHeight),
+            modifier = Modifier
+                .padding(top = categoryViewModel.commonHeaderHeight)
+                .fillMaxSize(),
             state = listState
         ) {
             item {

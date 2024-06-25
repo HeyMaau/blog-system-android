@@ -106,15 +106,11 @@ fun CategoryPage(
     }
     val context = LocalContext.current
     val density = LocalDensity.current
+
     val pullRefreshState = rememberPullRefreshState(
         refreshing = articleCategoryViewModel.refreshing,
         onRefresh = {
-            categoryViewModel.refreshing = true
-            articleCategoryViewModel.refreshing = true
-            articleCategoryViewModel.pureLoading = false
-            articleCategoryViewModel.lastCategoryID = ""
-            articleCategoryViewModel.noMore = false
-            categoryViewModel.getCategoryList()
+            refresh(categoryViewModel, articleCategoryViewModel)
         })
 
     var popupState: PopupState by remember {
@@ -187,6 +183,21 @@ fun CategoryPage(
                 articleCategoryViewModel.lastCategoryID,
                 true
             )
+        }
+    }
+
+    LaunchedEffect(key1 = Unit) {
+        blogScaffoldViewModel.sameBottomItemClickIndex.collect {
+            when (it) {
+                1 -> {
+                    if (!listState.canScrollBackward) {
+                        refresh(categoryViewModel, articleCategoryViewModel)
+                    } else {
+                        listState.animateScrollToItem(0)
+                    }
+                    blogScaffoldViewModel.dispatchEvent(BlogScaffoldViewModel.ScaffoldIntent.FinishSameBottomItemClick)
+                }
+            }
         }
     }
 
@@ -308,6 +319,18 @@ fun CategoryPage(
             contentColor = colorResource(id = R.color.blue_4285f4)
         )
     }
+}
+
+private fun refresh(
+    categoryViewModel: CategoryViewModel,
+    articleCategoryViewModel: ArticleCategoryViewModel
+) {
+    categoryViewModel.refreshing = true
+    articleCategoryViewModel.refreshing = true
+    articleCategoryViewModel.pureLoading = false
+    articleCategoryViewModel.lastCategoryID = ""
+    articleCategoryViewModel.noMore = false
+    categoryViewModel.getCategoryList()
 }
 
 sealed class PopupState {

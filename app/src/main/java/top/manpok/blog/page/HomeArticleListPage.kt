@@ -1,9 +1,11 @@
 package top.manpok.blog.page
 
 import android.graphics.Color
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
@@ -17,20 +19,19 @@ import top.manpok.blog.component.ArticleList
 import top.manpok.blog.utils.Constants
 import top.manpok.blog.utils.reachBottom
 import top.manpok.blog.viewmodel.ArticleViewModel
+import top.manpok.blog.viewmodel.BlogScaffoldViewModel
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun HomeArticleListPage(
     modifier: Modifier = Modifier,
-    articleViewModel: ArticleViewModel = viewModel()
+    pagerState: PagerState? = null,
+    articleViewModel: ArticleViewModel = viewModel(),
+    blogScaffoldViewModel: BlogScaffoldViewModel = viewModel()
 ) {
     val pullRefreshState =
         rememberPullRefreshState(refreshing = articleViewModel.refreshing, onRefresh = {
-            articleViewModel.refreshing = true
-            articleViewModel.currentPage = Constants.DEFAULT_PAGE
-            articleViewModel.pageSize = Constants.DEFAULT_PAGE_SIZE
-            articleViewModel.noMore = false
-            articleViewModel.getArticleList(articleViewModel.currentPage, articleViewModel.pageSize)
+            refresh(articleViewModel)
         })
 
     val listState = rememberLazyListState()
@@ -44,6 +45,24 @@ fun HomeArticleListPage(
             )
         }
     }
+
+    LaunchedEffect(key1 = Unit) {
+        blogScaffoldViewModel.sameBottomItemClickIndex.collect {
+            if (pagerState != null && pagerState.currentPage == 0) {
+                when (it) {
+                    0 -> {
+                        if (!listState.canScrollBackward) {
+                            refresh(articleViewModel)
+                        } else {
+                            listState.animateScrollToItem(0)
+                        }
+                        blogScaffoldViewModel.dispatchEvent(BlogScaffoldViewModel.ScaffoldIntent.FinishSameBottomItemClick)
+                    }
+                }
+            }
+        }
+    }
+
     ArticleList(
         articleList = articleViewModel.articleList.toList(),
         refreshing = articleViewModel.refreshing,
@@ -53,6 +72,15 @@ fun HomeArticleListPage(
     )
 }
 
+private fun refresh(articleViewModel: ArticleViewModel) {
+    articleViewModel.refreshing = true
+    articleViewModel.currentPage = Constants.DEFAULT_PAGE
+    articleViewModel.pageSize = Constants.DEFAULT_PAGE_SIZE
+    articleViewModel.noMore = false
+    articleViewModel.getArticleList(articleViewModel.currentPage, articleViewModel.pageSize)
+}
+
+@OptIn(ExperimentalFoundationApi::class)
 @Preview(showSystemUi = true, showBackground = true, backgroundColor = Color.WHITE.toLong())
 @Composable
 private fun PreViewHomeArticleListPage() {

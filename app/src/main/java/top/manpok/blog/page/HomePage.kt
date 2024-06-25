@@ -107,13 +107,15 @@ fun HomePage(modifier: Modifier = Modifier, homePageViewModel: HomePageViewModel
         HorizontalPager(state = pagerState, beyondBoundsPageCount = 1) {
             when (it) {
                 0 -> HomeArticleListPage(
-                    Modifier
+                    pagerState = pagerState,
+                    modifier = Modifier
                         .fillMaxSize()
                         .padding(12.dp, 0.dp)
                 )
 
                 1 -> HomeThinkingListPage(
-                    Modifier
+                    pagerState = pagerState,
+                    modifier = Modifier
                         .fillMaxSize()
                         .background(
                             Brush.verticalGradient(

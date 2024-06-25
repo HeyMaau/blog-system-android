@@ -1,6 +1,7 @@
 package top.manpok.blog.page
 
 import android.content.Intent
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -9,6 +10,7 @@ import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
@@ -27,26 +29,23 @@ import top.manpok.blog.activity.ThinkingDetailActivity
 import top.manpok.blog.component.ThinkingListItem
 import top.manpok.blog.utils.Constants
 import top.manpok.blog.utils.reachBottom
+import top.manpok.blog.viewmodel.BlogScaffoldViewModel
 import top.manpok.blog.viewmodel.ThinkingViewModel
 
 private const val TAG = "HomeThinkingListPage"
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun HomeThinkingListPage(
     modifier: Modifier = Modifier,
-    thinkingViewModel: ThinkingViewModel = viewModel()
+    pagerState: PagerState? = null,
+    thinkingViewModel: ThinkingViewModel = viewModel(),
+    blogScaffoldViewModel: BlogScaffoldViewModel = viewModel()
 ) {
     val context = LocalContext.current
     val pullRefreshState =
         rememberPullRefreshState(refreshing = thinkingViewModel.refreshing, onRefresh = {
-            thinkingViewModel.refreshing = true
-            thinkingViewModel.currentPage = Constants.DEFAULT_PAGE
-            thinkingViewModel.pageSize = Constants.DEFAULT_PAGE_SIZE
-            thinkingViewModel.getThinkingList(
-                thinkingViewModel.currentPage,
-                thinkingViewModel.pageSize
-            )
+            refresh(thinkingViewModel)
         })
 
     val staggeredGridState = rememberLazyStaggeredGridState()
@@ -58,6 +57,23 @@ fun HomeThinkingListPage(
                 ++thinkingViewModel.currentPage,
                 thinkingViewModel.pageSize
             )
+        }
+    }
+
+    LaunchedEffect(key1 = Unit) {
+        blogScaffoldViewModel.sameBottomItemClickIndex.collect {
+            if (pagerState != null && pagerState.currentPage == 1) {
+                when (it) {
+                    0 -> {
+                        if (!staggeredGridState.canScrollBackward) {
+                            refresh(thinkingViewModel)
+                        } else {
+                            staggeredGridState.animateScrollToItem(0)
+                        }
+                        blogScaffoldViewModel.dispatchEvent(BlogScaffoldViewModel.ScaffoldIntent.FinishSameBottomItemClick)
+                    }
+                }
+            }
         }
     }
 
@@ -106,4 +122,14 @@ fun HomeThinkingListPage(
             contentColor = colorResource(id = R.color.blue_4285f4)
         )
     }
+}
+
+private fun refresh(thinkingViewModel: ThinkingViewModel) {
+    thinkingViewModel.refreshing = true
+    thinkingViewModel.currentPage = Constants.DEFAULT_PAGE
+    thinkingViewModel.pageSize = Constants.DEFAULT_PAGE_SIZE
+    thinkingViewModel.getThinkingList(
+        thinkingViewModel.currentPage,
+        thinkingViewModel.pageSize
+    )
 }

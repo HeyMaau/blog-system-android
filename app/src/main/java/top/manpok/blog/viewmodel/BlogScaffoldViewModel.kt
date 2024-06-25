@@ -4,6 +4,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import top.manpok.blog.R
 import top.manpok.blog.pojo.BottomBarItem
 
@@ -22,4 +24,23 @@ class BlogScaffoldViewModel : ViewModel() {
 
     var selectedBottomItemIndex by mutableIntStateOf(0)
 
+    private var _sameBottomItemClickIndex = MutableStateFlow(-1)
+    var sameBottomItemClickIndex = _sameBottomItemClickIndex.asStateFlow()
+
+    fun dispatchEvent(scaffoldIntent: ScaffoldIntent) {
+        when (scaffoldIntent) {
+            is ScaffoldIntent.SameBottomItemClick -> {
+                _sameBottomItemClickIndex.value = scaffoldIntent.index
+            }
+
+            ScaffoldIntent.FinishSameBottomItemClick -> {
+                _sameBottomItemClickIndex.value = -1
+            }
+        }
+    }
+
+    sealed class ScaffoldIntent() {
+        data class SameBottomItemClick(val index: Int) : ScaffoldIntent()
+        data object FinishSameBottomItemClick : ScaffoldIntent()
+    }
 }

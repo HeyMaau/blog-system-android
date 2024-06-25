@@ -42,6 +42,13 @@ fun BlogScaffold(
                 } else {
                     vibrator.vibrate(20)
                 }
+                if (blogScaffoldViewModel.selectedBottomItemIndex == it) {
+                    blogScaffoldViewModel.dispatchEvent(
+                        BlogScaffoldViewModel.ScaffoldIntent.SameBottomItemClick(
+                            it
+                        )
+                    )
+                }
                 blogScaffoldViewModel.selectedBottomItemIndex = it
             }
         }

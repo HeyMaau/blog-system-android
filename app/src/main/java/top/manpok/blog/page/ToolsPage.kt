@@ -20,6 +20,7 @@ import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -35,13 +36,15 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import top.manpok.blog.R
 import top.manpok.blog.activity.CommonWebViewActivity
 import top.manpok.blog.component.FriendLinkItem
+import top.manpok.blog.viewmodel.BlogScaffoldViewModel
 import top.manpok.blog.viewmodel.FriendLinkViewModel
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ToolsPage(
     modifier: Modifier = Modifier,
-    friendLinkViewModel: FriendLinkViewModel = viewModel()
+    friendLinkViewModel: FriendLinkViewModel = viewModel(),
+    blogScaffoldViewModel: BlogScaffoldViewModel = viewModel()
 ) {
     val context = LocalContext.current
     Column(
@@ -75,12 +78,19 @@ fun ToolsPage(
 
         val pullRefreshState =
             rememberPullRefreshState(refreshing = friendLinkViewModel.refreshing, onRefresh = {
-                friendLinkViewModel.refreshing = true
-                friendLinkViewModel.getFriendLink(
-                    friendLinkViewModel.currentPage,
-                    friendLinkViewModel.pageSize
-                )
+                refresh(friendLinkViewModel)
             })
+
+        LaunchedEffect(key1 = Unit) {
+            blogScaffoldViewModel.sameBottomItemClickIndex.collect {
+                when (it) {
+                    2 -> {
+                        refresh(friendLinkViewModel)
+                        blogScaffoldViewModel.dispatchEvent(BlogScaffoldViewModel.ScaffoldIntent.FinishSameBottomItemClick)
+                    }
+                }
+            }
+        }
 
         Box(
             contentAlignment = Alignment.TopCenter,
@@ -125,4 +135,12 @@ fun ToolsPage(
             )
         }
     }
+}
+
+private fun refresh(friendLinkViewModel: FriendLinkViewModel) {
+    friendLinkViewModel.refreshing = true
+    friendLinkViewModel.getFriendLink(
+        friendLinkViewModel.currentPage,
+        friendLinkViewModel.pageSize
+    )
 }

@@ -1,12 +1,17 @@
 package top.manpok.blog.component
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.os.Build
+import android.os.VibrationEffect
+import android.os.Vibrator
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import top.manpok.blog.page.AboutPage
 import top.manpok.blog.page.CategoryPage
@@ -23,10 +28,20 @@ fun BlogScaffold(
     Scaffold(
         containerColor = Color.White,
         bottomBar = {
+            val context = LocalContext.current
+            val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
             BlogNavigationBar(
                 blogScaffoldViewModel.mBottomBarItemList,
                 blogScaffoldViewModel.selectedBottomItemIndex
             ) {
+                vibrator.cancel()
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    val effect =
+                        VibrationEffect.createOneShot(20, VibrationEffect.DEFAULT_AMPLITUDE)
+                    vibrator.vibrate(effect)
+                } else {
+                    vibrator.vibrate(20)
+                }
                 blogScaffoldViewModel.selectedBottomItemIndex = it
             }
         }

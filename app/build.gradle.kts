@@ -85,6 +85,7 @@ dependencies {
     implementation(libs.room.ktx)
     implementation(libs.jsoup)
     implementation(libs.zoomable)
+    implementation(libs.datastore.preferences)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

@@ -37,10 +37,10 @@ fun BlogScaffold(
                 vibrator.cancel()
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     val effect =
-                        VibrationEffect.createOneShot(20, VibrationEffect.DEFAULT_AMPLITUDE)
+                        VibrationEffect.createOneShot(10, VibrationEffect.DEFAULT_AMPLITUDE)
                     vibrator.vibrate(effect)
                 } else {
-                    vibrator.vibrate(20)
+                    vibrator.vibrate(10)
                 }
                 if (blogScaffoldViewModel.selectedBottomItemIndex == it) {
                     blogScaffoldViewModel.dispatchEvent(

@@ -15,6 +15,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import top.manpok.blog.component.BlogScaffold
 import top.manpok.blog.component.LaunchPage
+import top.manpok.blog.ds.DataStoreManager
 import top.manpok.blog.ui.theme.BlogSystemAndroidTheme
 import top.manpok.blog.viewmodel.ArticleViewModel
 
@@ -24,8 +25,18 @@ class MainActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        var hasInitialized = false
         lifecycleScope.launch {
-            delay(2000)
+            DataStoreManager.instance.getHasInitialized(this@MainActivity).collect {
+                hasInitialized = it
+            }
+        }
+        lifecycleScope.launch {
+            delay(1000)
+            if (!hasInitialized) {
+                delay(1000)
+                DataStoreManager.instance.setHasInitialized(this@MainActivity, true)
+            }
             launching = false
         }
         setContent {

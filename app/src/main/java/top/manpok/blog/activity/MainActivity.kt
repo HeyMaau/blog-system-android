@@ -25,19 +25,15 @@ class MainActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        var hasInitialized = false
         lifecycleScope.launch {
             DataStoreManager.instance.getHasInitialized(this@MainActivity).collect {
-                hasInitialized = it
-            }
-        }
-        lifecycleScope.launch {
-            delay(1000)
-            if (!hasInitialized) {
                 delay(1000)
-                DataStoreManager.instance.setHasInitialized(this@MainActivity, true)
+                if (!it) {
+                    delay(1000)
+                    DataStoreManager.instance.setHasInitialized(this@MainActivity, true)
+                }
+                launching = false
             }
-            launching = false
         }
         setContent {
             val articleViewModel: ArticleViewModel = viewModel()

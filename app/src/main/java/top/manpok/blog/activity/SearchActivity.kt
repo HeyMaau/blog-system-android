@@ -6,6 +6,8 @@ import android.text.TextUtils
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -83,10 +85,13 @@ class SearchActivity : BaseActivity() {
                         }
                         Column(
                             horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center,
                             modifier = Modifier
                                 .background(Color.White)
                                 .fillMaxSize()
-                                .padding(top = searchViewModel.commonHeaderHeight + 20.dp)
+                                .clickable {
+                                    searchViewModel.doSearch()
+                                }
                         ) {
                             Image(
                                 imageVector = ImageVector.vectorResource(id = if (networkError) R.drawable.ic_network_error else R.drawable.logo_empty_search_result),
@@ -95,7 +100,9 @@ class SearchActivity : BaseActivity() {
                             )
                             Text(
                                 text = stringResource(id = if (networkError) R.string.network_error else R.string.empty_search_result),
-                                fontSize = 20.sp
+                                fontSize = 16.sp,
+                                modifier = Modifier.padding(top = 20.dp),
+                                color = colorResource(id = R.color.gray_878789)
                             )
                         }
                     } else {

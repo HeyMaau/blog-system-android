@@ -12,6 +12,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.jsoup.Jsoup
@@ -26,9 +28,13 @@ import top.manpok.blog.db.entity.BlogSearchHistory
 import top.manpok.blog.pojo.BaseResponse
 import top.manpok.blog.pojo.BlogSearchResult
 import top.manpok.blog.utils.Constants
+import top.manpok.blog.utils.NetworkUtil
 
 class SearchViewModel : ViewModel() {
     private val TAG = "SearchViewModel"
+
+    private var _searchState = MutableStateFlow<State>(State.None)
+    var searchState = _searchState.asStateFlow()
 
     var keywords by mutableStateOf("")
     var searchList = mutableStateListOf<BlogSearchResult.Data?>()
@@ -52,6 +58,13 @@ class SearchViewModel : ViewModel() {
     }
 
     fun doSearch() {
+
+        if (!NetworkUtil.isNetworkAvailable(BaseApplication.getApplication())) {
+            _searchState.value = State.NerworkError
+            return
+        }
+
+        _searchState.value = State.None
 
         loadingTimeOut = false
         isLoading = true
@@ -138,5 +151,10 @@ class SearchViewModel : ViewModel() {
                 searchHistoryList.addAll(searchHistoryListFromDB)
             }
         }
+    }
+
+    sealed class State {
+        data object None : State()
+        data object NerworkError : State()
     }
 }

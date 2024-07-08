@@ -19,6 +19,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -56,6 +60,9 @@ class SearchActivity : BaseActivity() {
             val density = LocalDensity.current
             val context = LocalContext.current
             val focusManager = LocalFocusManager.current
+            var networkError by remember {
+                mutableStateOf(false)
+            }
             Box(
                 contentAlignment = Alignment.TopCenter,
                 modifier = Modifier
@@ -65,6 +72,15 @@ class SearchActivity : BaseActivity() {
             ) {
                 if (searchViewModel.beginSearch) {
                     if (searchViewModel.searchList.isEmpty() && !searchViewModel.isLoading) {
+
+                        LaunchedEffect(key1 = Unit) {
+                            searchViewModel.searchState.collect {
+                                when (it) {
+                                    SearchViewModel.State.NerworkError -> networkError = true
+                                    SearchViewModel.State.None -> networkError = false
+                                }
+                            }
+                        }
                         Column(
                             horizontalAlignment = Alignment.CenterHorizontally,
                             modifier = Modifier
@@ -73,12 +89,12 @@ class SearchActivity : BaseActivity() {
                                 .padding(top = searchViewModel.commonHeaderHeight + 20.dp)
                         ) {
                             Image(
-                                imageVector = ImageVector.vectorResource(id = R.drawable.logo_empty_search_result),
+                                imageVector = ImageVector.vectorResource(id = if (networkError) R.drawable.ic_network_error else R.drawable.logo_empty_search_result),
                                 contentDescription = null,
                                 modifier = Modifier.size(200.dp)
                             )
                             Text(
-                                text = stringResource(id = R.string.empty_search_result),
+                                text = stringResource(id = if (networkError) R.string.network_error else R.string.empty_search_result),
                                 fontSize = 20.sp
                             )
                         }

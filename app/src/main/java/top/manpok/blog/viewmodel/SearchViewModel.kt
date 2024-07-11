@@ -27,13 +27,14 @@ import top.manpok.blog.db.SearchDatabase
 import top.manpok.blog.db.entity.BlogSearchHistory
 import top.manpok.blog.pojo.BaseResponse
 import top.manpok.blog.pojo.BlogSearchResult
+import top.manpok.blog.pojo.DefaultState
 import top.manpok.blog.utils.Constants
 import top.manpok.blog.utils.NetworkUtil
 
 class SearchViewModel : ViewModel() {
     private val TAG = "SearchViewModel"
 
-    private var _searchState = MutableStateFlow<State>(State.None)
+    private var _searchState = MutableStateFlow<DefaultState>(DefaultState.NONE)
     var searchState = _searchState.asStateFlow()
 
     var keywords by mutableStateOf("")
@@ -60,11 +61,11 @@ class SearchViewModel : ViewModel() {
     fun doSearch() {
 
         if (!NetworkUtil.isNetworkAvailable(BaseApplication.getApplication())) {
-            _searchState.value = State.NerworkError
+            _searchState.value = DefaultState.NETWORK_ERROR
             return
         }
 
-        _searchState.value = State.None
+        _searchState.value = DefaultState.NONE
 
         loadingTimeOut = false
         isLoading = true
@@ -110,6 +111,9 @@ class SearchViewModel : ViewModel() {
                             }
                             searchList.clear()
                             searchList.addAll(it)
+                            if (searchList.isEmpty()) {
+                                _searchState.value = DefaultState.EMPTY
+                            }
                             if (loadingTimeOut) {
                                 isLoading = false
                             }
@@ -151,10 +155,5 @@ class SearchViewModel : ViewModel() {
                 searchHistoryList.addAll(searchHistoryListFromDB)
             }
         }
-    }
-
-    sealed class State {
-        data object None : State()
-        data object NerworkError : State()
     }
 }

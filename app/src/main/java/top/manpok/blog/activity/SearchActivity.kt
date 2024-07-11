@@ -6,8 +6,6 @@ import android.text.TextUtils
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -19,7 +17,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Text
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -39,13 +36,14 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import top.manpok.blog.R
 import top.manpok.blog.component.CommonHeader
+import top.manpok.blog.component.DefaultUIState
 import top.manpok.blog.component.SearchHistoryPanel
 import top.manpok.blog.component.SearchInput
 import top.manpok.blog.component.SearchResultItem
+import top.manpok.blog.pojo.DefaultState
 import top.manpok.blog.utils.Constants
 import top.manpok.blog.utils.ToastUtil
 import top.manpok.blog.viewmodel.SearchViewModel
@@ -62,8 +60,8 @@ class SearchActivity : BaseActivity() {
             val density = LocalDensity.current
             val context = LocalContext.current
             val focusManager = LocalFocusManager.current
-            var networkError by remember {
-                mutableStateOf(false)
+            var uiState: DefaultState by remember {
+                mutableStateOf(DefaultState.NONE)
             }
             Box(
                 contentAlignment = Alignment.TopCenter,
@@ -77,34 +75,20 @@ class SearchActivity : BaseActivity() {
 
                         LaunchedEffect(key1 = Unit) {
                             searchViewModel.searchState.collect {
-                                when (it) {
-                                    SearchViewModel.State.NerworkError -> networkError = true
-                                    SearchViewModel.State.None -> networkError = false
-                                }
+                                uiState = it
                             }
                         }
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.Center,
-                            modifier = Modifier
-                                .background(Color.White)
-                                .fillMaxSize()
-                                .clickable {
+                        DefaultUIState(
+                            state = uiState,
+                            hint = if (uiState == DefaultState.EMPTY) stringResource(
+                                id = R.string.empty_search_result
+                            ) else stringResource(id = R.string.network_error),
+                            onClick = {
+                                if (uiState == DefaultState.NETWORK_ERROR) {
                                     searchViewModel.doSearch()
                                 }
-                        ) {
-                            Image(
-                                imageVector = ImageVector.vectorResource(id = if (networkError) R.drawable.ic_network_error else R.drawable.logo_empty_search_result),
-                                contentDescription = null,
-                                modifier = Modifier.size(200.dp)
-                            )
-                            Text(
-                                text = stringResource(id = if (networkError) R.string.network_error else R.string.empty_search_result),
-                                fontSize = 16.sp,
-                                modifier = Modifier.padding(top = 20.dp),
-                                color = colorResource(id = R.color.gray_878789)
-                            )
-                        }
+                            }
+                        )
                     } else {
                         LazyColumn(
                             modifier = Modifier

@@ -71,13 +71,12 @@ class SearchActivity : BaseActivity() {
                     .statusBarsPadding()
             ) {
                 if (searchViewModel.beginSearch) {
-                    if (searchViewModel.searchList.isEmpty() && !searchViewModel.isLoading) {
-
-                        LaunchedEffect(key1 = Unit) {
-                            searchViewModel.searchState.collect {
-                                uiState = it
-                            }
+                    LaunchedEffect(key1 = Unit) {
+                        searchViewModel.searchState.collect {
+                            uiState = it
                         }
+                    }
+                    if (uiState == DefaultState.EMPTY || uiState == DefaultState.NETWORK_ERROR) {
                         DefaultUIState(
                             state = uiState,
                             hint = if (uiState == DefaultState.EMPTY) stringResource(

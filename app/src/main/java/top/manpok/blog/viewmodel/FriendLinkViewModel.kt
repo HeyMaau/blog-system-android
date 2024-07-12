@@ -9,15 +9,20 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import top.manpok.blog.R
 import top.manpok.blog.api.BlogRetrofit
+import top.manpok.blog.base.BaseApplication
 import top.manpok.blog.pojo.BaseResponse
 import top.manpok.blog.pojo.BlogFriendLink
+import top.manpok.blog.pojo.DefaultState
 import top.manpok.blog.utils.Constants
+import top.manpok.blog.utils.NetworkUtil
 import top.manpok.blog.utils.ToastUtil
 
 class FriendLinkViewModel : ViewModel() {
@@ -34,6 +39,9 @@ class FriendLinkViewModel : ViewModel() {
 
     var refreshing by mutableStateOf(false)
 
+    private var _friendLinkState = MutableStateFlow<DefaultState>(DefaultState.NONE)
+    var friendLinkState = _friendLinkState.asStateFlow()
+
     init {
         getFriendLink(currentPage, pageSize)
         viewModelScope.launch {
@@ -46,6 +54,11 @@ class FriendLinkViewModel : ViewModel() {
     }
 
     fun getFriendLink(page: Int, size: Int) {
+        if (!NetworkUtil.isNetworkAvailable(BaseApplication.getApplication())) {
+            _friendLinkState.value = DefaultState.NETWORK_ERROR
+            return
+        }
+        _friendLinkState.value = DefaultState.NONE
         BlogRetrofit.friendLinkApi.getFriendLinkList(page, size).enqueue(object :
             Callback<BaseResponse<BlogFriendLink>> {
             override fun onResponse(
@@ -79,7 +92,11 @@ class FriendLinkViewModel : ViewModel() {
                 if (refreshing) {
                     ToastUtil.showShortToast(R.string.refresh_fail)
                 }
+                if (loadingTimeOut) {
+                    showSkeleton = false
+                }
                 refreshing = false
+                _friendLinkState.value = DefaultState.NETWORK_ERROR
                 Log.d(TAG, "onFailure: $error")
             }
         })

@@ -45,8 +45,10 @@ import top.manpok.blog.R
 import top.manpok.blog.component.AuthorInfoBanner
 import top.manpok.blog.component.CommentWindow
 import top.manpok.blog.component.CommonHeader
+import top.manpok.blog.component.DefaultUIState
 import top.manpok.blog.component.EditCommentBottomDialog
 import top.manpok.blog.component.FloatingHeader
+import top.manpok.blog.pojo.DefaultState
 import top.manpok.blog.utils.Constants
 import top.manpok.blog.viewmodel.ArticleDetailViewModel
 import top.manpok.blog.viewmodel.CommentViewModel
@@ -113,112 +115,153 @@ class ArticleDetailActivity : BaseActivity() {
                 }
             }
 
+            var uiState: DefaultState by remember {
+                mutableStateOf(DefaultState.NONE)
+            }
+            LaunchedEffect(key1 = Unit) {
+                articleDetailViewModel.articleDetailState.collect {
+                    uiState = it
+                }
+            }
+
             Box(
                 modifier = Modifier
                     .background(Color.White)
                     .fillMaxSize()
                     .padding(12.dp, 0.dp)
             ) {
-                Column(
-                    modifier = Modifier
-                        .verticalScroll(scrollState)
-                        .statusBarsPadding()
-                ) {
-                    CommonHeader(
-                        title = articleDetailViewModel.title,
-                        leftIcon = R.drawable.ic_arrow_back,
-                        rightIcon = R.drawable.ic_more,
-                        leftIconClick = {
-                            finish()
-                        },
-                        rightIconClick = { /*TODO*/ },
+                if (uiState == DefaultState.NETWORK_ERROR) {
+                    Box(
                         modifier = Modifier
-                            .zIndex(1f)
-                            .onGloballyPositioned {
-                                commonHeaderHeight = it.size.height
-                                with(density) {
-                                    commonHeaderHeightDP = it.size.height.toDp()
+                            .fillMaxSize()
+                    ) {
+                        DefaultUIState(
+                            state = uiState,
+                            hint = stringResource(id = R.string.network_error),
+                            onClick = {
+                                articleDetailViewModel.initLoading()
+                                articleDetailViewModel.getArticleDetail(id)
+                                commentViewModel.getCommentList(
+                                    commentViewModel.currentPage,
+                                    commentViewModel.pageSize,
+                                    Constants.COMMENT_TYPE_ARTICLE,
+                                    id
+                                )
+                            })
+                        FloatingHeader(
+                            leftIcon = R.drawable.ic_arrow_back,
+                            rightIcon = R.drawable.ic_more,
+                            leftIconClick = {
+                                finish()
+                            },
+                            rightIconClick = {},
+                            modifier = Modifier
+                                .statusBarsPadding()
+                                .padding(0.dp, 20.dp)
+                        )
+                    }
+                } else {
+                    Column(
+                        modifier = Modifier
+                            .verticalScroll(scrollState)
+                            .statusBarsPadding()
+                    ) {
+                        CommonHeader(
+                            title = articleDetailViewModel.title,
+                            leftIcon = R.drawable.ic_arrow_back,
+                            rightIcon = R.drawable.ic_more,
+                            leftIconClick = {
+                                finish()
+                            },
+                            rightIconClick = { /*TODO*/ },
+                            modifier = Modifier
+                                .zIndex(1f)
+                                .onGloballyPositioned {
+                                    commonHeaderHeight = it.size.height
+                                    with(density) {
+                                        commonHeaderHeightDP = it.size.height.toDp()
+                                    }
+                                })
+                        Text(
+                            text = articleDetailViewModel.title,
+                            fontSize = 18.sp,
+                            modifier = Modifier.padding(0.dp, 15.dp)
+                        )
+                        AuthorInfoBanner(
+                            avatarUrl = articleDetailViewModel.authorAvatar,
+                            name = articleDetailViewModel.authorName,
+                            sign = articleDetailViewModel.authorSign
+                        )
+                        if (!TextUtils.isEmpty(articleDetailViewModel.cover)) {
+                            AsyncImage(
+                                model = articleDetailViewModel.cover,
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(0.dp, 12.dp)
+                            )
+                        }
+                        if (!TextUtils.isEmpty(articleDetailViewModel.content)) {
+                            AndroidView(modifier = Modifier.fillMaxSize(), factory = {
+                                val webView = WebView(it)
+                                webView.settings.apply {
+                                    setSupportZoom(false)
+                                    builtInZoomControls = false
+                                    displayZoomControls = false
+                                    javaScriptEnabled = true
+                                }
+                                webView.apply {
+                                    webView.webViewClient = BlogWebViewClient()
+                                    webChromeClient = BlogWebChromeClient()
+                                    loadDataWithBaseURL(
+                                        "file:///android_asset/",
+                                        articleDetailViewModel.content,
+                                        "text/html",
+                                        "utf-8",
+                                        null
+                                    )
+                                    addJavascriptInterface(
+                                        ImageJSInterface(
+                                            this@ArticleDetailActivity,
+                                            articleDetailViewModel
+                                        ), "img_api"
+                                    )
                                 }
                             })
-                    Text(
-                        text = articleDetailViewModel.title,
-                        fontSize = 18.sp,
-                        modifier = Modifier.padding(0.dp, 15.dp)
-                    )
-                    AuthorInfoBanner(
-                        avatarUrl = articleDetailViewModel.authorAvatar,
-                        name = articleDetailViewModel.authorName,
-                        sign = articleDetailViewModel.authorSign
-                    )
-                    if (!TextUtils.isEmpty(articleDetailViewModel.cover)) {
-                        AsyncImage(
-                            model = articleDetailViewModel.cover,
-                            contentDescription = null,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(0.dp, 12.dp)
-                        )
-                    }
-                    if (!TextUtils.isEmpty(articleDetailViewModel.content)) {
-                        AndroidView(modifier = Modifier.fillMaxSize(), factory = {
-                            val webView = WebView(it)
-                            webView.settings.apply {
-                                setSupportZoom(false)
-                                builtInZoomControls = false
-                                displayZoomControls = false
-                                javaScriptEnabled = true
+                        }
+                        if (!TextUtils.isEmpty(articleDetailViewModel.updateTime)) {
+                            Text(
+                                text = stringResource(
+                                    id = R.string.update_time,
+                                    articleDetailViewModel.updateTime
+                                ),
+                                color = colorResource(id = R.color.gray_878789),
+                                modifier = Modifier.padding(vertical = 15.dp)
+                            )
+                        }
+                        CommentWindow(
+                            commentTotal = commentViewModel.total,
+                            commentList = commentViewModel.commentList,
+                            onReplyClick = { parentCommentId, replyCommentId, replyUserName ->
+                                if (replyUserName != null) {
+                                    commentViewModel.replyUserName = replyUserName
+                                }
+                                if (parentCommentId != null) {
+                                    commentViewModel.parentCommentId = parentCommentId
+                                }
+                                commentViewModel.replyCommentId = replyCommentId
+                                if (parentCommentId == null && replyCommentId != null) {
+                                    commentViewModel.parentCommentId = replyCommentId
+                                    commentViewModel.replyCommentId = null
+                                }
+                                showCommentBottomDialog = true
+                                commentViewModel.updateCommitState(CommentViewModel.CommitState.Stop)
                             }
-                            webView.apply {
-                                webView.webViewClient = BlogWebViewClient()
-                                webChromeClient = BlogWebChromeClient()
-                                loadDataWithBaseURL(
-                                    "file:///android_asset/",
-                                    articleDetailViewModel.content,
-                                    "text/html",
-                                    "utf-8",
-                                    null
-                                )
-                                addJavascriptInterface(
-                                    ImageJSInterface(
-                                        this@ArticleDetailActivity,
-                                        articleDetailViewModel
-                                    ), "img_api"
-                                )
-                            }
-                        })
-                    }
-                    if (!TextUtils.isEmpty(articleDetailViewModel.updateTime)) {
-                        Text(
-                            text = stringResource(
-                                id = R.string.update_time,
-                                articleDetailViewModel.updateTime
-                            ),
-                            color = colorResource(id = R.color.gray_878789),
-                            modifier = Modifier.padding(vertical = 15.dp)
-                        )
-                    }
-                    CommentWindow(
-                        commentTotal = commentViewModel.total,
-                        commentList = commentViewModel.commentList,
-                        onReplyClick = { parentCommentId, replyCommentId, replyUserName ->
-                            if (replyUserName != null) {
-                                commentViewModel.replyUserName = replyUserName
-                            }
-                            if (parentCommentId != null) {
-                                commentViewModel.parentCommentId = parentCommentId
-                            }
-                            commentViewModel.replyCommentId = replyCommentId
-                            if (parentCommentId == null && replyCommentId != null) {
-                                commentViewModel.parentCommentId = replyCommentId
-                                commentViewModel.replyCommentId = null
-                            }
+                        ) {
                             showCommentBottomDialog = true
+                            commentViewModel.clearReplyState()
                             commentViewModel.updateCommitState(CommentViewModel.CommitState.Stop)
                         }
-                    ) {
-                        showCommentBottomDialog = true
-                        commentViewModel.clearReplyState()
-                        commentViewModel.updateCommitState(CommentViewModel.CommitState.Stop)
                     }
                 }
                 if (showFloatingHeader) {

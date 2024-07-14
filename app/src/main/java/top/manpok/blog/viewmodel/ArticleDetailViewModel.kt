@@ -8,6 +8,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.jsoup.Jsoup
 import retrofit2.Call
@@ -19,7 +21,9 @@ import top.manpok.blog.db.ArticleDatabase
 import top.manpok.blog.db.entity.BlogArticleDetailForDB
 import top.manpok.blog.pojo.BaseResponse
 import top.manpok.blog.pojo.BlogArticleDetail
+import top.manpok.blog.pojo.DefaultState
 import top.manpok.blog.utils.Constants
+import top.manpok.blog.utils.NetworkUtil
 
 class ArticleDetailViewModel : ViewModel() {
 
@@ -39,17 +43,24 @@ class ArticleDetailViewModel : ViewModel() {
     val imageMap = mutableMapOf<String, Int>()
     val imageList = mutableListOf<String>()
 
+    private var _articleDetailState = MutableStateFlow<DefaultState>(DefaultState.NONE)
+    var articleDetailState = _articleDetailState.asStateFlow()
+
     init {
-        viewModelScope.launch {
-            delay(1000)
-            if (!TextUtils.isEmpty(content)) {
-                loading = false
-            }
-            timeOut = true
-        }
+        initLoading()
     }
 
     fun getArticleDetail(id: String?) {
+        if (!NetworkUtil.isNetworkAvailable(BaseApplication.getApplication())) {
+            if (TextUtils.isEmpty(content)) {
+                _articleDetailState.value = DefaultState.NETWORK_ERROR
+                loading = false
+            }
+            return
+        }
+
+        _articleDetailState.value = DefaultState.NONE
+
         if (id != null && !TextUtils.isEmpty(id)) {
             BlogRetrofit.articleApi.getArticleDetail(id)
                 .enqueue(object : Callback<BaseResponse<BlogArticleDetail>> {
@@ -86,6 +97,7 @@ class ArticleDetailViewModel : ViewModel() {
                         if (timeOut) {
                             loading = false
                         }
+                        _articleDetailState.value = DefaultState.NETWORK_ERROR
                         Log.d(TAG, "onFailure: $error")
                     }
 
@@ -172,5 +184,16 @@ class ArticleDetailViewModel : ViewModel() {
             </script>
             </html>
         """.trimIndent()
+    }
+
+    fun initLoading() {
+        viewModelScope.launch {
+            loading = true
+            delay(1000)
+            if (!TextUtils.isEmpty(content)) {
+                loading = false
+            }
+            timeOut = true
+        }
     }
 }

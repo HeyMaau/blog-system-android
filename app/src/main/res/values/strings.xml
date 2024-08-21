@@ -53,4 +53,8 @@
     <string name="reply_to_who">回复 %s：</string>
 
     <string name="network_error">网络不可用，轻触重试噢</string>
+
+    <string name="choose_env_type">选择环境：</string>
+    <string name="env_prod">生产环境</string>
+    <string name="env_dev">开发环境</string>
 </resources>

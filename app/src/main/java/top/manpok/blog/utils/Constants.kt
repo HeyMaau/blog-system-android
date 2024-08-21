@@ -10,6 +10,10 @@ object Constants {
     const val BASE_IMAGE_URL: String = "$BASE_URL/image/"
     const val BASE_COMMENT_AVATAR_URL: String = BASE_IMAGE_URL + "comment/"
 
+    const val BASE_URL_DEV: String = "http://192.168.31.136:8080"
+    const val BASE_IMAGE_URL_DEV: String = "$BASE_URL_DEV/image/"
+    const val BASE_COMMENT_AVATAR_URL_DEV: String = BASE_IMAGE_URL_DEV + "comment/"
+
     const val HOST_NAME = "manpok.top"
 
     const val TABLE_NAME_ARTICLE_LIST: String = "article_list"

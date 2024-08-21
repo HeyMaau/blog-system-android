@@ -8,6 +8,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import top.manpok.blog.utils.Constants
+import top.manpok.blog.utils.TempData
 import java.util.concurrent.TimeUnit
 
 object BlogRetrofit {
@@ -46,7 +47,17 @@ object BlogRetrofit {
         }
         return@lazy builder
     }
-    private val instance: Retrofit by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
+
+    private val devInstance: Retrofit by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
+        Retrofit.Builder().baseUrl(Constants.BASE_URL_DEV)
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(
+                okHttpClient.build()
+            )
+            .build()
+    }
+
+    private val prodInstance: Retrofit by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
         Retrofit.Builder().baseUrl(Constants.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .client(
@@ -55,35 +66,148 @@ object BlogRetrofit {
             .build()
     }
 
-    val articleApi: ArticleApi by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
-        instance.create(ArticleApi::class.java)
+    private val instance: Retrofit
+        get() {
+            return if (TempData.currentEnv == 0) {
+                prodInstance
+            } else {
+                devInstance
+            }
+        }
+
+    private val prodArticleApi: ArticleApi by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
+        prodInstance.create(ArticleApi::class.java)
     }
 
-    val thinkingApi: ThinkingApi by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
-        instance.create(ThinkingApi::class.java)
+    private val devArticleApi: ArticleApi by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
+        devInstance.create(ArticleApi::class.java)
     }
 
-    val categoryApi: CategoryApi by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
-        instance.create(CategoryApi::class.java)
+    val articleApi: ArticleApi
+        get() {
+            return if (TempData.currentEnv == 0) {
+                prodArticleApi
+            } else {
+                devArticleApi
+            }
+        }
+
+    private val prodThinkingApi: ThinkingApi by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
+        prodInstance.create(ThinkingApi::class.java)
     }
 
-    val userApi: UserApi by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
-        instance.create(UserApi::class.java)
+    private val devThinkingApi: ThinkingApi by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
+        devInstance.create(ThinkingApi::class.java)
     }
 
-    val friendLinkApi: FriendLinkApi by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
-        instance.create(FriendLinkApi::class.java)
+    val thinkingApi: ThinkingApi
+        get() {
+            return if (TempData.currentEnv == 0) {
+                prodThinkingApi
+            } else {
+                devThinkingApi
+            }
+        }
+
+    private val prodCategoryApi: CategoryApi by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
+        prodInstance.create(CategoryApi::class.java)
     }
 
-    val feedbackApi: FeedbackApi by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
-        instance.create(FeedbackApi::class.java)
+    private val devCategoryApi: CategoryApi by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
+        devInstance.create(CategoryApi::class.java)
     }
 
-    val searchApi: SearchApi by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
-        instance.create(SearchApi::class.java)
+    val categoryApi: CategoryApi
+        get() {
+            return if (TempData.currentEnv == 0) {
+                prodCategoryApi
+            } else {
+                devCategoryApi
+            }
+        }
+
+    private val prodUserApi: UserApi by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
+        prodInstance.create(UserApi::class.java)
     }
 
-    val commentApi: CommentApi by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
-        instance.create(CommentApi::class.java)
+    private val devUserApi: UserApi by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
+        devInstance.create(UserApi::class.java)
     }
+
+    val userApi: UserApi
+        get() {
+            return if (TempData.currentEnv == 0) {
+                prodUserApi
+            } else {
+                devUserApi
+            }
+        }
+
+    private val prodFriendLinkApi: FriendLinkApi by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
+        prodInstance.create(FriendLinkApi::class.java)
+    }
+
+    private val devFriendLinkApi: FriendLinkApi by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
+        devInstance.create(FriendLinkApi::class.java)
+    }
+
+    val friendLinkApi: FriendLinkApi
+        get() {
+            return if (TempData.currentEnv == 0) {
+                prodFriendLinkApi
+            } else {
+                devFriendLinkApi
+            }
+        }
+
+    private val prodFeedbackApi: FeedbackApi by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
+        prodInstance.create(FeedbackApi::class.java)
+    }
+
+    private val devFeedbackApi: FeedbackApi by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
+        devInstance.create(FeedbackApi::class.java)
+    }
+
+    val feedbackApi: FeedbackApi
+        get() {
+            return if (TempData.currentEnv == 0) {
+                prodFeedbackApi
+            } else {
+                devFeedbackApi
+            }
+        }
+
+    private val prodSearchApi: SearchApi by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
+        prodInstance.create(SearchApi::class.java)
+    }
+
+    private val devSearchApi: SearchApi by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
+        devInstance.create(SearchApi::class.java)
+    }
+
+    val searchApi: SearchApi
+        get() {
+            return if (TempData.currentEnv == 0) {
+                prodSearchApi
+            } else {
+                devSearchApi
+            }
+        }
+
+    private val prodCommentApi: CommentApi by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
+        prodInstance.create(CommentApi::class.java)
+    }
+
+    private val devCommentApi: CommentApi by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
+        devInstance.create(CommentApi::class.java)
+    }
+
+    val commentApi: CommentApi
+        get() {
+            return if (TempData.currentEnv == 0) {
+                prodCommentApi
+            } else {
+                devCommentApi
+            }
+        }
 }

@@ -19,6 +19,7 @@ import top.manpok.blog.component.LaunchPage
 import top.manpok.blog.ds.DataStoreManager
 import top.manpok.blog.ui.theme.BlogSystemAndroidTheme
 import top.manpok.blog.viewmodel.ArticleViewModel
+import top.manpok.blog.viewmodel.EnvViewModel
 
 class MainActivity : BaseActivity() {
 
@@ -37,6 +38,7 @@ class MainActivity : BaseActivity() {
             }
         }
         setContent {
+            val envViewModel: EnvViewModel = viewModel()
             val articleViewModel: ArticleViewModel = viewModel()
             if (launching) {
                 LaunchPage()

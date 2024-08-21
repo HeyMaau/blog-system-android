@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import top.manpok.blog.R
 import top.manpok.blog.component.SettingItem
+import top.manpok.blog.component.SwitchEnvButton
 import top.manpok.blog.utils.Constants
 import top.manpok.blog.viewmodel.AboutPageViewModel
 
@@ -68,5 +69,10 @@ fun AboutPage(modifier: Modifier = Modifier, aboutPageViewModel: AboutPageViewMo
             )
         }
         HorizontalDivider(thickness = 0.5.dp)
+        SwitchEnvButton(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 12.dp)
+        )
     }
 }

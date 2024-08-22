@@ -24,6 +24,7 @@ import coil.compose.AsyncImage
 import top.manpok.blog.R
 import top.manpok.blog.pojo.BlogThinking
 import top.manpok.blog.utils.Constants
+import top.manpok.blog.utils.TempData
 
 @Composable
 fun ThinkingListItem(data: BlogThinking.Data?, click: () -> Unit, modifier: Modifier = Modifier) {
@@ -40,7 +41,7 @@ fun ThinkingListItem(data: BlogThinking.Data?, click: () -> Unit, modifier: Modi
                 val cover = split[0]
                 if (!TextUtils.isEmpty(cover)) {
                     AsyncImage(
-                        model = Constants.BASE_IMAGE_URL + cover,
+                        model = (if (TempData.currentEnv == Constants.ENV_PROD) Constants.BASE_IMAGE_URL else Constants.BASE_IMAGE_URL_DEV) + cover,
                         contentDescription = null,
                         contentScale = ContentScale.Fit,
                         placeholder = painterResource(id = R.drawable.thinking_default)
@@ -69,7 +70,7 @@ fun ThinkingListItem(data: BlogThinking.Data?, click: () -> Unit, modifier: Modi
                 modifier = Modifier.padding(8.dp)
             )
             AuthorInfoBanner(
-                avatarUrl = Constants.BASE_IMAGE_URL + data.user?.avatar,
+                avatarUrl = (if (TempData.currentEnv == Constants.ENV_PROD) Constants.BASE_IMAGE_URL else Constants.BASE_IMAGE_URL_DEV) + data.user?.avatar,
                 name = data.user?.userName!!,
                 modifier = Modifier.padding(8.dp, 0.dp, 0.dp, 5.dp)
             )

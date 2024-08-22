@@ -54,6 +54,7 @@ import top.manpok.blog.component.CategoryInfoCard
 import top.manpok.blog.component.CategoryPopup
 import top.manpok.blog.component.CommonHeader
 import top.manpok.blog.utils.Constants
+import top.manpok.blog.utils.TempData
 import top.manpok.blog.utils.reachBottom
 import top.manpok.blog.viewmodel.ArticleCategoryViewModel
 import top.manpok.blog.viewmodel.BlogScaffoldViewModel
@@ -216,7 +217,7 @@ fun CategoryPage(
                     CategoryInfoCard(
                         avatarUrl = userViewModel.authorAvatar,
                         userName = userViewModel.authorName,
-                        coverUrl = Constants.BASE_IMAGE_URL + categoryViewModel.categoryList[categoryViewModel.currentIndex].cover,
+                        coverUrl = (if (TempData.currentEnv == Constants.ENV_PROD) Constants.BASE_IMAGE_URL else Constants.BASE_IMAGE_URL_DEV) + categoryViewModel.categoryList[categoryViewModel.currentIndex].cover,
                         categoryName = categoryViewModel.categoryList[categoryViewModel.currentIndex].name!!,
                         categoryDesc = categoryViewModel.categoryList[categoryViewModel.currentIndex].description!!,
                         totalArticle = articleCategoryViewModel.total,

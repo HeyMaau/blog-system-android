@@ -24,6 +24,7 @@ import top.manpok.blog.pojo.BlogArticleDetail
 import top.manpok.blog.pojo.DefaultState
 import top.manpok.blog.utils.Constants
 import top.manpok.blog.utils.NetworkUtil
+import top.manpok.blog.utils.TempData
 
 class ArticleDetailViewModel : ViewModel() {
 
@@ -73,10 +74,10 @@ class ArticleDetailViewModel : ViewModel() {
                             if (body?.code == Constants.CODE_SUCCESS) {
                                 val data = body.data
                                 title = data?.title!!
-                                authorAvatar = Constants.BASE_IMAGE_URL + data.user?.avatar
+                                authorAvatar = (if (TempData.currentEnv == Constants.ENV_PROD) Constants.BASE_IMAGE_URL else Constants.BASE_IMAGE_URL_DEV) + data.user?.avatar
                                 authorName = data.user?.userName!!
                                 authorSign = data.user.sign!!
-                                cover = Constants.BASE_IMAGE_URL + data.cover!!
+                                cover = (if (TempData.currentEnv == Constants.ENV_PROD) Constants.BASE_IMAGE_URL else Constants.BASE_IMAGE_URL_DEV) + data.cover!!
                                 updateTime = data.updateTime!!
                                 setHtmlContent(data.content!!)
                                 if (timeOut) {
@@ -114,10 +115,10 @@ class ArticleDetailViewModel : ViewModel() {
         val data = articleDetailDao.getOne(id)
         if (data != null) {
             title = data.title!!
-            authorAvatar = Constants.BASE_IMAGE_URL + data.avatar
+            authorAvatar = (if (TempData.currentEnv == Constants.ENV_PROD) Constants.BASE_IMAGE_URL else Constants.BASE_IMAGE_URL_DEV) + data.avatar
             authorName = data.userName!!
             authorSign = data.sign!!
-            cover = Constants.BASE_IMAGE_URL + data.cover
+            cover = (if (TempData.currentEnv == Constants.ENV_PROD) Constants.BASE_IMAGE_URL else Constants.BASE_IMAGE_URL_DEV) + data.cover
             setHtmlContent(data.content!!)
             updateTime = data.updateTime!!
         }

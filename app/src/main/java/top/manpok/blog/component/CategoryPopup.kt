@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import top.manpok.blog.pojo.BlogCategory
 import top.manpok.blog.utils.Constants
+import top.manpok.blog.utils.TempData
 
 @Composable
 fun CategoryPopup(
@@ -41,7 +42,7 @@ fun CategoryPopup(
         ) {
             dataList.forEachIndexed { index, blogCategory ->
                 CategoryListItem(
-                    coverUrl = Constants.BASE_IMAGE_URL + blogCategory.cover,
+                    coverUrl = (if (TempData.currentEnv == Constants.ENV_PROD) Constants.BASE_IMAGE_URL else Constants.BASE_IMAGE_URL_DEV) + blogCategory.cover,
                     name = blogCategory.name!!,
                     isFirst = index == 0,
                     isLast = index == dataList.size - 1,

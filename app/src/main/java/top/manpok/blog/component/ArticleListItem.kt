@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.sp
 import top.manpok.blog.R
 import top.manpok.blog.pojo.BlogArticle
 import top.manpok.blog.utils.Constants
+import top.manpok.blog.utils.TempData
 
 @Composable
 fun ArticleListItem(
@@ -35,7 +36,7 @@ fun ArticleListItem(
         ) {
             Text(text = "${item?.title}", fontWeight = FontWeight(500), fontSize = 18.sp)
             AuthorInfoBanner(
-                avatarUrl = Constants.BASE_IMAGE_URL + item?.user?.avatar,
+                avatarUrl = (if (TempData.currentEnv == Constants.ENV_PROD) Constants.BASE_IMAGE_URL else Constants.BASE_IMAGE_URL_DEV) + item?.user?.avatar,
                 name = "${item?.user?.userName}",
                 modifier = Modifier.padding(5.dp),
                 fontSize = 16.sp,

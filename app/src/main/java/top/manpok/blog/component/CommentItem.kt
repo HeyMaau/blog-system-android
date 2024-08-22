@@ -28,6 +28,7 @@ import coil.compose.AsyncImage
 import top.manpok.blog.R
 import top.manpok.blog.pojo.BlogComment
 import top.manpok.blog.utils.Constants
+import top.manpok.blog.utils.TempData
 
 @Composable
 fun CommentItem(
@@ -38,7 +39,7 @@ fun CommentItem(
     if (data != null) {
         Row(verticalAlignment = Alignment.Top, modifier = modifier.fillMaxWidth()) {
             AsyncImage(
-                model = Constants.BASE_COMMENT_AVATAR_URL + data.userAvatar,
+                model = (if (TempData.currentEnv == Constants.ENV_PROD) Constants.BASE_COMMENT_AVATAR_URL else Constants.BASE_COMMENT_AVATAR_URL_DEV) + data.userAvatar,
                 contentDescription = null,
                 modifier = modifier
                     .size(30.dp)

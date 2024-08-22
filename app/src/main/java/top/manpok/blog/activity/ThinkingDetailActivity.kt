@@ -47,6 +47,7 @@ import top.manpok.blog.component.CommonHeader
 import top.manpok.blog.component.EditCommentBottomDialog
 import top.manpok.blog.component.FloatingHeader
 import top.manpok.blog.utils.Constants
+import top.manpok.blog.utils.TempData
 import top.manpok.blog.viewmodel.CommentViewModel
 
 class ThinkingDetailActivity : BaseActivity() {
@@ -130,7 +131,7 @@ class ThinkingDetailActivity : BaseActivity() {
                         })
                     Spacer(modifier = Modifier.height(8.dp))
                     AuthorInfoBanner(
-                        avatarUrl = Constants.BASE_IMAGE_URL + intent.getStringExtra(
+                        avatarUrl = (if (TempData.currentEnv == Constants.ENV_PROD) Constants.BASE_IMAGE_URL else Constants.BASE_IMAGE_URL_DEV) + intent.getStringExtra(
                             INTENT_KEY_AUTHOR_AVATAR
                         ),
                         name = intent.getStringExtra(INTENT_KEY_AUTHOR_NAME)!!,
@@ -149,7 +150,7 @@ class ThinkingDetailActivity : BaseActivity() {
                     )
                     if (splitImage?.size == 1) {
                         AsyncImage(
-                            model = Constants.BASE_IMAGE_URL + splitImage[0],
+                            model = (if (TempData.currentEnv == Constants.ENV_PROD) Constants.BASE_IMAGE_URL else Constants.BASE_IMAGE_URL_DEV) + splitImage[0],
                             contentDescription = null,
                             modifier = Modifier
                                 .padding(0.dp, 10.dp)
@@ -165,7 +166,7 @@ class ThinkingDetailActivity : BaseActivity() {
                             items(splitImage.size) {
                                 if (it == 0) {
                                     AsyncImage(
-                                        model = Constants.BASE_IMAGE_URL + splitImage[it],
+                                        model = (if (TempData.currentEnv == Constants.ENV_PROD) Constants.BASE_IMAGE_URL else Constants.BASE_IMAGE_URL_DEV) + splitImage[it],
                                         contentDescription = null,
                                         modifier = Modifier
                                             .padding(0.dp, 10.dp, 5.dp, 10.dp)
@@ -176,7 +177,7 @@ class ThinkingDetailActivity : BaseActivity() {
                                     )
                                 } else if (it != splitImage.size - 1) {
                                     AsyncImage(
-                                        model = Constants.BASE_IMAGE_URL + splitImage[it],
+                                        model = (if (TempData.currentEnv == Constants.ENV_PROD) Constants.BASE_IMAGE_URL else Constants.BASE_IMAGE_URL_DEV) + splitImage[it],
                                         contentDescription = null,
                                         modifier = Modifier
                                             .padding(5.dp, 10.dp)
@@ -187,7 +188,7 @@ class ThinkingDetailActivity : BaseActivity() {
                                     )
                                 } else {
                                     AsyncImage(
-                                        model = Constants.BASE_IMAGE_URL + splitImage[it],
+                                        model = (if (TempData.currentEnv == Constants.ENV_PROD) Constants.BASE_IMAGE_URL else Constants.BASE_IMAGE_URL_DEV) + splitImage[it],
                                         contentDescription = null,
                                         modifier = Modifier
                                             .padding(5.dp, 10.dp, 0.dp, 10.dp)

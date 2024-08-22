@@ -11,6 +11,7 @@ import top.manpok.blog.api.BlogRetrofit
 import top.manpok.blog.pojo.BaseResponse
 import top.manpok.blog.pojo.BlogUser
 import top.manpok.blog.utils.Constants
+import top.manpok.blog.utils.TempData
 
 class UserViewModel : ViewModel() {
 
@@ -36,7 +37,7 @@ class UserViewModel : ViewModel() {
                         val data = body.data
                         authorName = data?.userName!!
                         authorSign = data.sign!!
-                        authorAvatar = Constants.BASE_IMAGE_URL + data.avatar
+                        authorAvatar = (if (TempData.currentEnv == Constants.ENV_PROD) Constants.BASE_IMAGE_URL else Constants.BASE_IMAGE_URL_DEV) + data.avatar
                         authorMajor = data.major!!
                         authorGithub = data.hubSite!!
                     }

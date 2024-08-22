@@ -57,4 +57,8 @@
     <string name="choose_env_type">选择环境：</string>
     <string name="env_prod">生产环境</string>
     <string name="env_dev">开发环境</string>
+
+    <string name="version_update_title">卧卷版本更新</string>
+    <string name="update_now">立刻更新</string>
+    <string name="update_next_time">下次再说</string>
 </resources>

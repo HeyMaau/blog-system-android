@@ -8,7 +8,9 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.runBlocking
 
 class DataStoreManager private constructor() {
 
@@ -38,6 +40,14 @@ class DataStoreManager private constructor() {
     fun getCurrentEnv(context: Context): Flow<Int> {
         return context.dataStore.data.map {
             it[KEY_CURRENT_ENV] ?: 0
+        }
+    }
+
+    fun getCurrentEnvSync(context: Context): Int {
+        return runBlocking {
+            context.dataStore.data.map {
+                it[KEY_CURRENT_ENV] ?: 0
+            }.first()
         }
     }
 

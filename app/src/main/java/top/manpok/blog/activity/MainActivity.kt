@@ -18,6 +18,7 @@ import top.manpok.blog.component.BlogScaffold
 import top.manpok.blog.component.LaunchPage
 import top.manpok.blog.ds.DataStoreManager
 import top.manpok.blog.ui.theme.BlogSystemAndroidTheme
+import top.manpok.blog.utils.TempData
 import top.manpok.blog.viewmodel.ArticleViewModel
 import top.manpok.blog.viewmodel.EnvViewModel
 
@@ -38,6 +39,7 @@ class MainActivity : BaseActivity() {
             }
         }
         setContent {
+            TempData.currentEnv = DataStoreManager.instance.getCurrentEnvSync(this)
             val envViewModel: EnvViewModel = viewModel()
             val articleViewModel: ArticleViewModel = viewModel()
             if (launching) {

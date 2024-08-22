@@ -210,4 +210,21 @@ object BlogRetrofit {
                 devCommentApi
             }
         }
+
+    private val prodUpdateApi: UpdateApi by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
+        prodInstance.create(UpdateApi::class.java)
+    }
+
+    private val devUpdateApi: UpdateApi by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
+        devInstance.create(UpdateApi::class.java)
+    }
+
+    val updateApi: UpdateApi
+        get() {
+            return if (TempData.currentEnv == 0) {
+                prodUpdateApi
+            } else {
+                devUpdateApi
+            }
+        }
 }

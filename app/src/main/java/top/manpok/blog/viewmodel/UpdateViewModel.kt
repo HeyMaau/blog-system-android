@@ -29,6 +29,8 @@ class UpdateViewModel : ViewModel() {
     var showUpdateDialog: Boolean by mutableStateOf(false)
     var downloadUrl: String? = null
     var forceUpdate: Int by mutableIntStateOf(0)
+    var versionName: String? by mutableStateOf(null)
+    var changeLog: String? by mutableStateOf(null)
 
     init {
         checkUpdate(false)
@@ -58,6 +60,8 @@ class UpdateViewModel : ViewModel() {
                                     showUpdateDialog = true
                                     downloadUrl = data.downloadUrl
                                     forceUpdate = data.forceUpdate
+                                    versionName = data.versionName
+                                    changeLog = data.changeLog
                                 } else {
                                     if (checkManually) {
                                         ToastUtil.showShortToast(R.string.already_latest_version)

@@ -90,17 +90,23 @@ fun BlogScaffold(
         }
         if (updateViewModel.showUpdateDialog) {
             val context = LocalContext.current
-            UpdateDialog(onConfirmClick = {
-                updateViewModel.showUpdateDialog = false
-                if (!TextUtils.isEmpty(updateViewModel.downloadUrl)) {
-                    val uri = Uri.parse(updateViewModel.downloadUrl)
-                    val intent = Intent(Intent.ACTION_VIEW, uri)
-                    context.startActivity(intent)
-                }
-            }, onCancelClick = {
-                updateViewModel.showUpdateDialog = false
-                updateViewModel.handleCloseUpdateDialog()
-            }, forceUpdate = updateViewModel.forceUpdate == Constants.FORCE_UPDATE_TRUE)
+            UpdateDialog(
+                versionName = updateViewModel.versionName,
+                changeLog = updateViewModel.changeLog,
+                onConfirmClick = {
+                    updateViewModel.showUpdateDialog = false
+                    if (!TextUtils.isEmpty(updateViewModel.downloadUrl)) {
+                        val uri = Uri.parse(updateViewModel.downloadUrl)
+                        val intent = Intent(Intent.ACTION_VIEW, uri)
+                        context.startActivity(intent)
+                    }
+                },
+                onCancelClick = {
+                    updateViewModel.showUpdateDialog = false
+                    updateViewModel.handleCloseUpdateDialog()
+                },
+                forceUpdate = updateViewModel.forceUpdate == Constants.FORCE_UPDATE_TRUE
+            )
         }
     }
 }

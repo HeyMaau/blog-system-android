@@ -31,6 +31,8 @@ import top.manpok.blog.R
 
 @Composable
 fun UpdateDialog(
+    versionName: String?,
+    changeLog: String?,
     onConfirmClick: () -> Unit,
     onCancelClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -56,16 +58,18 @@ fun UpdateDialog(
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold
                     )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    androidx.compose.material.Text(text = "V1.1.1")
+                    if (versionName != null) {
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(text = versionName)
+                    }
                 }
-                Spacer(modifier = Modifier.height(12.dp))
-                Text(
-                    text = "1、更新了很多很多很多很多很多很多很多\n" +
-                            "2、更新了很多很多很多很多很多很多很多\n" +
-                            "3、更新了很多很多很多很多很多很多很多",
-                    modifier = Modifier.align(Alignment.Start)
-                )
+                if (changeLog != null) {
+                    Spacer(modifier = Modifier.height(12.dp))
+                    Text(
+                        text = changeLog,
+                        modifier = Modifier.align(Alignment.Start)
+                    )
+                }
                 Spacer(modifier = Modifier.height(12.dp))
                 Button(
                     onClick = { onConfirmClick.invoke() }, colors = ButtonDefaults.buttonColors(
@@ -97,5 +101,13 @@ fun UpdateDialog(
 @Preview(showSystemUi = false)
 @Composable
 private fun PreviewUpdateDialog() {
-    UpdateDialog(onConfirmClick = {}, onCancelClick = {}, modifier = Modifier.fillMaxWidth())
+    UpdateDialog(
+        versionName = "V1.1.1",
+        changeLog = "1、更新了很多很多很多很多很多很多很多\n" +
+                "2、更新了很多很多很多很多很多很多很多\n" +
+                "3、更新了很多很多很多很多很多很多很多",
+        onConfirmClick = {},
+        onCancelClick = {},
+        modifier = Modifier.fillMaxWidth()
+    )
 }

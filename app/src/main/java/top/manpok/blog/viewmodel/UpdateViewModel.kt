@@ -27,7 +27,11 @@ class UpdateViewModel : ViewModel() {
     var forceUpdate: Int by mutableIntStateOf(0)
 
     init {
-        if (shouldShowUpdateDialog()) {
+        checkUpdate(false)
+    }
+
+    fun checkUpdate(checkManually: Boolean) {
+        if (checkManually || shouldShowUpdateDialog()) {
             val packageManager = BaseApplication.getApplication().packageManager
             val packageInfo =
                 packageManager.getPackageInfo(BaseApplication.getApplication().packageName, 0)

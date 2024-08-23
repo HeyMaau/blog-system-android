@@ -61,4 +61,5 @@
     <string name="version_update_title">卧卷版本更新</string>
     <string name="update_now">立刻更新</string>
     <string name="update_next_time">下次再说</string>
+    <string name="check_update">检查更新</string>
 </resources>

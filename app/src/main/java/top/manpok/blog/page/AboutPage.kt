@@ -26,9 +26,14 @@ import top.manpok.blog.component.SettingItem
 import top.manpok.blog.component.SwitchEnvButton
 import top.manpok.blog.utils.Constants
 import top.manpok.blog.viewmodel.AboutPageViewModel
+import top.manpok.blog.viewmodel.UpdateViewModel
 
 @Composable
-fun AboutPage(modifier: Modifier = Modifier, aboutPageViewModel: AboutPageViewModel = viewModel()) {
+fun AboutPage(
+    modifier: Modifier = Modifier,
+    aboutPageViewModel: AboutPageViewModel = viewModel(),
+    updateViewModel: UpdateViewModel = viewModel()
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
@@ -61,13 +66,24 @@ fun AboutPage(modifier: Modifier = Modifier, aboutPageViewModel: AboutPageViewMo
             SettingItem(
                 name = settingItemData.name,
                 rightIcon = settingItemData.rightIcon,
-                isLast = index == aboutPageViewModel.settingItemList.size - 1,
+                isLast = false,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(20.dp, 0.dp),
                 click = settingItemData.click
             )
         }
+        SettingItem(
+            name = R.string.check_update,
+            rightIcon = R.drawable.ic_arrow_forward,
+            isLast = true,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(20.dp, 0.dp),
+            click = {
+                updateViewModel.checkUpdate(true)
+            }
+        )
         HorizontalDivider(thickness = 0.5.dp)
         SwitchEnvButton(
             modifier = Modifier

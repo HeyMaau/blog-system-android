@@ -62,4 +62,5 @@
     <string name="update_now">立刻更新</string>
     <string name="update_next_time">下次再说</string>
     <string name="check_update">检查更新</string>
+    <string name="already_latest_version">已是最新版本</string>
 </resources>

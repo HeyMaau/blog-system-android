@@ -12,12 +12,14 @@ import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import top.manpok.blog.R
 import top.manpok.blog.api.BlogRetrofit
 import top.manpok.blog.base.BaseApplication
 import top.manpok.blog.ds.DataStoreManager
 import top.manpok.blog.pojo.BaseResponse
 import top.manpok.blog.pojo.BlogAppInfo
 import top.manpok.blog.utils.Constants
+import top.manpok.blog.utils.ToastUtil
 import java.time.LocalDateTime
 import java.util.Calendar
 import kotlin.math.abs
@@ -56,6 +58,10 @@ class UpdateViewModel : ViewModel() {
                                     showUpdateDialog = true
                                     downloadUrl = data.downloadUrl
                                     forceUpdate = data.forceUpdate
+                                } else {
+                                    if (checkManually) {
+                                        ToastUtil.showShortToast(R.string.already_latest_version)
+                                    }
                                 }
                             }
                         }

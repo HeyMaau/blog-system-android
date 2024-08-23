@@ -1,5 +1,6 @@
 package top.manpok.blog.viewmodel
 
+import android.os.Build
 import android.text.TextUtils
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -18,6 +19,7 @@ import top.manpok.blog.pojo.BaseResponse
 import top.manpok.blog.pojo.BlogAppInfo
 import top.manpok.blog.utils.Constants
 import java.time.LocalDateTime
+import java.util.Calendar
 import kotlin.math.abs
 
 class UpdateViewModel : ViewModel() {
@@ -35,7 +37,12 @@ class UpdateViewModel : ViewModel() {
             val packageManager = BaseApplication.getApplication().packageManager
             val packageInfo =
                 packageManager.getPackageInfo(BaseApplication.getApplication().packageName, 0)
-            BlogRetrofit.updateApi.checkUpdateInfo(packageInfo.longVersionCode.toInt())
+            val versionCode: Int = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                packageInfo.longVersionCode.toInt()
+            } else {
+                packageInfo.versionCode
+            }
+            BlogRetrofit.updateApi.checkUpdateInfo(versionCode)
                 .enqueue(object : Callback<BaseResponse<BlogAppInfo>> {
                     override fun onResponse(
                         call: Call<BaseResponse<BlogAppInfo>>,
@@ -63,18 +70,28 @@ class UpdateViewModel : ViewModel() {
     }
 
     fun handleCloseUpdateDialog() {
+        val day: Int = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            LocalDateTime.now().dayOfYear
+        } else {
+            Calendar.getInstance().get(Calendar.DAY_OF_YEAR)
+        }
         viewModelScope.launch {
             DataStoreManager.instance.setLastCloseUpdateDialogTime(
                 BaseApplication.getApplication(),
-                LocalDateTime.now().dayOfYear
+                day
             )
+
         }
     }
 
     private fun shouldShowUpdateDialog(): Boolean {
         val lastCloseUpdateDialogTime =
             DataStoreManager.instance.getLastCloseUpdateDialogTimeSync(BaseApplication.getApplication())
-        val nowDay = LocalDateTime.now().dayOfYear
+        val nowDay: Int = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            LocalDateTime.now().dayOfYear
+        } else {
+            Calendar.getInstance().get(Calendar.DAY_OF_YEAR)
+        }
         return abs(nowDay - lastCloseUpdateDialogTime) >= 3
     }
 }

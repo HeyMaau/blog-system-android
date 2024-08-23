@@ -6,7 +6,6 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
-import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -22,7 +21,7 @@ class DataStoreManager private constructor() {
         private val KEY_HAS_INITIALIZED = booleanPreferencesKey("key_has_initialized")
         private val KEY_CURRENT_ENV = intPreferencesKey("key_current_env")
         private val KEY_LAST_CLOSE_UPDATE_DIALOG_TIME =
-            longPreferencesKey("key_last_close_update_dialog_time")
+            intPreferencesKey("key_last_close_update_dialog_time")
         val instance: DataStoreManager by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
             DataStoreManager()
         }
@@ -60,13 +59,13 @@ class DataStoreManager private constructor() {
         }
     }
 
-    suspend fun setLastCloseUpdateDialogTime(context: Context, time: Long) {
+    suspend fun setLastCloseUpdateDialogTime(context: Context, time: Int) {
         context.dataStore.edit {
             it[KEY_LAST_CLOSE_UPDATE_DIALOG_TIME] = time
         }
     }
 
-    fun getLastCloseUpdateDialogTimeSync(context: Context): Long {
+    fun getLastCloseUpdateDialogTimeSync(context: Context): Int {
         return runBlocking {
             context.dataStore.data.map {
                 it[KEY_LAST_CLOSE_UPDATE_DIALOG_TIME] ?: 0

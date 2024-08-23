@@ -30,7 +30,11 @@ import androidx.compose.ui.window.Dialog
 import top.manpok.blog.R
 
 @Composable
-fun UpdateDialog(onCancelClick: () -> Unit, modifier: Modifier = Modifier) {
+fun UpdateDialog(
+    onConfirmClick: () -> Unit,
+    onCancelClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     Dialog(onDismissRequest = { /*TODO*/ }) {
         Card(colors = CardDefaults.cardColors(containerColor = Color.White)) {
             Column(
@@ -63,7 +67,7 @@ fun UpdateDialog(onCancelClick: () -> Unit, modifier: Modifier = Modifier) {
                 )
                 Spacer(modifier = Modifier.height(12.dp))
                 Button(
-                    onClick = { /*TODO*/ }, colors = ButtonDefaults.buttonColors(
+                    onClick = { onConfirmClick.invoke() }, colors = ButtonDefaults.buttonColors(
                         containerColor = colorResource(
                             id = R.color.blue_0185fa
                         )
@@ -90,5 +94,5 @@ fun UpdateDialog(onCancelClick: () -> Unit, modifier: Modifier = Modifier) {
 @Preview(showSystemUi = false)
 @Composable
 private fun PreviewUpdateDialog() {
-    UpdateDialog(onCancelClick = {}, modifier = Modifier.fillMaxWidth())
+    UpdateDialog(onConfirmClick = {}, onCancelClick = {}, modifier = Modifier.fillMaxWidth())
 }

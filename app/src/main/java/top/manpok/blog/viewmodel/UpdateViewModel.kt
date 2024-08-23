@@ -5,6 +5,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -14,9 +16,7 @@ import top.manpok.blog.ds.DataStoreManager
 import top.manpok.blog.pojo.BaseResponse
 import top.manpok.blog.pojo.BlogAppInfo
 import top.manpok.blog.utils.Constants
-import java.time.Instant
 import java.time.LocalDateTime
-import java.time.ZoneId
 import kotlin.math.abs
 
 class UpdateViewModel : ViewModel() {
@@ -53,15 +53,19 @@ class UpdateViewModel : ViewModel() {
         }
     }
 
+    fun handleCloseUpdateDialog() {
+        viewModelScope.launch {
+            DataStoreManager.instance.setLastCloseUpdateDialogTime(
+                BaseApplication.getApplication(),
+                LocalDateTime.now().dayOfYear
+            )
+        }
+    }
+
     private fun shouldShowUpdateDialog(): Boolean {
         val lastCloseUpdateDialogTime =
             DataStoreManager.instance.getLastCloseUpdateDialogTimeSync(BaseApplication.getApplication())
-        val lastCloseUpdateDialogTimeInstant = Instant.ofEpochMilli(lastCloseUpdateDialogTime)
-        val lastCloseUpdateDialogTimeLocalDateTime =
-            LocalDateTime.ofInstant(lastCloseUpdateDialogTimeInstant, ZoneId.systemDefault())
-        val lastCloseUpdateDialogTimeDay = lastCloseUpdateDialogTimeLocalDateTime.dayOfYear
-
         val nowDay = LocalDateTime.now().dayOfYear
-        return abs(nowDay - lastCloseUpdateDialogTimeDay) >= 3
+        return abs(nowDay - lastCloseUpdateDialogTime) >= 3
     }
 }

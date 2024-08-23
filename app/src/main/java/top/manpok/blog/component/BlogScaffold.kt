@@ -10,14 +10,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
-import kotlinx.coroutines.launch
-import top.manpok.blog.ds.DataStoreManager
 import top.manpok.blog.page.AboutPage
 import top.manpok.blog.page.CategoryPage
 import top.manpok.blog.page.HomePage
@@ -88,16 +85,11 @@ fun BlogScaffold(
             }
         }
         if (updateViewModel.showUpdateDialog) {
-            val context = LocalContext.current
-            val coroutineScope = rememberCoroutineScope()
-            UpdateDialog(onCancelClick = {
+            UpdateDialog(onConfirmClick = {
                 updateViewModel.showUpdateDialog = false
-                coroutineScope.launch {
-                    DataStoreManager.instance.setLastCloseUpdateDialogTime(
-                        context,
-                        System.currentTimeMillis()
-                    )
-                }
+            }, onCancelClick = {
+                updateViewModel.showUpdateDialog = false
+                updateViewModel.handleCloseUpdateDialog()
             })
         }
     }

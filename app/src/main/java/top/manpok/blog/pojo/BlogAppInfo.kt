@@ -7,6 +7,7 @@ data class BlogAppInfo(
     val downloadUrl: String?,
     val id: String,
     val updateTime: String?,
-    val versionCode: Int?,
-    val versionName: String?
+    val versionCode: Int,
+    val versionName: String?,
+    val forceUpdate: Int
 )

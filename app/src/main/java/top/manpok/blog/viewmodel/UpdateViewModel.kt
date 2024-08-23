@@ -2,6 +2,7 @@ package top.manpok.blog.viewmodel
 
 import android.text.TextUtils
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
@@ -23,6 +24,7 @@ class UpdateViewModel : ViewModel() {
 
     var showUpdateDialog: Boolean by mutableStateOf(false)
     var downloadUrl: String? = null
+    var forceUpdate: Int by mutableIntStateOf(0)
 
     init {
         if (shouldShowUpdateDialog()) {
@@ -42,6 +44,7 @@ class UpdateViewModel : ViewModel() {
                                 if (data != null && !TextUtils.isEmpty(data.downloadUrl)) {
                                     showUpdateDialog = true
                                     downloadUrl = data.downloadUrl
+                                    forceUpdate = data.forceUpdate
                                 }
                             }
                         }

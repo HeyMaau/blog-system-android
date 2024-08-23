@@ -17,6 +17,8 @@ object Constants {
     const val ENV_PROD = 0
     const val ENV_DEV = 1
 
+    const val FORCE_UPDATE_TRUE = 1
+
     const val HOST_NAME = "manpok.top"
 
     const val TABLE_NAME_ARTICLE_LIST: String = "article_list"

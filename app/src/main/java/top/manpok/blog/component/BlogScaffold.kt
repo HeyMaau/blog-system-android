@@ -22,6 +22,7 @@ import top.manpok.blog.page.AboutPage
 import top.manpok.blog.page.CategoryPage
 import top.manpok.blog.page.HomePage
 import top.manpok.blog.page.ToolsPage
+import top.manpok.blog.utils.Constants
 import top.manpok.blog.viewmodel.BlogScaffoldViewModel
 import top.manpok.blog.viewmodel.UpdateViewModel
 
@@ -99,7 +100,7 @@ fun BlogScaffold(
             }, onCancelClick = {
                 updateViewModel.showUpdateDialog = false
                 updateViewModel.handleCloseUpdateDialog()
-            })
+            }, forceUpdate = updateViewModel.forceUpdate == Constants.FORCE_UPDATE_TRUE)
         }
     }
 }

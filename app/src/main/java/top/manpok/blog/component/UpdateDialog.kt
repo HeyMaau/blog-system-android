@@ -33,7 +33,8 @@ import top.manpok.blog.R
 fun UpdateDialog(
     onConfirmClick: () -> Unit,
     onCancelClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    forceUpdate: Boolean = false
 ) {
     Dialog(onDismissRequest = { /*TODO*/ }) {
         Card(colors = CardDefaults.cardColors(containerColor = Color.White)) {
@@ -75,16 +76,18 @@ fun UpdateDialog(
                 ) {
                     Text(text = stringResource(id = R.string.update_now), color = Color.White)
                 }
-                Button(
-                    onClick = { onCancelClick.invoke() },
-                    colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
-                    elevation = null
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.update_next_time),
-                        color = Color.Gray,
-                        fontSize = 12.sp
-                    )
+                if (!forceUpdate) {
+                    Button(
+                        onClick = { onCancelClick.invoke() },
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
+                        elevation = null
+                    ) {
+                        Text(
+                            text = stringResource(id = R.string.update_next_time),
+                            color = Color.Gray,
+                            fontSize = 12.sp
+                        )
+                    }
                 }
             }
         }

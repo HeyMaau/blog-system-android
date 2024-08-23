@@ -2,9 +2,12 @@ package top.manpok.blog.component
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
+import android.text.TextUtils
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
@@ -85,8 +88,14 @@ fun BlogScaffold(
             }
         }
         if (updateViewModel.showUpdateDialog) {
+            val context = LocalContext.current
             UpdateDialog(onConfirmClick = {
                 updateViewModel.showUpdateDialog = false
+                if (!TextUtils.isEmpty(updateViewModel.downloadUrl)) {
+                    val uri = Uri.parse(updateViewModel.downloadUrl)
+                    val intent = Intent(Intent.ACTION_VIEW, uri)
+                    context.startActivity(intent)
+                }
             }, onCancelClick = {
                 updateViewModel.showUpdateDialog = false
                 updateViewModel.handleCloseUpdateDialog()

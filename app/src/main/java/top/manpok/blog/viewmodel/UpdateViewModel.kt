@@ -22,6 +22,7 @@ import kotlin.math.abs
 class UpdateViewModel : ViewModel() {
 
     var showUpdateDialog: Boolean by mutableStateOf(false)
+    var downloadUrl: String? = null
 
     init {
         if (shouldShowUpdateDialog()) {
@@ -38,8 +39,9 @@ class UpdateViewModel : ViewModel() {
                             val body = response.body()
                             if (body?.code == Constants.CODE_SUCCESS) {
                                 val data = body.data
-                                if (!TextUtils.isEmpty(data?.downloadUrl)) {
+                                if (data != null && !TextUtils.isEmpty(data.downloadUrl)) {
                                     showUpdateDialog = true
+                                    downloadUrl = data.downloadUrl
                                 }
                             }
                         }

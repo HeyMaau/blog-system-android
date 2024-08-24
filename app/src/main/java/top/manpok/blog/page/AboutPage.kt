@@ -24,7 +24,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import top.manpok.blog.R
 import top.manpok.blog.component.SettingItem
 import top.manpok.blog.component.SwitchEnvButton
-import top.manpok.blog.utils.Constants
 import top.manpok.blog.viewmodel.AboutPageViewModel
 import top.manpok.blog.viewmodel.UpdateViewModel
 
@@ -53,8 +52,9 @@ fun AboutPage(
             fontSize = 20.sp,
             modifier = Modifier.padding(top = 15.dp)
         )
+        val packageManager = context.packageManager
         val versionName =
-            context.packageManager.getPackageInfo(Constants.PACKAGE_NAME, 0).versionName
+            packageManager.getPackageInfo(context.packageName, 0).versionName
         Text(
             text = stringResource(id = R.string.app_version, versionName),
             modifier = Modifier.padding(

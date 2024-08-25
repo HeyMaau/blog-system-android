@@ -14,6 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import top.manpok.blog.BuildConfig
 import top.manpok.blog.component.BlogScaffold
 import top.manpok.blog.component.LaunchPage
 import top.manpok.blog.ds.DataStoreManager
@@ -40,7 +41,9 @@ class MainActivity : BaseActivity() {
         }
         setContent {
             TempData.currentEnv = DataStoreManager.instance.getCurrentEnvSync(this)
-            val envViewModel: EnvViewModel = viewModel()
+            if (BuildConfig.DEBUG) {
+                val envViewModel: EnvViewModel = viewModel()
+            }
             val articleViewModel: ArticleViewModel = viewModel()
             if (launching) {
                 LaunchPage()

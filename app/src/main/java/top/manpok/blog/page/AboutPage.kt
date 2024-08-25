@@ -21,6 +21,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import top.manpok.blog.BuildConfig
 import top.manpok.blog.R
 import top.manpok.blog.component.SettingItem
 import top.manpok.blog.component.SwitchEnvButton
@@ -85,10 +86,12 @@ fun AboutPage(
             }
         )
         HorizontalDivider(thickness = 0.5.dp)
-        SwitchEnvButton(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 12.dp)
-        )
+        if (BuildConfig.DEBUG) {
+            SwitchEnvButton(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 12.dp)
+            )
+        }
     }
 }

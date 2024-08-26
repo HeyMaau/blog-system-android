@@ -1,13 +1,13 @@
 package top.manpok.blog.api
 
 import android.os.Build
-import android.util.Log
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import top.manpok.blog.utils.Constants
+import top.manpok.blog.utils.LogUtil
 import top.manpok.blog.utils.TempData
 import java.util.concurrent.TimeUnit
 
@@ -17,7 +17,7 @@ object BlogRetrofit {
 
     private val httpLoggingInterceptor: HttpLoggingInterceptor by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
         val instance = HttpLoggingInterceptor {
-            Log.i(TAG, it)
+            LogUtil.i(TAG, it)
         }
         instance.setLevel(HttpLoggingInterceptor.Level.BODY)
         return@lazy instance

@@ -66,17 +66,16 @@ object LogUtil {
         val file = File(rootPath, "log.txt")
         val writer = FileWriter(file, true)
         val bufferedWriter = BufferedWriter(writer)
-        bufferedWriter.write("abc")
         try {
             logBuffer.forEach {
-                writer.write(it)
+                bufferedWriter.write(it)
             }
             logBuffer.clear()
         } catch (e: Exception) {
             Log.e(TAG, "writeLog2File error: $e")
         } finally {
             try {
-                writer.close()
+                bufferedWriter.close()
             } catch (e: Exception) {
                 Log.e(TAG, "writeLog2File close error: $e")
             }

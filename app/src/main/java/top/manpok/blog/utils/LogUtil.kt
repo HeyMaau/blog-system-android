@@ -11,6 +11,7 @@ import java.io.FileWriter
 import java.io.IOException
 import java.nio.channels.FileChannel
 import java.text.SimpleDateFormat
+import java.util.Arrays
 import java.util.Date
 
 
@@ -27,6 +28,7 @@ object LogUtil {
      * 2MB分片
      */
     private const val LOG_FILE_SIZE: Long = 2097152
+    private const val LOG_FILE_NUM = 10
 
     fun v(tag: String, msg: String) {
         if (BuildConfig.DEBUG) {
@@ -98,6 +100,27 @@ object LogUtil {
             } catch (e: Exception) {
                 Log.e(TAG, "writeLog2File close error: $e")
             }
+        }
+        deleteRedundantLogFile()
+    }
+
+    @Synchronized
+    private fun deleteRedundantLogFile() {
+        val rootPath = BaseApplication.getApplication().getExternalFilesDir("log")
+        val listFiles = rootPath?.listFiles()
+        val fileNum = listFiles?.size
+        if (fileNum != null && fileNum > LOG_FILE_NUM) {
+            Arrays.sort(listFiles) { o1, o2 ->
+                if (o1!!.lastModified() > o2!!.lastModified()) {
+                    1
+                } else if (o1.lastModified() == o2.lastModified()) {
+                    0
+                } else {
+                    -1
+                }
+            }
+            val deleteSuccessfully = listFiles[0].delete()
+            i(TAG, "delete log file ${listFiles[0].name} successfully: $deleteSuccessfully")
         }
     }
 

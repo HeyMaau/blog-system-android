@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import top.manpok.blog.BuildConfig
@@ -19,6 +20,7 @@ import top.manpok.blog.component.BlogScaffold
 import top.manpok.blog.component.LaunchPage
 import top.manpok.blog.ds.DataStoreManager
 import top.manpok.blog.ui.theme.BlogSystemAndroidTheme
+import top.manpok.blog.utils.LogUtil
 import top.manpok.blog.utils.TempData
 import top.manpok.blog.viewmodel.ArticleViewModel
 import top.manpok.blog.viewmodel.EnvViewModel
@@ -61,6 +63,13 @@ class MainActivity : BaseActivity() {
             return true
         }
         return super.onKeyDown(keyCode, event)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        lifecycleScope.launch(Dispatchers.IO) {
+            LogUtil.flushLogBuffer()
+        }
     }
 }
 

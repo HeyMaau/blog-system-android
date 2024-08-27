@@ -90,6 +90,12 @@ object LogUtil {
         }
     }
 
+    suspend fun flushLogBuffer() {
+        mutex.withLock {
+            writeLog2File()
+        }
+    }
+
     private suspend fun writeLog2File() {
         val rootPath = BaseApplication.getApplication().getExternalFilesDir("log")
         var file = File(rootPath, "log.txt")

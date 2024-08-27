@@ -1,6 +1,11 @@
 package top.manpok.blog.utils
 
 import android.util.Log
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import top.manpok.blog.BuildConfig
 import top.manpok.blog.base.BaseApplication
 import java.io.BufferedWriter
@@ -23,6 +28,7 @@ object LogUtil {
     private const val BUFFER_SIZE: Int = 10
     private val logDateFormatter: SimpleDateFormat = SimpleDateFormat("MM-dd hh:mm:ss:SSS")
     private val fileDateFormatter: SimpleDateFormat = SimpleDateFormat("yyyyMMddhhmmssSSS")
+    private val mutex: Mutex = Mutex()
 
     /**
      * 2MB分片
@@ -46,25 +52,36 @@ object LogUtil {
         if (BuildConfig.DEBUG) {
             Log.i(tag, msg)
         }
-        add2LogBuffer(tag, msg, "I")
+        GlobalScope.launch(Dispatchers.IO) {
+            mutex.withLock {
+                add2LogBuffer(tag, msg, "I")
+            }
+        }
     }
 
     fun w(tag: String, msg: String) {
         if (BuildConfig.DEBUG) {
             Log.w(tag, msg)
         }
-        add2LogBuffer(tag, msg, "W")
+        GlobalScope.launch(Dispatchers.IO) {
+            mutex.withLock {
+                add2LogBuffer(tag, msg, "W")
+            }
+        }
     }
 
     fun e(tag: String, msg: String) {
         if (BuildConfig.DEBUG) {
             Log.e(tag, msg)
         }
-        add2LogBuffer(tag, msg, "E")
+        GlobalScope.launch(Dispatchers.IO) {
+            mutex.withLock {
+                add2LogBuffer(tag, msg, "E")
+            }
+        }
     }
 
-    @Synchronized
-    private fun add2LogBuffer(tag: String, msg: String, level: String) {
+    private suspend fun add2LogBuffer(tag: String, msg: String, level: String) {
         val date = logDateFormatter.format(Date())
         val logText = "$date $level $tag $msg\n"
         logBuffer.add(logText)
@@ -73,8 +90,7 @@ object LogUtil {
         }
     }
 
-    @Synchronized
-    private fun writeLog2File() {
+    private suspend fun writeLog2File() {
         val rootPath = BaseApplication.getApplication().getExternalFilesDir("log")
         var file = File(rootPath, "log.txt")
         if (getFileSize(file) >= LOG_FILE_SIZE) {
@@ -104,8 +120,7 @@ object LogUtil {
         deleteRedundantLogFile()
     }
 
-    @Synchronized
-    private fun deleteRedundantLogFile() {
+    private suspend fun deleteRedundantLogFile() {
         val rootPath = BaseApplication.getApplication().getExternalFilesDir("log")
         val listFiles = rootPath?.listFiles()
         val fileNum = listFiles?.size
@@ -124,7 +139,7 @@ object LogUtil {
         }
     }
 
-    private fun getFileSize(file: File): Long {
+    private suspend fun getFileSize(file: File): Long {
         var fc: FileChannel? = null
         var fileSize: Long = 0
         try {

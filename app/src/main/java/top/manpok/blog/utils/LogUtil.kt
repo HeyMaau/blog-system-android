@@ -20,12 +20,13 @@ object LogUtil {
 
     private val logBuffer: MutableList<String> = mutableListOf()
     private const val BUFFER_SIZE: Int = 10
-    private val dateFormatter: SimpleDateFormat = SimpleDateFormat("MM-dd hh:mm:ss:SSS")
+    private val logDateFormatter: SimpleDateFormat = SimpleDateFormat("MM-dd hh:mm:ss:SSS")
+    private val fileDateFormatter: SimpleDateFormat = SimpleDateFormat("yyyyMMddhhmmssSSS")
 
     /**
-     * 10MB分片
+     * 2MB分片
      */
-    private const val LOG_FILE_SIZE: Long = 1048576
+    private const val LOG_FILE_SIZE: Long = 2097152
 
     fun v(tag: String, msg: String) {
         if (BuildConfig.DEBUG) {
@@ -62,7 +63,7 @@ object LogUtil {
 
     @Synchronized
     private fun add2LogBuffer(tag: String, msg: String, level: String) {
-        val date = dateFormatter.format(Date())
+        val date = logDateFormatter.format(Date())
         val logText = "$date $level $tag $msg\n"
         logBuffer.add(logText)
         if (logBuffer.size >= BUFFER_SIZE) {
@@ -73,7 +74,15 @@ object LogUtil {
     @Synchronized
     private fun writeLog2File() {
         val rootPath = BaseApplication.getApplication().getExternalFilesDir("log")
-        val file = File(rootPath, "log.txt")
+        var file = File(rootPath, "log.txt")
+        if (getFileSize(file) >= LOG_FILE_SIZE) {
+            val formatFileTimeSuffix = fileDateFormatter.format(Date())
+            val renameFile = File(rootPath, "log_${formatFileTimeSuffix}.txt")
+            val renameSuccessfully = file.renameTo(renameFile)
+            if (renameSuccessfully) {
+                file = File(rootPath, "log.txt")
+            }
+        }
         val writer = FileWriter(file, true)
         val bufferedWriter = BufferedWriter(writer)
         try {

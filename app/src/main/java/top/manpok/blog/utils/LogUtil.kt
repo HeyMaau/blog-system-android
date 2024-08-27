@@ -7,17 +7,21 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import top.manpok.blog.BuildConfig
+import top.manpok.blog.R
 import top.manpok.blog.base.BaseApplication
 import java.io.BufferedWriter
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileNotFoundException
+import java.io.FileOutputStream
 import java.io.FileWriter
 import java.io.IOException
 import java.nio.channels.FileChannel
 import java.text.SimpleDateFormat
 import java.util.Arrays
 import java.util.Date
+import java.util.zip.ZipEntry
+import java.util.zip.ZipOutputStream
 
 
 object LogUtil {
@@ -170,6 +174,59 @@ object LogUtil {
             }
         }
         return fileSize
+    }
+
+    suspend fun createZipFile() {
+        val rootPath = BaseApplication.getApplication().getExternalFilesDir("log")
+        if (rootPath == null || !rootPath.exists()) {
+            ToastUtil.showShortToast(R.string.empty_log_files)
+            return
+        }
+        var listFiles = rootPath.listFiles()
+        if (listFiles == null || listFiles.isEmpty()) {
+            ToastUtil.showShortToast(R.string.empty_log_files)
+            return
+        }
+        val zipFile = File(rootPath, "log.zip")
+        if (zipFile.exists()) {
+            zipFile.delete()
+            listFiles = rootPath.listFiles()
+        }
+        val fileOutputStream = FileOutputStream(zipFile)
+        val zipOutputStream = ZipOutputStream(fileOutputStream)
+        try {
+            listFiles.forEach {
+                val zipEntry = ZipEntry(it.name)
+                zipOutputStream.putNextEntry(zipEntry)
+                val fileInputStream = FileInputStream(it)
+                try {
+                    val buffer = ByteArray(4096)
+                    var len = fileInputStream.read(buffer)
+                    while (len > 0) {
+                        zipOutputStream.write(buffer, 0, len)
+                        len = fileInputStream.read(buffer)
+                    }
+                } catch (e: Exception) {
+                    e(TAG, "output zip file error1: $e")
+                } finally {
+                    try {
+                        zipOutputStream.closeEntry()
+                        fileInputStream.close()
+                    } catch (e: Exception) {
+                        e(TAG, "close stream error1: $e")
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            e(TAG, "output zip file error2: $e")
+        } finally {
+            try {
+                zipOutputStream.close()
+                fileOutputStream.close()
+            } catch (e: Exception) {
+                e(TAG, "close stream error2: $e")
+            }
+        }
     }
 
 }

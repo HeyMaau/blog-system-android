@@ -42,8 +42,8 @@ class MainActivity : BaseActivity() {
             }
         }
         setContent {
-            TempData.currentEnv = DataStoreManager.instance.getCurrentEnvSync(this)
             if (BuildConfig.DEBUG) {
+                TempData.currentEnv = DataStoreManager.instance.getCurrentEnvSync(this)
                 val envViewModel: EnvViewModel = viewModel()
             }
             val articleViewModel: ArticleViewModel = viewModel()

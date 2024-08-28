@@ -15,6 +15,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import org.jsoup.Jsoup
 import org.jsoup.safety.Safelist
@@ -33,6 +35,8 @@ import top.manpok.blog.utils.NetworkUtil
 
 class SearchViewModel : ViewModel() {
     private val TAG = "SearchViewModel"
+
+    private val mutex = Mutex()
 
     private var _searchState = MutableStateFlow<DefaultState>(DefaultState.NONE)
     var searchState = _searchState.asStateFlow()
@@ -79,7 +83,9 @@ class SearchViewModel : ViewModel() {
         }
 
         viewModelScope.launch(Dispatchers.IO) {
-            saveDB(keyword = keywords)
+            mutex.withLock {
+                saveDB(keyword = keywords)
+            }
         }
 
         BlogRetrofit.searchApi.getArticleList(currentPage, pageSize, keywords).enqueue(object :

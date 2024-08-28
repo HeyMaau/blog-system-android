@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Update
 import top.manpok.blog.db.entity.BlogSearchHistory
 import top.manpok.blog.utils.Constants
@@ -12,9 +13,11 @@ import top.manpok.blog.utils.Constants
 interface SearchHistoryDao {
 
     @Insert
+    @Transaction
     suspend fun insert(blogSearchHistory: BlogSearchHistory)
 
     @Update
+    @Transaction
     suspend fun update(blogSearchHistory: BlogSearchHistory)
 
     @Delete

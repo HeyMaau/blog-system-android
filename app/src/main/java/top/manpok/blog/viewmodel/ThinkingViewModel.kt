@@ -9,6 +9,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
@@ -27,6 +29,8 @@ import top.manpok.blog.utils.ToastUtil
 class ThinkingViewModel : ViewModel() {
 
     private val TAG = "ThinkingViewModel"
+
+    private val mutex = Mutex()
 
     val thinkingList = mutableStateListOf<BlogThinking.Data>()
     var currentPage by mutableIntStateOf(Constants.DEFAULT_PAGE)
@@ -68,7 +72,9 @@ class ThinkingViewModel : ViewModel() {
                                 if (currentPage == Constants.DEFAULT_PAGE) {
                                     thinkingList.clear()
                                     viewModelScope.launch(Dispatchers.IO) {
-                                        saveToDB(blogThinking.data)
+                                        mutex.withLock {
+                                            saveToDB(blogThinking.data)
+                                        }
                                     }
                                 }
                                 thinkingList.addAll(it)

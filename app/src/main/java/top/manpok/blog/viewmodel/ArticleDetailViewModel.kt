@@ -11,6 +11,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import org.jsoup.Jsoup
 import retrofit2.Call
@@ -31,6 +33,8 @@ import top.manpok.blog.utils.TempData
 class ArticleDetailViewModel : ViewModel() {
 
     private val TAG = "ArticleDetailViewModel"
+
+    private val mutex = Mutex()
 
     var title by mutableStateOf("")
     var authorAvatar by mutableStateOf("")
@@ -76,17 +80,21 @@ class ArticleDetailViewModel : ViewModel() {
                             if (body?.code == Constants.CODE_SUCCESS) {
                                 val data = body.data
                                 title = data?.title!!
-                                authorAvatar = (if (TempData.currentEnv == Constants.ENV_PROD) Constants.BASE_IMAGE_URL else Constants.BASE_IMAGE_URL_DEV) + data.user?.avatar
+                                authorAvatar =
+                                    (if (TempData.currentEnv == Constants.ENV_PROD) Constants.BASE_IMAGE_URL else Constants.BASE_IMAGE_URL_DEV) + data.user?.avatar
                                 authorName = data.user?.userName!!
                                 authorSign = data.user.sign!!
-                                cover = (if (TempData.currentEnv == Constants.ENV_PROD) Constants.BASE_IMAGE_URL else Constants.BASE_IMAGE_URL_DEV) + data.cover!!
+                                cover =
+                                    (if (TempData.currentEnv == Constants.ENV_PROD) Constants.BASE_IMAGE_URL else Constants.BASE_IMAGE_URL_DEV) + data.cover!!
                                 updateTime = data.updateTime!!
                                 setHtmlContent(data.content!!)
                                 if (timeOut) {
                                     loading = false
                                 }
                                 viewModelScope.launch(Dispatchers.IO) {
-                                    saveToDB(data)
+                                    mutex.withLock {
+                                        saveToDB(data)
+                                    }
                                     initImageMap(data.content)
                                 }
                             }
@@ -118,10 +126,12 @@ class ArticleDetailViewModel : ViewModel() {
         if (data != null) {
             withContext(Dispatchers.Main) {
                 title = data.title!!
-                authorAvatar = (if (TempData.currentEnv == Constants.ENV_PROD) Constants.BASE_IMAGE_URL else Constants.BASE_IMAGE_URL_DEV) + data.avatar
+                authorAvatar =
+                    (if (TempData.currentEnv == Constants.ENV_PROD) Constants.BASE_IMAGE_URL else Constants.BASE_IMAGE_URL_DEV) + data.avatar
                 authorName = data.userName!!
                 authorSign = data.sign!!
-                cover = (if (TempData.currentEnv == Constants.ENV_PROD) Constants.BASE_IMAGE_URL else Constants.BASE_IMAGE_URL_DEV) + data.cover
+                cover =
+                    (if (TempData.currentEnv == Constants.ENV_PROD) Constants.BASE_IMAGE_URL else Constants.BASE_IMAGE_URL_DEV) + data.cover
                 setHtmlContent(data.content!!)
                 updateTime = data.updateTime!!
             }

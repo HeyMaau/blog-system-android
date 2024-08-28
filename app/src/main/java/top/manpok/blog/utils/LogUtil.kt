@@ -87,7 +87,13 @@ object LogUtil {
 
     private suspend fun add2LogBuffer(tag: String, msg: String, level: String) {
         val date = logDateFormatter.format(Date())
-        val logText = "$date $level $tag $msg\n"
+        val logText: String
+        if (msg.length > Constants.LOG_MSG_MAX_LENGTH) {
+            val simpleMsg = msg.substring(0, Constants.LOG_MSG_MAX_LENGTH)
+            logText = "$date $level $tag $simpleMsg\n"
+        } else {
+            logText = "$date $level $tag $msg\n"
+        }
         logBuffer.add(logText)
         if (logBuffer.size >= BUFFER_SIZE) {
             writeLog2File()

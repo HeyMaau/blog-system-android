@@ -37,4 +37,6 @@ object Constants {
     const val COMMENT_TYPE_THINKING = 1
 
     const val EMOJI_NUM_PER_PAGE = 24
+
+    const val LOG_MSG_MAX_LENGTH = 4000
 }

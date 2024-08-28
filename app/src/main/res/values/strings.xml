@@ -24,6 +24,7 @@
     <string name="contact_me">联系我</string>
     <string name="upload_log">上传日志</string>
     <string name="empty_log_files">没有日志文件</string>
+    <string name="can_not_find_send_email_app">没有找到可以发送邮件的应用</string>
     <string name="please_enter_feedback_title">请输入标题（选填）</string>
     <string name="please_enter_feedback_content">请输入反馈意见（必填）</string>
     <string name="please_enter_feedback_email">请输入您的邮箱（选填）</string>

@@ -45,6 +45,7 @@ class AboutPageViewModel : ViewModel() {
             click = {
                 viewModelScope.launch {
                     withContext(Dispatchers.IO) {
+                        LogUtil.flushLogBuffer()
                         LogUtil.createZipFile()
                         withContext(Dispatchers.Main) {
                             shareLog2Email(it)

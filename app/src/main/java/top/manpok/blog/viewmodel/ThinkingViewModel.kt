@@ -1,6 +1,5 @@
 package top.manpok.blog.viewmodel
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
@@ -8,7 +7,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -20,6 +21,7 @@ import top.manpok.blog.db.entity.BlogThinkingListItemForDB
 import top.manpok.blog.pojo.BaseResponse
 import top.manpok.blog.pojo.BlogThinking
 import top.manpok.blog.utils.Constants
+import top.manpok.blog.utils.LogUtil
 import top.manpok.blog.utils.ToastUtil
 
 class ThinkingViewModel : ViewModel() {
@@ -36,7 +38,7 @@ class ThinkingViewModel : ViewModel() {
     var loading by mutableStateOf(false)
 
     init {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             getDataFromDB()
         }
         getThinkingList(currentPage, pageSize)
@@ -65,7 +67,7 @@ class ThinkingViewModel : ViewModel() {
                             blogThinking.data?.let {
                                 if (currentPage == Constants.DEFAULT_PAGE) {
                                     thinkingList.clear()
-                                    viewModelScope.launch {
+                                    viewModelScope.launch(Dispatchers.IO) {
                                         saveToDB(blogThinking.data)
                                     }
                                 }
@@ -81,7 +83,7 @@ class ThinkingViewModel : ViewModel() {
                     }
                     loading = false
                     refreshing = false
-                    Log.d(TAG, "onFailure: $error")
+                    LogUtil.d(TAG, "onFailure: $error")
                 }
 
             })
@@ -115,7 +117,8 @@ class ThinkingViewModel : ViewModel() {
         thinkingListDao.insertAll(saveList)
     }
 
-    private fun convertDBData(data: List<BlogThinkingListItemForDB?>?) {
+    private suspend fun convertDBData(data: List<BlogThinkingListItemForDB?>?) {
+        val tempDataList = mutableListOf<BlogThinking.Data>()
         data?.forEach {
             val item = BlogThinking.Data(
                 id = it?.id,
@@ -129,7 +132,10 @@ class ThinkingViewModel : ViewModel() {
                 images = it?.images,
                 updateTime = it?.updateTime
             )
-            thinkingList.add(item)
+            tempDataList.add(item)
+        }
+        withContext(Dispatchers.Main) {
+            thinkingList.addAll(tempDataList)
         }
     }
 }

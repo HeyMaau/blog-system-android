@@ -1,16 +1,17 @@
 package top.manpok.blog.viewmodel
 
 import android.text.TextUtils
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.jsoup.Jsoup
 import retrofit2.Call
 import retrofit2.Callback
@@ -23,6 +24,7 @@ import top.manpok.blog.pojo.BaseResponse
 import top.manpok.blog.pojo.BlogArticleDetail
 import top.manpok.blog.pojo.DefaultState
 import top.manpok.blog.utils.Constants
+import top.manpok.blog.utils.LogUtil
 import top.manpok.blog.utils.NetworkUtil
 import top.manpok.blog.utils.TempData
 
@@ -83,7 +85,7 @@ class ArticleDetailViewModel : ViewModel() {
                                 if (timeOut) {
                                     loading = false
                                 }
-                                viewModelScope.launch {
+                                viewModelScope.launch(Dispatchers.IO) {
                                     saveToDB(data)
                                     initImageMap(data.content)
                                 }
@@ -99,7 +101,7 @@ class ArticleDetailViewModel : ViewModel() {
                             loading = false
                         }
                         _articleDetailState.value = DefaultState.NETWORK_ERROR
-                        Log.d(TAG, "onFailure: $error")
+                        LogUtil.d(TAG, "onFailure: $error")
                     }
 
                 })
@@ -114,13 +116,15 @@ class ArticleDetailViewModel : ViewModel() {
             ArticleDatabase.getDatabase(BaseApplication.getApplication()).articleDetailDao()
         val data = articleDetailDao.getOne(id)
         if (data != null) {
-            title = data.title!!
-            authorAvatar = (if (TempData.currentEnv == Constants.ENV_PROD) Constants.BASE_IMAGE_URL else Constants.BASE_IMAGE_URL_DEV) + data.avatar
-            authorName = data.userName!!
-            authorSign = data.sign!!
-            cover = (if (TempData.currentEnv == Constants.ENV_PROD) Constants.BASE_IMAGE_URL else Constants.BASE_IMAGE_URL_DEV) + data.cover
-            setHtmlContent(data.content!!)
-            updateTime = data.updateTime!!
+            withContext(Dispatchers.Main) {
+                title = data.title!!
+                authorAvatar = (if (TempData.currentEnv == Constants.ENV_PROD) Constants.BASE_IMAGE_URL else Constants.BASE_IMAGE_URL_DEV) + data.avatar
+                authorName = data.userName!!
+                authorSign = data.sign!!
+                cover = (if (TempData.currentEnv == Constants.ENV_PROD) Constants.BASE_IMAGE_URL else Constants.BASE_IMAGE_URL_DEV) + data.cover
+                setHtmlContent(data.content!!)
+                updateTime = data.updateTime!!
+            }
         }
     }
 

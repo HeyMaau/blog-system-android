@@ -53,7 +53,7 @@ class SearchViewModel : ViewModel() {
     var commonHeaderHeight by mutableStateOf(0.dp)
 
     init {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             loadDB()
         }
     }
@@ -78,10 +78,8 @@ class SearchViewModel : ViewModel() {
             loadingTimeOut = true
         }
 
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                saveDB(keyword = keywords)
-            }
+        viewModelScope.launch(Dispatchers.IO) {
+            saveDB(keyword = keywords)
         }
 
         BlogRetrofit.searchApi.getArticleList(currentPage, pageSize, keywords).enqueue(object :
@@ -151,8 +149,10 @@ class SearchViewModel : ViewModel() {
             SearchDatabase.getDatabase(BaseApplication.getApplication()).searchHistoryDao()
         val searchHistoryListFromDB = searchHistoryDao.getAll()
         searchHistoryListFromDB?.let {
-            if (searchHistoryListFromDB.isNotEmpty()) {
-                searchHistoryList.addAll(searchHistoryListFromDB)
+            if (it.isNotEmpty()) {
+                withContext(Dispatchers.Main) {
+                    searchHistoryList.addAll(it)
+                }
             }
         }
     }

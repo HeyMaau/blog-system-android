@@ -1,6 +1,5 @@
 package top.manpok.blog.viewmodel
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
@@ -8,7 +7,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -20,6 +21,7 @@ import top.manpok.blog.db.entity.BlogArticleListItemForDB
 import top.manpok.blog.pojo.BaseResponse
 import top.manpok.blog.pojo.BlogArticle
 import top.manpok.blog.utils.Constants
+import top.manpok.blog.utils.LogUtil
 import top.manpok.blog.utils.ToastUtil
 
 class ArticleViewModel : ViewModel() {
@@ -36,7 +38,7 @@ class ArticleViewModel : ViewModel() {
     var loading by mutableStateOf(false)
 
     init {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             getDataFromDB()
         }
         getArticleList(currentPage, pageSize)
@@ -65,8 +67,8 @@ class ArticleViewModel : ViewModel() {
                         blogArticle.data?.let {
                             if (currentPage == Constants.DEFAULT_PAGE) {
                                 articleList.clear()
-                                viewModelScope.launch {
-                                    saveToDB(blogArticle.data)
+                                viewModelScope.launch(Dispatchers.IO) {
+                                    saveToDB(it)
                                 }
                             }
                             articleList.addAll(it)
@@ -81,7 +83,7 @@ class ArticleViewModel : ViewModel() {
                     refreshing = false
                 }
                 loading = false
-                Log.d(TAG, "onFailure: $error")
+                LogUtil.d(TAG, "onFailure: $error")
             }
 
         })
@@ -112,7 +114,8 @@ class ArticleViewModel : ViewModel() {
         articleListDao.insertAll(saveList)
     }
 
-    private fun convertDBData(data: List<BlogArticleListItemForDB>?) {
+    private suspend fun convertDBData(data: List<BlogArticleListItemForDB>?) {
+        val tempDataList = mutableListOf<BlogArticle.Data>()
         data?.forEach {
             val item = BlogArticle.Data(
                 id = it.id,
@@ -120,7 +123,11 @@ class ArticleViewModel : ViewModel() {
                 user = BlogArticle.User(avatar = it.avatar, userName = it.userName),
                 content = it.content
             )
-            articleList.add(item)
+            tempDataList.add(item)
+        }
+        withContext(Dispatchers.Main) {
+            articleList.clear()
+            articleList.addAll(tempDataList)
         }
     }
 }

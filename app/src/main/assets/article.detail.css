@@ -26,3 +26,15 @@ blockquote {
 a {
     border-bottom: 0.266vw solid #808080;
 }
+
+table tr:not(:last-child) {
+  border-bottom: 1px solid silver;
+}
+
+table tr:first-child td {
+  font-weight: bold;
+}
+
+td {
+  padding: 0.6em;
+}

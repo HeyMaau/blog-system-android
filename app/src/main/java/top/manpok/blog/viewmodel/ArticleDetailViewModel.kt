@@ -186,6 +186,7 @@ class ArticleDetailViewModel : ViewModel() {
                 </div>
             </body>
             <script src="highlight.min.js"></script>
+            <script src="groovy.min.js"></script>
             <script>
                 function blogHighlightAll() {
                     hljs.highlightAll()

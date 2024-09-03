@@ -43,8 +43,7 @@ class PersonalInfoActivity : BaseActivity() {
                     title = stringResource(id = R.string.about_me),
                     leftIcon = R.drawable.ic_arrow_back,
                     rightIcon = R.drawable.ic_more,
-                    leftIconClick = { finish() },
-                    rightIconClick = { /*TODO*/ })
+                    leftIconClick = { finish() })
                 Spacer(modifier = Modifier.height(50.dp))
                 AsyncImage(
                     model = userViewModel.authorAvatar,

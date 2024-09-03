@@ -177,7 +177,6 @@ class ArticleDetailActivity : BaseActivity() {
                             leftIconClick = {
                                 finish()
                             },
-                            rightIconClick = { /*TODO*/ },
                             modifier = Modifier
                                 .zIndex(1f)
                                 .onGloballyPositioned {

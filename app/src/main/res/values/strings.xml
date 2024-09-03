@@ -66,4 +66,7 @@
     <string name="update_next_time">下次再说</string>
     <string name="check_update">检查更新</string>
     <string name="already_latest_version">已是最新版本</string>
+
+    <string name="share">分享</string>
+    <string name="copy_share_link">复制链接</string>
 </resources>

@@ -76,7 +76,6 @@ class CommonWebViewActivity : BaseActivity() {
                             finish()
                         }
                     },
-                    rightIconClick = { /*TODO*/ },
                     modifier = Modifier
                         .zIndex(2f)
                         .padding(12.dp, 0.dp)

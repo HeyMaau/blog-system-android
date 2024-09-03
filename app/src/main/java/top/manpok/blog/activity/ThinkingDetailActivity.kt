@@ -125,7 +125,6 @@ class ThinkingDetailActivity : BaseActivity() {
                         leftIcon = R.drawable.ic_arrow_back,
                         rightIcon = R.drawable.ic_more,
                         leftIconClick = { finish() },
-                        rightIconClick = { /*TODO*/ },
                         modifier = Modifier.onGloballyPositioned {
                             commonHeaderHeight = it.size.height
                         })

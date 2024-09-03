@@ -70,8 +70,7 @@ class FeedbackActivity : BaseActivity() {
                     title = stringResource(id = R.string.contact_me),
                     leftIcon = R.drawable.ic_arrow_back,
                     rightIcon = R.drawable.ic_more,
-                    leftIconClick = { finish() },
-                    rightIconClick = { /*TODO*/ })
+                    leftIconClick = { finish() })
                 Spacer(modifier = Modifier.height(50.dp))
                 Image(
                     imageVector = ImageVector.vectorResource(id = R.drawable.ic_feedback),

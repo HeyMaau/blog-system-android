@@ -45,6 +45,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.lifecycle.viewmodel.compose.viewModel
 import top.manpok.blog.R
@@ -260,12 +261,10 @@ fun CategoryPage(
         }
         Column {
             CommonHeader(
-                leftIcon = R.drawable.ic_arrow_back,
-                rightIcon = R.drawable.ic_more,
-                leftIconClick = {
-                    blogScaffoldViewModel.selectedBottomItemIndex = 0
-                },
-                rightIconClick = { },
+                leftIcon = null,
+                rightIcon = null,
+                leftIconClick = null,
+                rightIconClick = null,
                 modifier = Modifier
                     .zIndex(1f)
                     .background(Color.White)
@@ -294,7 +293,8 @@ fun CategoryPage(
                     Text(
                         text = if (categoryViewModel.currentIndex != -1) categoryViewModel.categoryList[categoryViewModel.currentIndex].name!! else stringResource(
                             id = R.string.default_category_android
-                        )
+                        ),
+                        fontSize = 18.sp
                     )
                     Icon(
                         imageVector = ImageVector.vectorResource(id = R.drawable.ic_arrow_drop_down),

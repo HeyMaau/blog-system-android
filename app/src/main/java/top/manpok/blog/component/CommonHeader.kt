@@ -88,13 +88,13 @@ fun CommonHeader(
 fun CommonHeader(
     @DrawableRes leftIcon: Int?,
     @DrawableRes rightIcon: Int?,
-    leftIconClick: () -> Unit,
-    rightIconClick: () -> Unit,
+    leftIconClick: (() -> Unit)?,
+    rightIconClick: (() -> Unit)?,
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit
 ) {
     Row(
-        horizontalArrangement = Arrangement.SpaceBetween,
+        horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
             .fillMaxWidth()
@@ -103,7 +103,9 @@ fun CommonHeader(
             Box(
                 modifier = Modifier
                     .padding(0.dp, 6.dp, 12.dp, 6.dp)
-                    .clickable(onClick = leftIconClick)
+                    .clickable(onClick = {
+                        leftIconClick?.invoke()
+                    })
             ) {
                 Icon(
                     imageVector = ImageVector.vectorResource(id = leftIcon),
@@ -116,7 +118,9 @@ fun CommonHeader(
             Box(
                 modifier = Modifier
                     .padding(12.dp, 6.dp, 0.dp, 6.dp)
-                    .clickable(onClick = rightIconClick)
+                    .clickable(onClick = {
+                        rightIconClick?.invoke()
+                    })
             ) {
                 Icon(
                     imageVector = ImageVector.vectorResource(id = rightIcon),

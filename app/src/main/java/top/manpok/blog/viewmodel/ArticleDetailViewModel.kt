@@ -179,14 +179,14 @@ class ArticleDetailViewModel : ViewModel() {
                 <link rel="stylesheet" href="highlight.default.min.css"/>
                 <link rel="stylesheet" href="global.css"/>
                 <link rel="stylesheet" href="article.detail.css"/>
+                <script src="highlight.min.js"></script>
+                <script src="groovy.min.js"></script>
             </head>
             <body>
                 <div class="container">
                     $data
                 </div>
             </body>
-            <script src="highlight.min.js"></script>
-            <script src="groovy.min.js"></script>
             <script>
                 function blogHighlightAll() {
                     hljs.highlightAll()

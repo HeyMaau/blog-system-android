@@ -9,6 +9,7 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -39,10 +40,10 @@ class CommonWebViewActivity : BaseActivity() {
     private val TAG = "CommonWebViewActivity"
 
     companion object {
-        val INTENT_KEY_URL: String = "intent_key_url"
+        const val INTENT_KEY_URL: String = "intent_key_url"
     }
 
-    val commonWebViewViewModel = CommonWebViewViewModel()
+    val commonWebViewViewModel: CommonWebViewViewModel by viewModels()
 
     private lateinit var webView: WebView
 

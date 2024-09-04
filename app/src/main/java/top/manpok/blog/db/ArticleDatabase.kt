@@ -4,14 +4,15 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import top.manpok.blog.db.entity.BlogArticleDetailForDB
 import top.manpok.blog.db.entity.BlogArticleListItemForDB
 import top.manpok.blog.utils.Constants
 
 @Database(
     entities = [BlogArticleListItemForDB::class, BlogArticleDetailForDB::class],
-    version = 1,
-    exportSchema = false
+    version = 2
 )
 abstract class ArticleDatabase : RoomDatabase() {
     abstract fun articleListDao(): ArticleListDao
@@ -19,6 +20,13 @@ abstract class ArticleDatabase : RoomDatabase() {
     abstract fun articleDetailDao(): ArticleDetailDao
 
     companion object {
+
+        private val MIGRATION_1_2 = object : Migration(1, 2) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("ALTER TABLE ${Constants.TABLE_NAME_ARTICLE_LIST} ADD `cover` TEXT")
+            }
+        }
+
         @Volatile
         private var Instance: ArticleDatabase? = null
 
@@ -29,7 +37,7 @@ abstract class ArticleDatabase : RoomDatabase() {
                     context,
                     ArticleDatabase::class.java,
                     Constants.DB_NAME_ARTICLE
-                )
+                ).addMigrations(MIGRATION_1_2)
                     .build()
                     .also { Instance = it }
             }

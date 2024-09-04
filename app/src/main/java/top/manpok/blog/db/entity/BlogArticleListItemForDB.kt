@@ -11,5 +11,6 @@ data class BlogArticleListItemForDB(
     val title: String?,
     val avatar: String?,
     val userName: String?,
-    val content: String?
+    val content: String?,
+    val cover: String?
 )

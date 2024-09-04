@@ -110,7 +110,8 @@ class ArticleViewModel : ViewModel() {
                 title = it.title,
                 avatar = it.user?.avatar,
                 userName = it.user?.userName,
-                content = it.content
+                content = it.content,
+                cover = it.cover
             )
             saveList.add(item)
         }
@@ -127,7 +128,8 @@ class ArticleViewModel : ViewModel() {
                 id = it.id,
                 title = it.title,
                 user = BlogArticle.User(avatar = it.avatar, userName = it.userName),
-                content = it.content
+                content = it.content,
+                cover = it.cover
             )
             tempDataList.add(item)
         }

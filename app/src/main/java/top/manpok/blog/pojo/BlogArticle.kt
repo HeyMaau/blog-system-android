@@ -23,11 +23,17 @@ data class BlogArticle(
         val userId: String?,
         val viewCount: Int?
     ) {
-        constructor(id: String, title: String?, user: User, content: String?) : this(
+        constructor(
+            id: String,
+            title: String?,
+            user: User,
+            content: String?,
+            cover: String?
+        ) : this(
             category = null,
             categoryId = null,
             content = content,
-            cover = null,
+            cover = cover,
             createTime = null,
             id = id,
             labels = null,

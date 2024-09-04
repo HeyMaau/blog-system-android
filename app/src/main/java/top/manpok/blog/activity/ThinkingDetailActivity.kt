@@ -236,11 +236,10 @@ class ThinkingDetailActivity : BaseActivity() {
                 if (showFloatingHeader) {
                     FloatingHeader(
                         leftIcon = R.drawable.ic_arrow_back,
-                        rightIcon = R.drawable.ic_more,
+                        rightIcon = null,
                         leftIconClick = {
                             finish()
                         },
-                        rightIconClick = {},
                         modifier = Modifier
                             .statusBarsPadding()
                             .padding(0.dp, 20.dp)

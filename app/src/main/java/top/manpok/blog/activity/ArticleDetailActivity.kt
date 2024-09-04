@@ -156,11 +156,10 @@ class ArticleDetailActivity : BaseActivity() {
                             })
                         FloatingHeader(
                             leftIcon = R.drawable.ic_arrow_back,
-                            rightIcon = R.drawable.ic_more,
+                            rightIcon = null,
                             leftIconClick = {
                                 finish()
                             },
-                            rightIconClick = {},
                             modifier = Modifier
                                 .statusBarsPadding()
                                 .padding(0.dp, 20.dp)
@@ -284,7 +283,14 @@ class ArticleDetailActivity : BaseActivity() {
                         leftIconClick = {
                             finish()
                         },
-                        rightIconClick = {},
+                        onShareClick = {
+                            if (id != null) {
+                                shareViewModel.copyArticleShareLink(
+                                    this@ArticleDetailActivity,
+                                    id
+                                )
+                            }
+                        },
                         modifier = Modifier
                             .statusBarsPadding()
                             .padding(0.dp, 20.dp)

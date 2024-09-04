@@ -34,6 +34,7 @@ import androidx.compose.ui.zIndex
 import top.manpok.blog.R
 import top.manpok.blog.component.CommonHeader
 import top.manpok.blog.utils.Constants
+import top.manpok.blog.utils.LogUtil
 import top.manpok.blog.viewmodel.CommonWebViewViewModel
 
 class CommonWebViewActivity : BaseActivity() {
@@ -148,7 +149,7 @@ class CommonWebViewActivity : BaseActivity() {
                                     }
 
                                     override fun onConsoleMessage(consoleMessage: ConsoleMessage?): Boolean {
-                                        Log.d(TAG, "onConsoleMessage: ${consoleMessage.toString()}")
+                                        LogUtil.i(TAG, "onConsoleMessage: ${consoleMessage.toString()}")
                                         return super.onConsoleMessage(consoleMessage)
                                     }
                                 }

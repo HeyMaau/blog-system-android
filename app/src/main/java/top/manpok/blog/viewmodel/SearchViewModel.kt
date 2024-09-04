@@ -31,6 +31,7 @@ import top.manpok.blog.pojo.BaseResponse
 import top.manpok.blog.pojo.BlogSearchResult
 import top.manpok.blog.pojo.DefaultState
 import top.manpok.blog.utils.Constants
+import top.manpok.blog.utils.LogUtil
 import top.manpok.blog.utils.NetworkUtil
 
 class SearchViewModel : ViewModel() {
@@ -127,7 +128,7 @@ class SearchViewModel : ViewModel() {
             }
 
             override fun onFailure(call: Call<BaseResponse<BlogSearchResult>>, error: Throwable) {
-                Log.d(TAG, "onFailure: $error")
+                LogUtil.e(TAG, "onFailure: $error")
             }
         })
     }

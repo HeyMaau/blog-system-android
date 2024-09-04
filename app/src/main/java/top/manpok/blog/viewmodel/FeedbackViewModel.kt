@@ -16,6 +16,7 @@ import top.manpok.blog.pojo.BaseResponse
 import top.manpok.blog.pojo.FeedbackItemData
 import top.manpok.blog.pojo.FeedbackRequest
 import top.manpok.blog.utils.Constants
+import top.manpok.blog.utils.LogUtil
 import top.manpok.blog.utils.ToastUtil
 
 class FeedbackViewModel : ViewModel() {
@@ -84,7 +85,7 @@ class FeedbackViewModel : ViewModel() {
                 ToastUtil.showShortToast(R.string.feedback_submit_fail)
                 showSubmitProgress = false
                 _submitState.value = SubmitState.Error
-                Log.d(TAG, "onFailure: $error")
+                LogUtil.e(TAG, "onFailure: $error")
             }
         })
     }

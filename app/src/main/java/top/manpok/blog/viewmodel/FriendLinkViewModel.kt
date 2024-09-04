@@ -22,6 +22,7 @@ import top.manpok.blog.pojo.BaseResponse
 import top.manpok.blog.pojo.BlogFriendLink
 import top.manpok.blog.pojo.DefaultState
 import top.manpok.blog.utils.Constants
+import top.manpok.blog.utils.LogUtil
 import top.manpok.blog.utils.NetworkUtil
 import top.manpok.blog.utils.ToastUtil
 
@@ -97,7 +98,7 @@ class FriendLinkViewModel : ViewModel() {
                 }
                 refreshing = false
                 _friendLinkState.value = DefaultState.NETWORK_ERROR
-                Log.d(TAG, "onFailure: $error")
+                LogUtil.e(TAG, "onFailure: $error")
             }
         })
     }

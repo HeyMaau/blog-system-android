@@ -20,6 +20,7 @@ import top.manpok.blog.api.BlogRetrofit
 import top.manpok.blog.pojo.BaseResponse
 import top.manpok.blog.pojo.BlogComment
 import top.manpok.blog.utils.Constants
+import top.manpok.blog.utils.LogUtil
 import top.manpok.blog.utils.ToastUtil
 
 class CommentViewModel : ViewModel() {
@@ -80,7 +81,7 @@ class CommentViewModel : ViewModel() {
                 }
 
                 override fun onFailure(call: Call<BaseResponse<BlogComment>>, error: Throwable) {
-                    Log.d(TAG, "onFailure: $error")
+                    LogUtil.e(TAG, "onFailure: $error")
                 }
 
             })

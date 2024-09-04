@@ -109,7 +109,7 @@ class ArticleDetailViewModel : ViewModel() {
                             loading = false
                         }
                         _articleDetailState.value = DefaultState.NETWORK_ERROR
-                        LogUtil.d(TAG, "onFailure: $error")
+                        LogUtil.e(TAG, "onFailure: $error")
                     }
 
                 })

@@ -89,7 +89,7 @@ class ArticleViewModel : ViewModel() {
                     refreshing = false
                 }
                 loading = false
-                LogUtil.d(TAG, "onFailure: $error")
+                LogUtil.e(TAG, "onFailure: $error")
             }
 
         })

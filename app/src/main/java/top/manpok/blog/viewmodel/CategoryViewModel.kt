@@ -17,6 +17,7 @@ import top.manpok.blog.api.BlogRetrofit
 import top.manpok.blog.pojo.BaseResponse
 import top.manpok.blog.pojo.BlogCategory
 import top.manpok.blog.utils.Constants
+import top.manpok.blog.utils.LogUtil
 
 class CategoryViewModel : ViewModel() {
     private val TAG = "CategoryViewModel"
@@ -71,7 +72,7 @@ class CategoryViewModel : ViewModel() {
                         _refreshState.value = RefreshState.Error
                     }
                     refreshing = false
-                    Log.d(TAG, "onFailure: $error")
+                    LogUtil.e(TAG, "onFailure: $error")
                 }
 
             })

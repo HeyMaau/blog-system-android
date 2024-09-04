@@ -15,6 +15,7 @@ import top.manpok.blog.api.BlogRetrofit
 import top.manpok.blog.pojo.BaseResponse
 import top.manpok.blog.pojo.BlogArticle
 import top.manpok.blog.utils.Constants
+import top.manpok.blog.utils.LogUtil
 import top.manpok.blog.utils.ToastUtil
 
 class ArticleCategoryViewModel : ViewModel() {
@@ -74,7 +75,7 @@ class ArticleCategoryViewModel : ViewModel() {
                     }
                     refreshing = false
                     pureLoading = false
-                    Log.d(TAG, "onFailure: $error")
+                    LogUtil.e(TAG, "onFailure: $error")
                 }
             })
     }

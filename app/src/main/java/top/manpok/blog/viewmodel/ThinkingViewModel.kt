@@ -89,7 +89,7 @@ class ThinkingViewModel : ViewModel() {
                     }
                     loading = false
                     refreshing = false
-                    LogUtil.d(TAG, "onFailure: $error")
+                    LogUtil.e(TAG, "onFailure: $error")
                 }
 
             })

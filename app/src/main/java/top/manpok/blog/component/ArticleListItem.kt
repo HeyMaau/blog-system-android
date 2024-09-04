@@ -44,7 +44,7 @@ fun ArticleListItem(
             AuthorInfoBanner(
                 avatarUrl = (if (TempData.currentEnv == Constants.ENV_PROD) Constants.BASE_IMAGE_URL else Constants.BASE_IMAGE_URL_DEV) + item?.user?.avatar,
                 name = "${item?.user?.userName}",
-                modifier = Modifier.padding(6.dp),
+                modifier = Modifier.padding(4.dp),
                 fontSize = 16.sp,
                 fontColor = R.color.gray_585858
             )

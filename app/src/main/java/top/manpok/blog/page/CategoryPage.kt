@@ -112,7 +112,7 @@ fun CategoryPage(
     val pullRefreshState = rememberPullRefreshState(
         refreshing = articleCategoryViewModel.refreshing,
         onRefresh = {
-            refresh(categoryViewModel, articleCategoryViewModel)
+            refresh(categoryViewModel, articleCategoryViewModel, userViewModel)
         })
 
     var popupState: PopupState by remember {
@@ -193,7 +193,7 @@ fun CategoryPage(
             when (it) {
                 1 -> {
                     if (!listState.canScrollBackward) {
-                        refresh(categoryViewModel, articleCategoryViewModel)
+                        refresh(categoryViewModel, articleCategoryViewModel, userViewModel)
                     } else {
                         listState.animateScrollToItem(0)
                     }
@@ -324,7 +324,8 @@ fun CategoryPage(
 
 private fun refresh(
     categoryViewModel: CategoryViewModel,
-    articleCategoryViewModel: ArticleCategoryViewModel
+    articleCategoryViewModel: ArticleCategoryViewModel,
+    userViewModel: UserViewModel
 ) {
     categoryViewModel.refreshing = true
     articleCategoryViewModel.refreshing = true
@@ -332,6 +333,7 @@ private fun refresh(
     articleCategoryViewModel.lastCategoryID = ""
     articleCategoryViewModel.noMore = false
     categoryViewModel.getCategoryList()
+    userViewModel.getUserInfo()
 }
 
 sealed class PopupState {

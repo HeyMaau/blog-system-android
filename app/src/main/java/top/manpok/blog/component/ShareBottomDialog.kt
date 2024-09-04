@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -40,11 +41,12 @@ fun ShareBottomDialog(
         sheetState = modalBottomSheetState,
         onDismissRequest = onDismiss, dragHandle = null,
         shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
-        containerColor = Color.White
+        containerColor = Color.White,
+        windowInsets = WindowInsets(0, 0, 0, 0)
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.padding(top = 12.dp, bottom = 20.dp, start = 12.dp, end = 12.dp)
+            modifier = Modifier.padding(top = 12.dp, bottom = 32.dp, start = 12.dp, end = 12.dp)
         ) {
             Text(text = stringResource(id = R.string.share), fontSize = 16.sp)
             Spacer(modifier = Modifier.height(8.dp))
@@ -53,9 +55,9 @@ fun ShareBottomDialog(
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier.clickable {
-                            onItemClick.invoke()
                             coroutineScope.launch {
                                 modalBottomSheetState.hide()
+                                onItemClick.invoke()
                             }
                         }) {
                         Image(

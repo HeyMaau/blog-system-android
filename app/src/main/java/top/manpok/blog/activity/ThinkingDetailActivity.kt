@@ -123,7 +123,7 @@ class ThinkingDetailActivity : BaseActivity() {
                     CommonHeader(
                         title = intent.getStringExtra(INTENT_KEY_THINKING_TITLE),
                         leftIcon = R.drawable.ic_arrow_back,
-                        rightIcon = R.drawable.ic_more,
+                        rightIcon = null,
                         leftIconClick = { finish() },
                         modifier = Modifier.onGloballyPositioned {
                             commonHeaderHeight = it.size.height

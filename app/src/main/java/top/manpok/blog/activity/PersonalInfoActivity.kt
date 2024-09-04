@@ -42,7 +42,7 @@ class PersonalInfoActivity : BaseActivity() {
                 CommonHeader(
                     title = stringResource(id = R.string.about_me),
                     leftIcon = R.drawable.ic_arrow_back,
-                    rightIcon = R.drawable.ic_more,
+                    rightIcon = null,
                     leftIconClick = { finish() })
                 Spacer(modifier = Modifier.height(50.dp))
                 AsyncImage(

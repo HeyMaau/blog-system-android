@@ -8,7 +8,6 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
@@ -37,18 +36,13 @@ fun CommonHeader(
     @DrawableRes leftIcon: Int?,
     @DrawableRes rightIcon: Int?,
     leftIconClick: () -> Unit,
-    onShareClick: (() -> Unit)? = null,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onShareClick: (() -> Unit)? = null
 ) {
     var showBottomDialog by remember {
         mutableStateOf(false)
     }
-    Row(
-        horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier
-            .fillMaxWidth()
-    ) {
+    Box(contentAlignment = Alignment.CenterStart, modifier = modifier.fillMaxWidth()) {
         if (leftIcon != null) {
             Box(
                 modifier = Modifier
@@ -62,37 +56,40 @@ fun CommonHeader(
             }
         }
         if (!TextUtils.isEmpty(title)) {
-            Text(
-                text = "$title",
-                fontSize = 18.sp,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .weight(1f, true)
-                    .padding(10.dp, 0.dp)
-            )
-        } else {
-            Spacer(modifier = Modifier.weight(1f))
-        }
-        if (rightIcon != null) {
-            Box(
-                modifier = Modifier
-                    .padding(12.dp, 6.dp, 0.dp, 6.dp)
-                    .clickable(onClick = {
-                        showBottomDialog = true
-                    })
-            ) {
-                Icon(
-                    imageVector = ImageVector.vectorResource(id = rightIcon),
-                    contentDescription = null
+            Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxWidth()) {
+                Text(
+                    text = "$title",
+                    fontSize = 18.sp,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .fillMaxWidth(0.8f)
                 )
             }
         }
+        if (rightIcon != null) {
+            Box(contentAlignment = Alignment.CenterEnd, modifier = Modifier.fillMaxWidth()) {
+                Box(
+                    modifier = Modifier
+                        .padding(12.dp, 6.dp, 0.dp, 6.dp)
+                        .clickable(onClick = {
+                            showBottomDialog = true
+                        })
+                ) {
+                    Icon(
+                        imageVector = ImageVector.vectorResource(id = rightIcon),
+                        contentDescription = null
+                    )
+                }
+            }
+        }
+
     }
     if (showBottomDialog) {
         ShareBottomDialog(onDismiss = { showBottomDialog = false }, onItemClick = {
             onShareClick?.invoke()
+            showBottomDialog = false
         })
     }
 }
@@ -195,7 +192,7 @@ fun CommonHeader(
 @Composable
 private fun PreviewCommonHeader() {
     CommonHeader(
-        title = "测试标题",
+        title = "测试标题测试标题测试标题测试标题测试标题测试标题测试标题",
         leftIcon = R.drawable.ic_arrow_back,
         rightIcon = R.drawable.ic_more,
         leftIconClick = { /*TODO*/ })

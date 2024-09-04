@@ -69,7 +69,7 @@ class FeedbackActivity : BaseActivity() {
                 CommonHeader(
                     title = stringResource(id = R.string.contact_me),
                     leftIcon = R.drawable.ic_arrow_back,
-                    rightIcon = R.drawable.ic_more,
+                    rightIcon = null,
                     leftIconClick = { finish() })
                 Spacer(modifier = Modifier.height(50.dp))
                 Image(

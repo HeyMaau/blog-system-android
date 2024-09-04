@@ -69,4 +69,5 @@
 
     <string name="share">分享</string>
     <string name="copy_share_link">复制链接</string>
+    <string name="already_copy_to_clipboard">已复制到剪贴板</string>
 </resources>

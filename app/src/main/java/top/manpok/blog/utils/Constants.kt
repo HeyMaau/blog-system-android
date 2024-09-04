@@ -7,10 +7,12 @@ object Constants {
     const val BASE_URL: String = "https://m.manpok.top"
     const val BASE_IMAGE_URL: String = "$BASE_URL/image/"
     const val BASE_COMMENT_AVATAR_URL: String = BASE_IMAGE_URL + "comment/"
+    const val BASE_ARTICLE_SHARE_LINK: String = "$BASE_URL/article/"
 
     const val BASE_URL_DEV: String = "http://192.168.31.136:8080"
     const val BASE_IMAGE_URL_DEV: String = "$BASE_URL_DEV/image/"
     const val BASE_COMMENT_AVATAR_URL_DEV: String = BASE_IMAGE_URL_DEV + "comment/"
+    const val BASE_ARTICLE_SHARE_LINK_DEV: String = "$BASE_URL_DEV/article/"
 
     const val ENV_PROD = 0
     const val ENV_DEV = 1
@@ -39,4 +41,6 @@ object Constants {
     const val EMOJI_NUM_PER_PAGE = 24
 
     const val LOG_MSG_MAX_LENGTH = 4000
+
+    const val CLIPBOARD_TAG_ARTICLE_SHARE_LINK = "article_share_link"
 }

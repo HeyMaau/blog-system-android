@@ -37,6 +37,7 @@ fun CommonHeader(
     @DrawableRes leftIcon: Int?,
     @DrawableRes rightIcon: Int?,
     leftIconClick: () -> Unit,
+    onShareClick: (() -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
     var showBottomDialog by remember {
@@ -90,7 +91,9 @@ fun CommonHeader(
         }
     }
     if (showBottomDialog) {
-        ShareBottomDialog(onDismiss = { showBottomDialog = false })
+        ShareBottomDialog(onDismiss = { showBottomDialog = false }, onItemClick = {
+            onShareClick?.invoke()
+        })
     }
 }
 

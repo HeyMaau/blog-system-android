@@ -54,6 +54,7 @@ import top.manpok.blog.pojo.DefaultState
 import top.manpok.blog.utils.Constants
 import top.manpok.blog.viewmodel.ArticleDetailViewModel
 import top.manpok.blog.viewmodel.CommentViewModel
+import top.manpok.blog.viewmodel.ShareViewModel
 import top.manpok.blog.webview.BlogWebChromeClient
 import top.manpok.blog.webview.BlogWebViewClient
 import top.manpok.blog.webview.ImageJSInterface
@@ -71,6 +72,7 @@ class ArticleDetailActivity : BaseActivity() {
         setContent {
             val articleDetailViewModel: ArticleDetailViewModel = viewModel()
             val commentViewModel: CommentViewModel = viewModel()
+            val shareViewModel: ShareViewModel = viewModel()
             LaunchedEffect(key1 = Unit) {
                 withContext(Dispatchers.IO) {
                     articleDetailViewModel.getFromDB(id)
@@ -176,6 +178,14 @@ class ArticleDetailActivity : BaseActivity() {
                             rightIcon = R.drawable.ic_more,
                             leftIconClick = {
                                 finish()
+                            },
+                            onShareClick = {
+                                if (id != null) {
+                                    shareViewModel.copyArticleShareLink(
+                                        this@ArticleDetailActivity,
+                                        id
+                                    )
+                                }
                             },
                             modifier = Modifier
                                 .zIndex(1f)

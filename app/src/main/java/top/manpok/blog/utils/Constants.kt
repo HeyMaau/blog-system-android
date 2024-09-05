@@ -43,4 +43,5 @@ object Constants {
     const val LOG_MSG_MAX_LENGTH = 4000
 
     const val CLIPBOARD_TAG_ARTICLE_SHARE_LINK = "article_share_link"
+    const val CLIPBOARD_TAG_WEB_URL = "web_url"
 }

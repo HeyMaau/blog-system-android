@@ -1,7 +1,6 @@
 package top.manpok.blog.activity
 
 import android.os.Bundle
-import android.util.Log
 import android.view.ViewGroup
 import android.webkit.ConsoleMessage
 import android.webkit.WebChromeClient
@@ -36,6 +35,7 @@ import top.manpok.blog.component.CommonHeader
 import top.manpok.blog.utils.Constants
 import top.manpok.blog.utils.LogUtil
 import top.manpok.blog.viewmodel.CommonWebViewViewModel
+import top.manpok.blog.viewmodel.ShareViewModel
 
 class CommonWebViewActivity : BaseActivity() {
     private val TAG = "CommonWebViewActivity"
@@ -45,6 +45,7 @@ class CommonWebViewActivity : BaseActivity() {
     }
 
     val commonWebViewViewModel: CommonWebViewViewModel by viewModels()
+    private val shareViewModel: ShareViewModel by viewModels()
 
     private lateinit var webView: WebView
 
@@ -76,6 +77,9 @@ class CommonWebViewActivity : BaseActivity() {
                         } else {
                             finish()
                         }
+                    },
+                    onShareClick = {
+                        shareViewModel.copyWebUrl(this@CommonWebViewActivity, url)
                     },
                     modifier = Modifier
                         .zIndex(2f)
@@ -149,7 +153,10 @@ class CommonWebViewActivity : BaseActivity() {
                                     }
 
                                     override fun onConsoleMessage(consoleMessage: ConsoleMessage?): Boolean {
-                                        LogUtil.i(TAG, "onConsoleMessage: ${consoleMessage.toString()}")
+                                        LogUtil.i(
+                                            TAG,
+                                            "onConsoleMessage: ${consoleMessage.toString()}"
+                                        )
                                         return super.onConsoleMessage(consoleMessage)
                                     }
                                 }

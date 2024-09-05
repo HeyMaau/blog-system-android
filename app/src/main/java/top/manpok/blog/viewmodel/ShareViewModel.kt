@@ -23,4 +23,12 @@ class ShareViewModel : ViewModel() {
         clipboardManager.setPrimaryClip(clipData)
         ToastUtil.showShortToast(R.string.already_copy_to_clipboard)
     }
+
+    fun copyWebUrl(context: Context, url: String) {
+        val clipboardManager =
+            context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clipData = ClipData.newPlainText(Constants.CLIPBOARD_TAG_WEB_URL, url)
+        clipboardManager.setPrimaryClip(clipData)
+        ToastUtil.showShortToast(R.string.already_copy_to_clipboard)
+    }
 }

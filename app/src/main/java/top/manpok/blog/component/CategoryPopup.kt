@@ -47,8 +47,9 @@ fun CategoryPopup(
                     isFirst = index == 0,
                     isLast = index == dataList.size - 1,
                     click = {
-                        onClick?.invoke(index)
-                    }
+                        onClick.invoke(index)
+                    },
+                    modifier = Modifier.width(200.dp)
                 )
                 if (index != dataList.size - 1) {
                     HorizontalDivider(modifier = Modifier.width(200.dp))

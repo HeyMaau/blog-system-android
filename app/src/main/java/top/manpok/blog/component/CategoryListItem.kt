@@ -2,7 +2,6 @@ package top.manpok.blog.component
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -28,7 +27,6 @@ fun CategoryListItem(
     modifier: Modifier = Modifier
 ) {
     Row(
-        horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
             .padding(

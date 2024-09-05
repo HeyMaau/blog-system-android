@@ -75,6 +75,7 @@ fun FloatingHeader(
     if (showBottomDialog) {
         ShareBottomDialog(onDismiss = { showBottomDialog = false }, onItemClick = {
             onShareClick?.invoke()
+        }, onHidden = {
             showBottomDialog = false
         })
     }

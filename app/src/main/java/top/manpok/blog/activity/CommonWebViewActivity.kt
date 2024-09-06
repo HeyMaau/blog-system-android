@@ -71,12 +71,16 @@ class CommonWebViewActivity : BaseActivity() {
                     title = commonWebViewViewModel.title,
                     leftIcon = R.drawable.ic_arrow_back,
                     rightIcon = R.drawable.ic_more,
+                    closeIcon = R.drawable.ic_close,
                     leftIconClick = {
                         if (webView.canGoBack()) {
                             webView.goBack()
                         } else {
                             finish()
                         }
+                    },
+                    closeIconClick = {
+                        finish()
                     },
                     onShareClick = {
                         shareViewModel.copyWebUrl(this@CommonWebViewActivity, url)

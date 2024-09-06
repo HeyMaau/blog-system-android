@@ -35,7 +35,9 @@ fun CommonHeader(
     title: String?,
     @DrawableRes leftIcon: Int?,
     @DrawableRes rightIcon: Int?,
+    @DrawableRes closeIcon: Int? = null,
     leftIconClick: () -> Unit,
+    closeIconClick: (() -> Unit)? = null,
     modifier: Modifier = Modifier,
     onShareClick: (() -> Unit)? = null
 ) {
@@ -43,16 +45,32 @@ fun CommonHeader(
         mutableStateOf(false)
     }
     Box(contentAlignment = Alignment.CenterStart, modifier = modifier.fillMaxWidth()) {
-        if (leftIcon != null) {
-            Box(
-                modifier = Modifier
-                    .padding(0.dp, 6.dp, 12.dp, 6.dp)
-                    .clickable(onClick = leftIconClick)
-            ) {
-                Icon(
-                    imageVector = ImageVector.vectorResource(id = leftIcon),
-                    contentDescription = null,
-                )
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            if (leftIcon != null) {
+                Box(
+                    modifier = Modifier
+                        .padding(0.dp, 6.dp, 12.dp, 6.dp)
+                        .clickable(onClick = leftIconClick)
+                ) {
+                    Icon(
+                        imageVector = ImageVector.vectorResource(id = leftIcon),
+                        contentDescription = null,
+                    )
+                }
+            }
+            if (closeIcon != null) {
+                Box(
+                    modifier = Modifier
+                        .padding(2.dp, 6.dp, 12.dp, 6.dp)
+                        .clickable(onClick = {
+                            closeIconClick?.invoke()
+                        })
+                ) {
+                    Icon(
+                        imageVector = ImageVector.vectorResource(id = closeIcon),
+                        contentDescription = null,
+                    )
+                }
             }
         }
         if (!TextUtils.isEmpty(title)) {
@@ -64,7 +82,7 @@ fun CommonHeader(
                     overflow = TextOverflow.Ellipsis,
                     textAlign = TextAlign.Center,
                     modifier = Modifier
-                        .fillMaxWidth(0.8f)
+                        .fillMaxWidth(0.6f)
                 )
             }
         }

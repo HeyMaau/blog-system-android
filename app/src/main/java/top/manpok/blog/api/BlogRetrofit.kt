@@ -227,4 +227,21 @@ object BlogRetrofit {
                 devUpdateApi
             }
         }
+
+    private val prodAudioApi: AudioApi by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
+        prodInstance.create(AudioApi::class.java)
+    }
+
+    private val devAudioApi: AudioApi by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
+        devInstance.create(AudioApi::class.java)
+    }
+
+    val audioApi: AudioApi
+        get() {
+            return if (TempData.currentEnv == 0) {
+                prodAudioApi
+            } else {
+                devAudioApi
+            }
+        }
 }

@@ -7,6 +7,9 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -35,6 +38,9 @@ class AudioViewModel : ViewModel() {
     var currentAudioCover by mutableStateOf("")
 
     private val prepareStateMap: MutableMap<String, Boolean> = mutableMapOf()
+
+    private var _playState = MutableStateFlow<PlayState>(PlayState.Stop)
+    val playState: StateFlow<PlayState> = _playState.asStateFlow()
 
     init {
         getAudioList()
@@ -77,17 +83,29 @@ class AudioViewModel : ViewModel() {
         }
         if (mediaPlayer.isPlaying) {
             mediaPlayer.pause()
+            _playState.value = PlayState.Pause
             return
         }
         if (prepareStateMap[currentAudioUrl] == true) {
             mediaPlayer.start()
+            _playState.value = PlayState.Playing
             return
         }
         mediaPlayer.setDataSource(currentAudioUrl)
         mediaPlayer.prepareAsync()
+        _playState.value = PlayState.PreParing
         mediaPlayer.setOnPreparedListener {
             mediaPlayer.start()
+            _playState.value = PlayState.Playing
             prepareStateMap[currentAudioUrl] = true
         }
+    }
+
+    sealed class PlayState {
+        data object Stop : PlayState()
+        data object PreParing : PlayState()
+        data object Playing : PlayState()
+        data object Pause : PlayState()
+        data object Error : PlayState()
     }
 }

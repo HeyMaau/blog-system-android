@@ -17,6 +17,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.setValue
@@ -52,6 +53,8 @@ class AudioPlayerActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val audioViewModel: AudioViewModel = viewModel()
+
+            val playState = audioViewModel.playState.collectAsState()
 
             GetPalette(url = audioViewModel.currentAudioCover)
             Box {
@@ -103,6 +106,7 @@ class AudioPlayerActivity : BaseActivity() {
                         onClickPlay = {
                             audioViewModel.playOrPauseAudio()
                         },
+                        playState = playState.value,
                         modifier = Modifier.padding(bottom = 24.dp)
                     )
                 }

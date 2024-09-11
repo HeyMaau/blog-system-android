@@ -26,6 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import top.manpok.blog.R
+import top.manpok.blog.viewmodel.AudioViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -34,6 +35,7 @@ fun AudioPlayerControlPanel(
     maxValue: Float,
     onValueChange: (Float) -> Unit,
     onClickPlay: () -> Unit,
+    playState: AudioViewModel.PlayState,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -82,7 +84,9 @@ fun AudioPlayerControlPanel(
                 modifier = Modifier.size(36.dp)
             )
             Icon(
-                imageVector = ImageVector.vectorResource(id = R.drawable.ic_play),
+                imageVector = if (playState != AudioViewModel.PlayState.Playing) ImageVector.vectorResource(
+                    id = R.drawable.ic_play
+                ) else ImageVector.vectorResource(id = R.drawable.ic_pause),
                 contentDescription = null,
                 tint = Color.White,
                 modifier = Modifier
@@ -108,5 +112,11 @@ fun AudioPlayerControlPanel(
 @Preview
 @Composable
 private fun PreviewAudioPlayerControlPanel() {
-    AudioPlayerControlPanel(value = 50f, maxValue = 100f, onValueChange = {}, onClickPlay = {})
+    AudioPlayerControlPanel(
+        value = 50f,
+        maxValue = 100f,
+        onValueChange = {},
+        onClickPlay = {},
+        playState = AudioViewModel.PlayState.Stop
+    )
 }

@@ -38,7 +38,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import top.manpok.blog.R
+import top.manpok.blog.activity.AudioPlayerActivity
 import top.manpok.blog.activity.CommonWebViewActivity
+import top.manpok.blog.component.ActivityEntranceItem
 import top.manpok.blog.component.DefaultUIState
 import top.manpok.blog.component.FriendLinkItem
 import top.manpok.blog.pojo.DefaultState
@@ -130,6 +132,25 @@ fun ToolsPage(
                             )
                         }
                     } else {
+                        item {
+                            ActivityEntranceItem(
+                                showSkeleton = friendLinkViewModel.showSkeleton,
+                                logo = R.drawable.thinking_default,
+                                name = stringResource(id = R.string.audio_player_entrance),
+                                modifier = Modifier
+                                    .padding(
+                                        start = 12.dp,
+                                        top = 16.dp,
+                                        end = 12.dp,
+                                        bottom = 16.dp
+                                    )
+                                    .clickable {
+                                        val intent =
+                                            Intent(context, AudioPlayerActivity::class.java)
+                                        context.startActivity(intent)
+                                    }
+                            )
+                        }
                         items(friendLinkViewModel.friendLinkList) {
                             FriendLinkItem(
                                 showSkeleton = friendLinkViewModel.showSkeleton,
@@ -143,8 +164,12 @@ fun ToolsPage(
                                         bottom = 16.dp
                                     )
                                     .clickable {
-                                        val intent = Intent(context, CommonWebViewActivity::class.java)
-                                        intent.putExtra(CommonWebViewActivity.INTENT_KEY_URL, it.url)
+                                        val intent =
+                                            Intent(context, CommonWebViewActivity::class.java)
+                                        intent.putExtra(
+                                            CommonWebViewActivity.INTENT_KEY_URL,
+                                            it.url
+                                        )
                                         context.startActivity(intent)
                                     }
                             )

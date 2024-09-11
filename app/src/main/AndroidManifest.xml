@@ -35,6 +35,10 @@
         </provider>
 
         <activity
+            android:name=".activity.AudioPlayerActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.ImagePreviewActivity"
             android:exported="false" />
         <activity

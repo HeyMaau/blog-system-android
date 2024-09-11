@@ -35,10 +35,10 @@ fun CommonHeader(
     title: String?,
     @DrawableRes leftIcon: Int?,
     @DrawableRes rightIcon: Int?,
+    modifier: Modifier = Modifier,
     @DrawableRes closeIcon: Int? = null,
     leftIconClick: () -> Unit,
     closeIconClick: (() -> Unit)? = null,
-    modifier: Modifier = Modifier,
     onShareClick: (() -> Unit)? = null
 ) {
     var showBottomDialog by remember {

@@ -87,6 +87,7 @@ dependencies {
     implementation(libs.jsoup)
     implementation(libs.zoomable)
     implementation(libs.datastore.preferences)
+    implementation(libs.androidx.palette)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

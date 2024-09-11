@@ -101,7 +101,7 @@ class AudioPlayerActivity : BaseActivity() {
                         maxValue = 100f,
                         onValueChange = {},
                         onClickPlay = {
-                            audioViewModel.playAudio()
+                            audioViewModel.playOrPauseAudio()
                         },
                         modifier = Modifier.padding(bottom = 24.dp)
                     )

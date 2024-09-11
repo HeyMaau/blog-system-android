@@ -3,6 +3,7 @@ package top.manpok.blog.viewmodel
 import android.media.MediaPlayer
 import android.text.TextUtils
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
@@ -27,10 +28,13 @@ class AudioViewModel : ViewModel() {
         MediaPlayer()
     }
 
+    var currentIndex by mutableIntStateOf(0)
     var currentAudioName by mutableStateOf("")
     var currentAudioArtist by mutableStateOf("")
     var currentAudioUrl by mutableStateOf("")
     var currentAudioCover by mutableStateOf("")
+
+    private val prepareStateMap: MutableMap<String, Boolean> = mutableMapOf()
 
     init {
         getAudioList()
@@ -66,16 +70,24 @@ class AudioViewModel : ViewModel() {
                 })
     }
 
-    fun playAudio() {
+    fun playOrPauseAudio() {
         if (TextUtils.isEmpty(currentAudioUrl)) {
             ToastUtil.showShortToast(R.string.play_audio_error)
+            return
+        }
+        if (mediaPlayer.isPlaying) {
+            mediaPlayer.pause()
+            return
+        }
+        if (prepareStateMap[currentAudioUrl] == true) {
+            mediaPlayer.start()
             return
         }
         mediaPlayer.setDataSource(currentAudioUrl)
         mediaPlayer.prepareAsync()
         mediaPlayer.setOnPreparedListener {
-            LogUtil.d(TAG, "onPrepared!")
             mediaPlayer.start()
+            prepareStateMap[currentAudioUrl] = true
         }
     }
 }

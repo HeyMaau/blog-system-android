@@ -31,6 +31,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.drawable.toBitmap
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.palette.graphics.Palette
 import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
@@ -39,6 +40,7 @@ import coil.request.ImageRequest
 import coil.size.Size
 import top.manpok.blog.R
 import top.manpok.blog.component.AudioPlayerControlPanel
+import top.manpok.blog.viewmodel.AudioViewModel
 
 class AudioPlayerActivity : BaseActivity() {
 
@@ -49,7 +51,9 @@ class AudioPlayerActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            GetPalette(url = "https://gcore.jsdelivr.net/gh/HeyMaau/blog-system-static-file/HOYO-MiX%20-%20时暮的思眷%20Le%20Souvenir%20avec%20le%20crepuscule.jpg")
+            val audioViewModel: AudioViewModel = viewModel()
+
+            GetPalette(url = audioViewModel.currentAudioCover)
             Box {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -69,7 +73,7 @@ class AudioPlayerActivity : BaseActivity() {
                     }
                     Spacer(modifier = Modifier.height(30.dp))
                     AsyncImage(
-                        model = "https://gcore.jsdelivr.net/gh/HeyMaau/blog-system-static-file/HOYO-MiX%20-%20时暮的思眷%20Le%20Souvenir%20avec%20le%20crepuscule.jpg",
+                        model = audioViewModel.currentAudioCover,
                         contentDescription = null,
                         modifier = Modifier
                             .padding(horizontal = 12.dp)
@@ -82,9 +86,13 @@ class AudioPlayerActivity : BaseActivity() {
                             .fillMaxWidth()
                             .padding(horizontal = 12.dp)
                     ) {
-                        Text(text = "可惜你是双子座", color = Color.White, fontSize = 24.sp)
+                        Text(
+                            text = audioViewModel.currentAudioName,
+                            color = Color.White,
+                            fontSize = 24.sp
+                        )
                         Spacer(modifier = Modifier.height(16.dp))
-                        Text(text = "无名歌手", color = Color.White)
+                        Text(text = audioViewModel.currentAudioArtist, color = Color.White)
                     }
                 }
                 Box(contentAlignment = Alignment.BottomCenter, modifier = Modifier.fillMaxSize()) {
@@ -92,6 +100,9 @@ class AudioPlayerActivity : BaseActivity() {
                         value = 50f,
                         maxValue = 100f,
                         onValueChange = {},
+                        onClickPlay = {
+                            audioViewModel.playAudio()
+                        },
                         modifier = Modifier.padding(bottom = 24.dp)
                     )
                 }

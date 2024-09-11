@@ -1,5 +1,6 @@
 package top.manpok.blog.component
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -32,6 +33,7 @@ fun AudioPlayerControlPanel(
     value: Float,
     maxValue: Float,
     onValueChange: (Float) -> Unit,
+    onClickPlay: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -83,7 +85,9 @@ fun AudioPlayerControlPanel(
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_play),
                 contentDescription = null,
                 tint = Color.White,
-                modifier = Modifier.size(48.dp)
+                modifier = Modifier
+                    .size(48.dp)
+                    .clickable { onClickPlay() }
             )
             Icon(
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_skip_next),
@@ -104,5 +108,5 @@ fun AudioPlayerControlPanel(
 @Preview
 @Composable
 private fun PreviewAudioPlayerControlPanel() {
-    AudioPlayerControlPanel(value = 50f, maxValue = 100f, onValueChange = {})
+    AudioPlayerControlPanel(value = 50f, maxValue = 100f, onValueChange = {}, onClickPlay = {})
 }

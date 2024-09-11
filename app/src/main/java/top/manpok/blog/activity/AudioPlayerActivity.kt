@@ -3,6 +3,7 @@ package top.manpok.blog.activity
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -35,6 +36,7 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.size.Size
 import top.manpok.blog.R
+import top.manpok.blog.component.AudioPlayerControlPanel
 
 class AudioPlayerActivity : BaseActivity() {
 
@@ -46,40 +48,49 @@ class AudioPlayerActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             GetPalette(url = "https://gcore.jsdelivr.net/gh/HeyMaau/blog-system-static-file/HOYO-MiX%20-%20时暮的思眷%20Le%20Souvenir%20avec%20le%20crepuscule.jpg")
-
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(Color(backgroundColor))
-                    .statusBarsPadding()
-                    .padding(horizontal = 12.dp)
-            ) {
-                Row(modifier = Modifier.fillMaxWidth()) {
-                    Icon(
-                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_arrow_down),
-                        contentDescription = null,
-                        tint = Color.White,
-                        modifier = Modifier.size(36.dp)
-                    )
-                }
-                Spacer(modifier = Modifier.height(30.dp))
-                AsyncImage(
-                    model = "https://gcore.jsdelivr.net/gh/HeyMaau/blog-system-static-file/HOYO-MiX%20-%20时暮的思眷%20Le%20Souvenir%20avec%20le%20crepuscule.jpg",
-                    contentDescription = null,
-                    modifier = Modifier
-                        .padding(horizontal = 12.dp)
-                        .fillMaxWidth()
-                )
-                Spacer(modifier = Modifier.height(30.dp))
+            Box {
                 Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
-                        .fillMaxWidth()
+                        .fillMaxSize()
+                        .background(Color(backgroundColor))
+                        .statusBarsPadding()
                         .padding(horizontal = 12.dp)
                 ) {
-                    Text(text = "可惜你是双子座", color = Color.White, fontSize = 24.sp)
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Text(text = "无名歌手", color = Color.White)
+                    Row(modifier = Modifier.fillMaxWidth()) {
+                        Icon(
+                            imageVector = ImageVector.vectorResource(id = R.drawable.ic_arrow_down),
+                            contentDescription = null,
+                            tint = Color.White,
+                            modifier = Modifier.size(36.dp)
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(30.dp))
+                    AsyncImage(
+                        model = "https://gcore.jsdelivr.net/gh/HeyMaau/blog-system-static-file/HOYO-MiX%20-%20时暮的思眷%20Le%20Souvenir%20avec%20le%20crepuscule.jpg",
+                        contentDescription = null,
+                        modifier = Modifier
+                            .padding(horizontal = 12.dp)
+                            .fillMaxWidth()
+                    )
+                    Spacer(modifier = Modifier.height(30.dp))
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 12.dp)
+                    ) {
+                        Text(text = "可惜你是双子座", color = Color.White, fontSize = 24.sp)
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Text(text = "无名歌手", color = Color.White)
+                    }
+                }
+                Box(contentAlignment = Alignment.BottomCenter, modifier = Modifier.fillMaxSize()) {
+                    AudioPlayerControlPanel(
+                        value = 50f,
+                        maxValue = 100f,
+                        onValueChange = {},
+                        modifier = Modifier.padding(bottom = 24.dp)
+                    )
                 }
             }
         }

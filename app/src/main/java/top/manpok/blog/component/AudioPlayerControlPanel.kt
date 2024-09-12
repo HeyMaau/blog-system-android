@@ -1,5 +1,11 @@
 package top.manpok.blog.component
 
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,8 +23,10 @@ import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
@@ -83,16 +91,36 @@ fun AudioPlayerControlPanel(
                 tint = Color.White,
                 modifier = Modifier.size(36.dp)
             )
-            Icon(
-                imageVector = if (playState != AudioViewModel.PlayState.Playing) ImageVector.vectorResource(
-                    id = R.drawable.ic_play
-                ) else ImageVector.vectorResource(id = R.drawable.ic_pause),
-                contentDescription = null,
-                tint = Color.White,
-                modifier = Modifier
-                    .size(48.dp)
-                    .clickable { onClickPlay() }
-            )
+            if (playState == AudioViewModel.PlayState.PreParing) {
+                val infiniteTransition = rememberInfiniteTransition(label = "")
+                val rotateDegrees by infiniteTransition.animateFloat(
+                    initialValue = 0f,
+                    targetValue = -360f,
+                    animationSpec = infiniteRepeatable(
+                        animation = tween(durationMillis = 2000, easing = LinearEasing),
+                        repeatMode = RepeatMode.Restart
+                    ), label = ""
+                )
+                Icon(
+                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_loading),
+                    contentDescription = null,
+                    tint = Color.White,
+                    modifier = Modifier
+                        .size(48.dp)
+                        .rotate(rotateDegrees)
+                )
+            } else {
+                Icon(
+                    imageVector = if (playState != AudioViewModel.PlayState.Playing) ImageVector.vectorResource(
+                        id = R.drawable.ic_play
+                    ) else ImageVector.vectorResource(id = R.drawable.ic_pause),
+                    contentDescription = null,
+                    tint = Color.White,
+                    modifier = Modifier
+                        .size(48.dp)
+                        .clickable { onClickPlay() }
+                )
+            }
             Icon(
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_skip_next),
                 contentDescription = null,

@@ -7,6 +7,7 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -24,6 +25,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
@@ -43,6 +45,7 @@ fun AudioPlayerControlPanel(
     maxValue: Float,
     onValueChange: (Float) -> Unit,
     onClickPlay: () -> Unit,
+    onClickNext: () -> Unit,
     playState: AudioViewModel.PlayState,
     modifier: Modifier = Modifier
 ) {
@@ -125,7 +128,13 @@ fun AudioPlayerControlPanel(
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_skip_next),
                 contentDescription = null,
                 tint = Color.White,
-                modifier = Modifier.size(36.dp)
+                modifier = Modifier
+                    .size(36.dp)
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null,
+                        onClick = onClickNext
+                    )
             )
             Icon(
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_play_list),
@@ -145,6 +154,7 @@ private fun PreviewAudioPlayerControlPanel() {
         maxValue = 100f,
         onValueChange = {},
         onClickPlay = {},
-        playState = AudioViewModel.PlayState.Stop
+        playState = AudioViewModel.PlayState.Stop,
+        onClickNext = {}
     )
 }

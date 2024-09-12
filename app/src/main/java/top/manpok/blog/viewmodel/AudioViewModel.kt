@@ -42,6 +42,8 @@ class AudioViewModel : ViewModel() {
     private var _playState = MutableStateFlow<PlayState>(PlayState.Stop)
     val playState: StateFlow<PlayState> = _playState.asStateFlow()
 
+    private var isSetOnPreparedListener = false
+
     init {
         getAudioList()
     }
@@ -60,10 +62,7 @@ class AudioViewModel : ViewModel() {
                                 val blogAudio = body.data
                                 blogAudio?.data?.let {
                                     audioList.addAll(it)
-                                    currentAudioName = audioList[0]?.name ?: ""
-                                    currentAudioArtist = audioList[0]?.artist ?: ""
-                                    currentAudioUrl = audioList[0]?.audioUrl ?: ""
-                                    currentAudioCover = audioList[0]?.coverUrl ?: ""
+                                    setCurrentData(0)
                                 }
                             }
                         }
@@ -76,6 +75,13 @@ class AudioViewModel : ViewModel() {
                 })
     }
 
+    private fun setCurrentData(index: Int) {
+        currentAudioName = audioList[index]?.name ?: ""
+        currentAudioArtist = audioList[index]?.artist ?: ""
+        currentAudioUrl = audioList[index]?.audioUrl ?: ""
+        currentAudioCover = audioList[index]?.coverUrl ?: ""
+    }
+
     fun playOrPauseAudio() {
         if (TextUtils.isEmpty(currentAudioUrl)) {
             ToastUtil.showShortToast(R.string.play_audio_error)
@@ -86,6 +92,10 @@ class AudioViewModel : ViewModel() {
             _playState.value = PlayState.Pause
             return
         }
+        handlePlay()
+    }
+
+    private fun handlePlay() {
         if (prepareStateMap[currentAudioUrl] == true) {
             mediaPlayer.start()
             _playState.value = PlayState.Playing
@@ -94,11 +104,29 @@ class AudioViewModel : ViewModel() {
         mediaPlayer.setDataSource(currentAudioUrl)
         mediaPlayer.prepareAsync()
         _playState.value = PlayState.PreParing
-        mediaPlayer.setOnPreparedListener {
-            mediaPlayer.start()
-            _playState.value = PlayState.Playing
-            prepareStateMap[currentAudioUrl] = true
+        if (!isSetOnPreparedListener) {
+            mediaPlayer.setOnPreparedListener {
+                isSetOnPreparedListener = true
+                mediaPlayer.start()
+                _playState.value = PlayState.Playing
+                prepareStateMap[currentAudioUrl] = true
+            }
         }
+    }
+
+    fun playNext() {
+        if (currentIndex == audioList.size - 1) {
+            ToastUtil.showShortToast(R.string.no_next_audio)
+            return
+        }
+        mediaPlayer.reset()
+        currentIndex++
+        setCurrentData(currentIndex)
+        handlePlay()
+    }
+
+    fun onDestroy() {
+        mediaPlayer.release()
     }
 
     sealed class PlayState {

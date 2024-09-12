@@ -73,4 +73,5 @@
 
     <string name="audio_player_entrance">来一首吗</string>
     <string name="play_audio_error">播放音频失败</string>
+    <string name="no_next_audio">没有下一首了</string>
 </resources>

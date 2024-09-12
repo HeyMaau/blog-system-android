@@ -17,6 +17,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -55,6 +56,12 @@ class AudioPlayerActivity : BaseActivity() {
             val audioViewModel: AudioViewModel = viewModel()
 
             val playState = audioViewModel.playState.collectAsState()
+
+            DisposableEffect(key1 = Unit) {
+                onDispose {
+                    audioViewModel.onDestroy()
+                }
+            }
 
             GetPalette(url = audioViewModel.currentAudioCover)
             Box {
@@ -105,6 +112,9 @@ class AudioPlayerActivity : BaseActivity() {
                         onValueChange = {},
                         onClickPlay = {
                             audioViewModel.playOrPauseAudio()
+                        },
+                        onClickNext = {
+                            audioViewModel.playNext()
                         },
                         playState = playState.value,
                         modifier = Modifier.padding(bottom = 24.dp)

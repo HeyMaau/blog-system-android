@@ -37,6 +37,7 @@
         <activity
             android:name=".activity.AudioPlayerActivity"
             android:exported="false"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.ImagePreviewActivity"

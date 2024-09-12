@@ -80,6 +80,7 @@ class AudioViewModel : ViewModel() {
         currentAudioArtist = audioList[index]?.artist ?: ""
         currentAudioUrl = audioList[index]?.audioUrl ?: ""
         currentAudioCover = audioList[index]?.coverUrl ?: ""
+        prepareStateMap[currentAudioUrl] = false
     }
 
     fun playOrPauseAudio() {
@@ -121,6 +122,17 @@ class AudioViewModel : ViewModel() {
         }
         mediaPlayer.reset()
         currentIndex++
+        setCurrentData(currentIndex)
+        handlePlay()
+    }
+
+    fun playPre() {
+        if (currentIndex == 0) {
+            ToastUtil.showShortToast(R.string.no_pre_audio)
+            return
+        }
+        mediaPlayer.reset()
+        currentIndex--
         setCurrentData(currentIndex)
         handlePlay()
     }

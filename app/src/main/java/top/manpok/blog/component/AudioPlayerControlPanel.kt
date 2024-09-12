@@ -46,6 +46,7 @@ fun AudioPlayerControlPanel(
     onValueChange: (Float) -> Unit,
     onClickPlay: () -> Unit,
     onClickNext: () -> Unit,
+    onClickPre: () -> Unit,
     playState: AudioViewModel.PlayState,
     modifier: Modifier = Modifier
 ) {
@@ -92,7 +93,13 @@ fun AudioPlayerControlPanel(
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_skip_previous),
                 contentDescription = null,
                 tint = Color.White,
-                modifier = Modifier.size(36.dp)
+                modifier = Modifier
+                    .size(36.dp)
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null,
+                        onClick = onClickPre
+                    )
             )
             if (playState == AudioViewModel.PlayState.PreParing) {
                 val infiniteTransition = rememberInfiniteTransition(label = "")
@@ -155,6 +162,7 @@ private fun PreviewAudioPlayerControlPanel() {
         onValueChange = {},
         onClickPlay = {},
         playState = AudioViewModel.PlayState.Stop,
-        onClickNext = {}
+        onClickNext = {},
+        onClickPre = {}
     )
 }

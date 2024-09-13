@@ -150,7 +150,12 @@ class AudioPlayerActivity : BaseActivity() {
             val bitmap =
                 (painter.state as AsyncImagePainter.State.Success).result.drawable.toBitmap()
             Palette.from(bitmap).generate {
-                backgroundColor = it?.getDarkVibrantColor(Color.White.toArgb())!!
+                var defaultColor: Int
+                defaultColor = it?.getMutedColor(Color.DarkGray.toArgb())!!
+                if (defaultColor == Color.DarkGray.toArgb()) {
+                    defaultColor = it.getDarkVibrantColor(Color.DarkGray.toArgb())
+                }
+                backgroundColor = defaultColor
             }
         }
     }

@@ -1,12 +1,14 @@
 package top.manpok.blog.viewmodel
 
-import android.media.MediaPlayer
 import android.text.TextUtils
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.media3.common.MediaItem
+import androidx.media3.common.Player
+import androidx.media3.exoplayer.ExoPlayer
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -15,6 +17,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import top.manpok.blog.R
 import top.manpok.blog.api.BlogRetrofit
+import top.manpok.blog.base.BaseApplication
 import top.manpok.blog.pojo.BaseResponse
 import top.manpok.blog.pojo.BlogAudio
 import top.manpok.blog.utils.Constants
@@ -27,8 +30,8 @@ class AudioViewModel : ViewModel() {
 
     private val audioList = mutableListOf<BlogAudio.Data?>()
 
-    private val mediaPlayer: MediaPlayer by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
-        MediaPlayer()
+    private val exoPlayer: ExoPlayer by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
+        ExoPlayer.Builder(BaseApplication.getApplication()).build()
     }
 
     var currentIndex by mutableIntStateOf(0)
@@ -42,7 +45,7 @@ class AudioViewModel : ViewModel() {
     private var _playState = MutableStateFlow<PlayState>(PlayState.Stop)
     val playState: StateFlow<PlayState> = _playState.asStateFlow()
 
-    private var isSetOnPreparedListener = false
+    private var isSetPlayerListener = false
 
     init {
         getAudioList()
@@ -88,8 +91,8 @@ class AudioViewModel : ViewModel() {
             ToastUtil.showShortToast(R.string.play_audio_error)
             return
         }
-        if (mediaPlayer.isPlaying) {
-            mediaPlayer.pause()
+        if (exoPlayer.isPlaying) {
+            exoPlayer.pause()
             _playState.value = PlayState.Pause
             return
         }
@@ -98,20 +101,25 @@ class AudioViewModel : ViewModel() {
 
     private fun handlePlay() {
         if (prepareStateMap[currentAudioUrl] == true) {
-            mediaPlayer.start()
+            exoPlayer.play()
             _playState.value = PlayState.Playing
             return
         }
-        mediaPlayer.setDataSource(currentAudioUrl)
-        mediaPlayer.prepareAsync()
+        val mediaItem = MediaItem.fromUri(currentAudioUrl)
+        exoPlayer.setMediaItem(mediaItem)
+        exoPlayer.prepare()
         _playState.value = PlayState.PreParing
-        if (!isSetOnPreparedListener) {
-            mediaPlayer.setOnPreparedListener {
-                isSetOnPreparedListener = true
-                mediaPlayer.start()
-                _playState.value = PlayState.Playing
-                prepareStateMap[currentAudioUrl] = true
-            }
+        if (!isSetPlayerListener) {
+            exoPlayer.addListener(object : Player.Listener{
+                override fun onPlaybackStateChanged(playbackState: Int) {
+                    isSetPlayerListener = true
+                    if (playbackState == Player.STATE_READY) {
+                        exoPlayer.play()
+                        _playState.value = PlayState.Playing
+                        prepareStateMap[currentAudioUrl] = true
+                    }
+                }
+            })
         }
     }
 
@@ -120,7 +128,6 @@ class AudioViewModel : ViewModel() {
             ToastUtil.showShortToast(R.string.no_next_audio)
             return
         }
-        mediaPlayer.reset()
         currentIndex++
         setCurrentData(currentIndex)
         handlePlay()
@@ -131,14 +138,13 @@ class AudioViewModel : ViewModel() {
             ToastUtil.showShortToast(R.string.no_pre_audio)
             return
         }
-        mediaPlayer.reset()
         currentIndex--
         setCurrentData(currentIndex)
         handlePlay()
     }
 
     fun onDestroy() {
-        mediaPlayer.release()
+        exoPlayer.release()
     }
 
     sealed class PlayState {

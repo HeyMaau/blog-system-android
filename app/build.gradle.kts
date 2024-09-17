@@ -88,6 +88,7 @@ dependencies {
     implementation(libs.zoomable)
     implementation(libs.datastore.preferences)
     implementation(libs.androidx.palette)
+    implementation(libs.androidx.media3.exoplayer)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

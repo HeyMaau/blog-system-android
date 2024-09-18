@@ -1,6 +1,5 @@
 package top.manpok.blog.viewmodel
 
-import android.text.TextUtils
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -40,12 +39,11 @@ class AudioViewModel : ViewModel() {
     var currentAudioUrl by mutableStateOf("")
     var currentAudioCover by mutableStateOf("")
 
-    private val prepareStateMap: MutableMap<String, Boolean> = mutableMapOf()
 
     private var _playState = MutableStateFlow<PlayState>(PlayState.Stop)
     val playState: StateFlow<PlayState> = _playState.asStateFlow()
 
-    private var isSetPlayerListener = false
+    private var isPrepare = false
 
     init {
         getAudioList()
@@ -65,6 +63,7 @@ class AudioViewModel : ViewModel() {
                                 val blogAudio = body.data
                                 blogAudio?.data?.let {
                                     audioList.addAll(it)
+                                    initExoPlayer(it)
                                     setCurrentData(0)
                                 }
                             }
@@ -78,49 +77,57 @@ class AudioViewModel : ViewModel() {
                 })
     }
 
+    private fun initExoPlayer(dataList: List<BlogAudio.Data?>) {
+        val audioItemList: MutableList<MediaItem> = mutableListOf()
+        dataList.forEach {
+            if (it?.audioUrl != null) {
+                audioItemList.add(MediaItem.fromUri(it.audioUrl))
+            }
+        }
+        exoPlayer.setMediaItems(audioItemList)
+        exoPlayer.addListener(object : Player.Listener {
+            override fun onPlaybackStateChanged(playbackState: Int) {
+                if (playbackState == Player.STATE_READY) {
+                    exoPlayer.play()
+                    _playState.value = PlayState.Playing
+                }
+            }
+        })
+        exoPlayer.playWhenReady = false
+    }
+
     private fun setCurrentData(index: Int) {
         currentAudioName = audioList[index]?.name ?: ""
         currentAudioArtist = audioList[index]?.artist ?: ""
         currentAudioUrl = audioList[index]?.audioUrl ?: ""
         currentAudioCover = audioList[index]?.coverUrl ?: ""
-        prepareStateMap[currentAudioUrl] = false
+    }
+
+    private fun checkPrepare() {
+        if (!isPrepare) {
+            exoPlayer.prepare()
+            _playState.value = PlayState.PreParing
+            isPrepare = true
+        }
+    }
+
+    private fun handlePlay() {
+        if (exoPlayer.isLoading) {
+            _playState.value = PlayState.PreParing
+        } else {
+            exoPlayer.play()
+            _playState.value = PlayState.Playing
+        }
     }
 
     fun playOrPauseAudio() {
-        if (TextUtils.isEmpty(currentAudioUrl)) {
-            ToastUtil.showShortToast(R.string.play_audio_error)
-            return
-        }
+        checkPrepare()
         if (exoPlayer.isPlaying) {
             exoPlayer.pause()
             _playState.value = PlayState.Pause
             return
         }
         handlePlay()
-    }
-
-    private fun handlePlay() {
-        if (prepareStateMap[currentAudioUrl] == true) {
-            exoPlayer.play()
-            _playState.value = PlayState.Playing
-            return
-        }
-        val mediaItem = MediaItem.fromUri(currentAudioUrl)
-        exoPlayer.setMediaItem(mediaItem)
-        exoPlayer.prepare()
-        _playState.value = PlayState.PreParing
-        if (!isSetPlayerListener) {
-            exoPlayer.addListener(object : Player.Listener{
-                override fun onPlaybackStateChanged(playbackState: Int) {
-                    isSetPlayerListener = true
-                    if (playbackState == Player.STATE_READY) {
-                        exoPlayer.play()
-                        _playState.value = PlayState.Playing
-                        prepareStateMap[currentAudioUrl] = true
-                    }
-                }
-            })
-        }
     }
 
     fun playNext() {
@@ -130,6 +137,8 @@ class AudioViewModel : ViewModel() {
         }
         currentIndex++
         setCurrentData(currentIndex)
+        exoPlayer.seekToNextMediaItem()
+        checkPrepare()
         handlePlay()
     }
 
@@ -140,6 +149,8 @@ class AudioViewModel : ViewModel() {
         }
         currentIndex--
         setCurrentData(currentIndex)
+        exoPlayer.seekToPreviousMediaItem()
+        checkPrepare()
         handlePlay()
     }
 

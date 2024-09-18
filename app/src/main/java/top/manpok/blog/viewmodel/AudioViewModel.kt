@@ -44,6 +44,7 @@ class AudioViewModel : ViewModel() {
     val playState: StateFlow<PlayState> = _playState.asStateFlow()
 
     private var isPrepare = false
+    private var initFirstAudio = false
 
     init {
         getAudioList()
@@ -90,6 +91,9 @@ class AudioViewModel : ViewModel() {
                 if (playbackState == Player.STATE_READY) {
                     exoPlayer.play()
                     _playState.value = PlayState.Playing
+                    if (!initFirstAudio) {
+                        initFirstAudio = true
+                    }
                 }
             }
         })
@@ -111,15 +115,6 @@ class AudioViewModel : ViewModel() {
         }
     }
 
-    private fun handlePlay() {
-        if (exoPlayer.isLoading) {
-            _playState.value = PlayState.PreParing
-        } else {
-            exoPlayer.play()
-            _playState.value = PlayState.Playing
-        }
-    }
-
     fun playOrPauseAudio() {
         checkPrepare()
         if (exoPlayer.isPlaying) {
@@ -127,7 +122,12 @@ class AudioViewModel : ViewModel() {
             _playState.value = PlayState.Pause
             return
         }
-        handlePlay()
+        if (!initFirstAudio) {
+            _playState.value = PlayState.PreParing
+        } else {
+            _playState.value = PlayState.Playing
+        }
+        exoPlayer.play()
     }
 
     fun playNext() {
@@ -135,11 +135,11 @@ class AudioViewModel : ViewModel() {
             ToastUtil.showShortToast(R.string.no_next_audio)
             return
         }
+        _playState.value = PlayState.PreParing
         currentIndex++
         setCurrentData(currentIndex)
         exoPlayer.seekToNextMediaItem()
         checkPrepare()
-        handlePlay()
     }
 
     fun playPre() {
@@ -147,11 +147,11 @@ class AudioViewModel : ViewModel() {
             ToastUtil.showShortToast(R.string.no_pre_audio)
             return
         }
+        _playState.value = PlayState.PreParing
         currentIndex--
         setCurrentData(currentIndex)
         exoPlayer.seekToPreviousMediaItem()
         checkPrepare()
-        handlePlay()
     }
 
     fun onDestroy() {

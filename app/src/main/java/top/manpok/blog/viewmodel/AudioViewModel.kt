@@ -2,15 +2,21 @@ package top.manpok.blog.viewmodel
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -38,6 +44,12 @@ class AudioViewModel : ViewModel() {
     var currentAudioArtist by mutableStateOf("")
     var currentAudioUrl by mutableStateOf("")
     var currentAudioCover by mutableStateOf("")
+    var currentAudioDuration by mutableLongStateOf(0)
+    var currentAudioDurationStr by mutableStateOf("00:00")
+    var currentAudioPosition by mutableLongStateOf(0)
+    var currentAudioPositionStr by mutableStateOf("00:00")
+
+    var currentTimerJob: Job? = null
 
 
     private var _playState = MutableStateFlow<PlayState>(PlayState.Stop)
@@ -94,10 +106,34 @@ class AudioViewModel : ViewModel() {
                     if (!initFirstAudio) {
                         initFirstAudio = true
                     }
+                    setAudioDuration(exoPlayer.duration)
+                    setPositionTimer()
                 }
             }
         })
         exoPlayer.playWhenReady = false
+    }
+
+    private fun setPositionTimer() {
+        currentTimerJob = viewModelScope.launch {
+            while (true) {
+                currentAudioPosition = exoPlayer.currentPosition / 1000
+                val min: Long = currentAudioPosition / 60
+                val second: Long = currentAudioPosition % 60
+                currentAudioPositionStr = String.format("%02d:%02d", min, second)
+                delay(1000)
+            }
+        }
+    }
+
+    private fun setAudioDuration(duration: Long) {
+        if (duration == C.TIME_UNSET) {
+            return
+        }
+        currentAudioDuration = duration / 1000
+        val min: Long = duration / 1000 / 60
+        val second: Long = duration / 1000 % 60
+        currentAudioDurationStr = String.format("%02d:%02d", min, second)
     }
 
     private fun setCurrentData(index: Int) {
@@ -136,6 +172,7 @@ class AudioViewModel : ViewModel() {
             return
         }
         _playState.value = PlayState.PreParing
+        currentTimerJob?.cancel()
         currentIndex++
         setCurrentData(currentIndex)
         exoPlayer.seekToNextMediaItem()
@@ -148,10 +185,15 @@ class AudioViewModel : ViewModel() {
             return
         }
         _playState.value = PlayState.PreParing
+        currentTimerJob?.cancel()
         currentIndex--
         setCurrentData(currentIndex)
         exoPlayer.seekToPreviousMediaItem()
         checkPrepare()
+    }
+
+    fun seekTo(position: Long) {
+        exoPlayer.seekTo(position * 1000)
     }
 
     fun onDestroy() {

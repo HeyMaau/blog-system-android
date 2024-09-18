@@ -116,9 +116,13 @@ class AudioPlayerActivity : BaseActivity() {
                 }
                 Box(contentAlignment = Alignment.BottomCenter, modifier = Modifier.fillMaxSize()) {
                     AudioPlayerControlPanel(
-                        value = 50f,
-                        maxValue = 100f,
-                        onValueChange = {},
+                        value = audioViewModel.currentAudioPosition.toFloat(),
+                        maxValue = audioViewModel.currentAudioDuration.toFloat(),
+                        duration = audioViewModel.currentAudioDurationStr,
+                        position = audioViewModel.currentAudioPositionStr,
+                        onValueChange = {
+                            audioViewModel.seekTo(it.toLong())
+                        },
                         onClickPlay = {
                             audioViewModel.playOrPauseAudio()
                         },

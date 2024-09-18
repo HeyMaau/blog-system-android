@@ -43,6 +43,8 @@ import top.manpok.blog.viewmodel.AudioViewModel
 fun AudioPlayerControlPanel(
     value: Float,
     maxValue: Float,
+    duration: String,
+    position: String,
     onValueChange: (Float) -> Unit,
     onClickPlay: () -> Unit,
     onClickNext: () -> Unit,
@@ -72,8 +74,8 @@ fun AudioPlayerControlPanel(
                 .fillMaxWidth()
                 .padding(horizontal = 8.dp)
         ) {
-            Text(text = "00:00", color = Color.White, fontSize = 12.sp)
-            Text(text = "11:11", color = Color.White, fontSize = 12.sp)
+            Text(text = position, color = Color.White, fontSize = 12.sp)
+            Text(text = duration, color = Color.White, fontSize = 12.sp)
         }
         Spacer(modifier = Modifier.height(20.dp))
         Row(
@@ -159,6 +161,8 @@ private fun PreviewAudioPlayerControlPanel() {
     AudioPlayerControlPanel(
         value = 50f,
         maxValue = 100f,
+        duration = "11:11",
+        position = "00:00",
         onValueChange = {},
         onClickPlay = {},
         playState = AudioViewModel.PlayState.Stop,

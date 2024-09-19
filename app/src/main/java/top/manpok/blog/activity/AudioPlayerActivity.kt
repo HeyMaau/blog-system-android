@@ -152,8 +152,12 @@ class AudioPlayerActivity : BaseActivity() {
                         AudioPlayListDialog(
                             data = audioViewModel.audioList,
                             playMode = audioViewModel.currentPlayMode,
+                            currentIndex = audioViewModel.currentIndex,
                             onPlayModeChange = {
                                 audioViewModel.changePlayMode(it)
+                            },
+                            onItemClick = {
+                                audioViewModel.seekToAudio(it)
                             },
                             onDismiss = {
                                 showPlayListDialog = false

@@ -224,6 +224,14 @@ class AudioViewModel : ViewModel() {
         currentPlayMode = mode
     }
 
+    fun seekToAudio(index: Int) {
+        _playState.value = PlayState.PreParing
+        exoPlayer.seekTo(index, 0)
+        currentIndex = exoPlayer.currentMediaItemIndex
+        setCurrentData(currentIndex)
+        checkPrepare()
+    }
+
     fun onDestroy() {
         exoPlayer.release()
         currentTimerJob?.cancel()

@@ -11,7 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -20,8 +20,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
@@ -34,6 +36,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.launch
 import top.manpok.blog.R
 import top.manpok.blog.pojo.BlogAudio
 import top.manpok.blog.utils.Constants
@@ -44,9 +47,12 @@ fun AudioPlayListDialog(
     data: List<BlogAudio.Data?>,
     modifier: Modifier = Modifier,
     playMode: Int = Constants.PLAY_MODE_SEQUENTIAL_PLAYBACK,
+    currentIndex: Int,
     onDismiss: () -> Unit,
-    onPlayModeChange: (Int) -> Unit
+    onPlayModeChange: (Int) -> Unit,
+    onItemClick: (Int) -> Unit
 ) {
+    val coroutineScope = rememberCoroutineScope()
     val modalBottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     ModalBottomSheet(
         sheetState = modalBottomSheetState,
@@ -90,21 +96,38 @@ fun AudioPlayListDialog(
                 )
             }
             LazyColumn {
-                items(data) {
+                itemsIndexed(data) { index, item ->
                     Text(
                         buildAnnotatedString {
-                            append(it?.name)
-                            withStyle(style = SpanStyle(color = colorResource(id = R.color.gray_878789))) {
-                                append(" - ${it?.artist}")
+                            append(item?.name)
+                            withStyle(
+                                style = SpanStyle(
+                                    color = if (currentIndex == index) colorResource(
+                                        id = R.color.blue_0185fa
+                                    ) else colorResource(id = R.color.gray_878789)
+                                )
+                            ) {
+                                append(" - ${item?.artist}")
                             }
                         },
                         fontSize = 16.sp,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
+                        color = if (currentIndex == index) colorResource(id = R.color.blue_0185fa) else Color.Unspecified,
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(vertical = 16.dp)
-
+                            .clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = null,
+                                onClick = {
+                                    onItemClick(index)
+                                    coroutineScope.launch {
+                                        modalBottomSheetState.hide()
+                                        onDismiss()
+                                    }
+                                }
+                            )
                     )
                 }
             }
@@ -115,5 +138,10 @@ fun AudioPlayListDialog(
 @Preview
 @Composable
 private fun PreviewAudioPlayListDialog() {
-    AudioPlayListDialog(data = listOf(), onDismiss = {}, onPlayModeChange = {})
+    AudioPlayListDialog(
+        data = listOf(),
+        onDismiss = {},
+        onPlayModeChange = {},
+        currentIndex = 0,
+        onItemClick = {})
 }

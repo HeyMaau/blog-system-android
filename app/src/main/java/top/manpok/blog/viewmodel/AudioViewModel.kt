@@ -107,11 +107,17 @@ class AudioViewModel : ViewModel() {
                         initFirstAudio = true
                     }
                     setAudioDuration(exoPlayer.duration)
-                    setPositionTimer()
                 }
+            }
+
+            override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
+                currentIndex = exoPlayer.currentMediaItemIndex
+                setCurrentData(currentIndex)
+                setAudioDuration(exoPlayer.duration)
             }
         })
         exoPlayer.playWhenReady = false
+        setPositionTimer()
     }
 
     private fun setPositionTimer() {
@@ -172,7 +178,6 @@ class AudioViewModel : ViewModel() {
             return
         }
         _playState.value = PlayState.PreParing
-        currentTimerJob?.cancel()
         exoPlayer.seekToNextMediaItem()
         currentIndex = exoPlayer.currentMediaItemIndex
         setCurrentData(currentIndex)
@@ -185,7 +190,6 @@ class AudioViewModel : ViewModel() {
             return
         }
         _playState.value = PlayState.PreParing
-        currentTimerJob?.cancel()
         exoPlayer.seekToPreviousMediaItem()
         currentIndex = exoPlayer.currentMediaItemIndex
         setCurrentData(currentIndex)
@@ -220,6 +224,7 @@ class AudioViewModel : ViewModel() {
 
     fun onDestroy() {
         exoPlayer.release()
+        currentTimerJob?.cancel()
     }
 
     sealed class PlayState {

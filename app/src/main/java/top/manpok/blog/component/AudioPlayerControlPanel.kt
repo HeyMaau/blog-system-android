@@ -53,6 +53,7 @@ fun AudioPlayerControlPanel(
     onClickNext: () -> Unit,
     onClickPre: () -> Unit,
     onPlayModeChange: (Int) -> Unit,
+    onPlayListClick: () -> Unit,
     playState: AudioViewModel.PlayState,
     modifier: Modifier = Modifier
 ) {
@@ -162,7 +163,11 @@ fun AudioPlayerControlPanel(
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_play_list),
                 contentDescription = null,
                 tint = Color.White,
-                modifier = Modifier.size(16.dp)
+                modifier = Modifier
+                    .size(16.dp)
+                    .clickable {
+                        onPlayListClick()
+                    }
             )
         }
     }
@@ -181,6 +186,7 @@ private fun PreviewAudioPlayerControlPanel() {
         playState = AudioViewModel.PlayState.Stop,
         onClickNext = {},
         onClickPre = {},
+        onPlayListClick = {},
         onPlayModeChange = {}
     )
 }

@@ -23,6 +23,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -44,6 +45,7 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.size.Size
 import top.manpok.blog.R
+import top.manpok.blog.component.AudioPlayListDialog
 import top.manpok.blog.component.AudioPlayerControlPanel
 import top.manpok.blog.viewmodel.AudioViewModel
 
@@ -115,6 +117,10 @@ class AudioPlayerActivity : BaseActivity() {
                     }
                 }
                 Box(contentAlignment = Alignment.BottomCenter, modifier = Modifier.fillMaxSize()) {
+                    var showPlayListDialog by remember {
+                        mutableStateOf(false)
+                    }
+
                     AudioPlayerControlPanel(
                         value = audioViewModel.currentAudioPosition.toFloat(),
                         maxValue = audioViewModel.currentAudioDuration.toFloat(),
@@ -135,9 +141,17 @@ class AudioPlayerActivity : BaseActivity() {
                         onPlayModeChange = {
                             audioViewModel.changePlayMode(it)
                         },
+                        onPlayListClick = {
+                            showPlayListDialog = true
+                        },
                         playState = playState.value,
                         modifier = Modifier.padding(bottom = 24.dp)
                     )
+                    if (showPlayListDialog) {
+                        AudioPlayListDialog(onDismiss = {
+                            showPlayListDialog = false
+                        }, modifier = Modifier.fillMaxWidth())
+                    }
                 }
             }
         }

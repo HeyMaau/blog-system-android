@@ -78,4 +78,5 @@
     <string name="list_loop">列表循环</string>
     <string name="shuffle_mode">随机播放</string>
     <string name="repeat_one">单曲循环</string>
+    <string name="current_play_list">当前播放列表（%d）</string>
 </resources>

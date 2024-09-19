@@ -48,6 +48,7 @@ class AudioViewModel : ViewModel() {
     var currentAudioDurationStr by mutableStateOf("00:00")
     var currentAudioPosition by mutableLongStateOf(0)
     var currentAudioPositionStr by mutableStateOf("00:00")
+    var currentPlayMode by mutableIntStateOf(Constants.PLAY_MODE_SEQUENTIAL_PLAYBACK)
 
     var currentTimerJob: Job? = null
 
@@ -220,6 +221,7 @@ class AudioViewModel : ViewModel() {
                 ToastUtil.showShortToast(R.string.shuffle_mode)
             }
         }
+        currentPlayMode = mode
     }
 
     fun onDestroy() {

@@ -1,5 +1,7 @@
 package top.manpok.blog.component
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -17,6 +19,7 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -33,13 +36,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import top.manpok.blog.R
 import top.manpok.blog.pojo.BlogAudio
+import top.manpok.blog.utils.Constants
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AudioPlayListDialog(
     data: List<BlogAudio.Data?>,
+    modifier: Modifier = Modifier,
+    playMode: Int = Constants.PLAY_MODE_SEQUENTIAL_PLAYBACK,
     onDismiss: () -> Unit,
-    modifier: Modifier = Modifier
+    onPlayModeChange: (Int) -> Unit
 ) {
     val modalBottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     ModalBottomSheet(
@@ -61,17 +67,25 @@ fun AudioPlayListDialog(
             )
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(end = 12.dp, top = 12.dp, bottom = 12.dp)
+                modifier = Modifier
+                    .padding(end = 12.dp, top = 12.dp, bottom = 12.dp)
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null,
+                        onClick = {
+                            val tempPlayMode: Int = (playMode + 1) % 3
+                            onPlayModeChange(tempPlayMode)
+                        })
             ) {
                 Icon(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_sequential_playback),
+                    imageVector = ImageVector.vectorResource(id = if (playMode == Constants.PLAY_MODE_SEQUENTIAL_PLAYBACK) R.drawable.ic_sequential_playback else if (playMode == Constants.PLAY_MODE_REPEAT_MODE_ONE) R.drawable.ic_repeat_mode_one else R.drawable.ic_shuffle_playback),
                     contentDescription = null,
                     tint = colorResource(id = R.color.gray_878789),
-                    modifier = Modifier.size(12.dp)
+                    modifier = Modifier.size(14.dp)
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
-                    text = stringResource(id = R.string.list_loop),
+                    text = stringResource(id = if (playMode == Constants.PLAY_MODE_SEQUENTIAL_PLAYBACK) R.string.list_loop else if (playMode == Constants.PLAY_MODE_REPEAT_MODE_ONE) R.string.repeat_one else R.string.shuffle_mode),
                     color = colorResource(id = R.color.gray_878789)
                 )
             }
@@ -101,5 +115,5 @@ fun AudioPlayListDialog(
 @Preview
 @Composable
 private fun PreviewAudioPlayListDialog() {
-    AudioPlayListDialog(data = listOf(), onDismiss = {})
+    AudioPlayListDialog(data = listOf(), onDismiss = {}, onPlayModeChange = {})
 }

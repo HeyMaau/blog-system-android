@@ -126,6 +126,7 @@ class AudioPlayerActivity : BaseActivity() {
                         maxValue = audioViewModel.currentAudioDuration.toFloat(),
                         duration = audioViewModel.currentAudioDurationStr,
                         position = audioViewModel.currentAudioPositionStr,
+                        playMode = audioViewModel.currentPlayMode,
                         onValueChange = {
                             audioViewModel.seekTo(it.toLong())
                         },
@@ -148,9 +149,17 @@ class AudioPlayerActivity : BaseActivity() {
                         modifier = Modifier.padding(bottom = 24.dp)
                     )
                     if (showPlayListDialog) {
-                        AudioPlayListDialog(data = audioViewModel.audioList, onDismiss = {
-                            showPlayListDialog = false
-                        }, modifier = Modifier.fillMaxWidth())
+                        AudioPlayListDialog(
+                            data = audioViewModel.audioList,
+                            playMode = audioViewModel.currentPlayMode,
+                            onPlayModeChange = {
+                                audioViewModel.changePlayMode(it)
+                            },
+                            onDismiss = {
+                                showPlayListDialog = false
+                            },
+                            modifier = Modifier.fillMaxWidth()
+                        )
                     }
                 }
             }

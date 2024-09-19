@@ -25,9 +25,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
@@ -48,19 +46,16 @@ fun AudioPlayerControlPanel(
     maxValue: Float,
     duration: String,
     position: String,
+    modifier: Modifier = Modifier,
+    playMode: Int = Constants.PLAY_MODE_SEQUENTIAL_PLAYBACK,
     onValueChange: (Float) -> Unit,
     onClickPlay: () -> Unit,
     onClickNext: () -> Unit,
     onClickPre: () -> Unit,
     onPlayModeChange: (Int) -> Unit,
     onPlayListClick: () -> Unit,
-    playState: AudioViewModel.PlayState,
-    modifier: Modifier = Modifier
+    playState: AudioViewModel.PlayState
 ) {
-    var playMode by remember {
-        mutableIntStateOf(Constants.PLAY_MODE_SEQUENTIAL_PLAYBACK)
-    }
-
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -101,8 +96,8 @@ fun AudioPlayerControlPanel(
                 modifier = Modifier
                     .size(16.dp)
                     .clickable {
-                        playMode = (playMode + 1) % 3
-                        onPlayModeChange(playMode)
+                        val tempPlayMode: Int = (playMode + 1) % 3
+                        onPlayModeChange(tempPlayMode)
                     }
             )
             Icon(

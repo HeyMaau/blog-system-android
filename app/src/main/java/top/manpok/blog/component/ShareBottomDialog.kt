@@ -32,7 +32,6 @@ import top.manpok.blog.R
 @Composable
 fun ShareBottomDialog(
     onDismiss: () -> Unit,
-    onHidden: () -> Unit,
     onItemClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -47,7 +46,7 @@ fun ShareBottomDialog(
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.padding(top = 12.dp, bottom = 32.dp, start = 12.dp, end = 12.dp)
+            modifier = modifier.padding(top = 12.dp, bottom = 32.dp, start = 12.dp, end = 12.dp)
         ) {
             Text(text = stringResource(id = R.string.share), fontSize = 16.sp)
             Spacer(modifier = Modifier.height(8.dp))
@@ -59,7 +58,7 @@ fun ShareBottomDialog(
                             onItemClick.invoke()
                             coroutineScope.launch {
                                 modalBottomSheetState.hide()
-                                onHidden.invoke()
+                                onDismiss()
                             }
                         }) {
                         Image(

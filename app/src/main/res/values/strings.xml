@@ -75,4 +75,7 @@
     <string name="play_audio_error">播放音频失败</string>
     <string name="no_next_audio">没有下一首了</string>
     <string name="no_pre_audio">已经是第一首了</string>
+    <string name="list_loop">列表循环</string>
+    <string name="shuffle_mode">随机播放</string>
+    <string name="repeat_one">单曲循环</string>
 </resources>

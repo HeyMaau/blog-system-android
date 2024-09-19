@@ -167,33 +167,55 @@ class AudioViewModel : ViewModel() {
     }
 
     fun playNext() {
-        if (currentIndex == audioList.size - 1) {
+        if (!exoPlayer.hasNextMediaItem() && !exoPlayer.shuffleModeEnabled) {
             ToastUtil.showShortToast(R.string.no_next_audio)
             return
         }
         _playState.value = PlayState.PreParing
         currentTimerJob?.cancel()
-        currentIndex++
-        setCurrentData(currentIndex)
         exoPlayer.seekToNextMediaItem()
+        currentIndex = exoPlayer.currentMediaItemIndex
+        setCurrentData(currentIndex)
         checkPrepare()
     }
 
     fun playPre() {
-        if (currentIndex == 0) {
+        if (!exoPlayer.hasPreviousMediaItem() && !exoPlayer.shuffleModeEnabled) {
             ToastUtil.showShortToast(R.string.no_pre_audio)
             return
         }
         _playState.value = PlayState.PreParing
         currentTimerJob?.cancel()
-        currentIndex--
-        setCurrentData(currentIndex)
         exoPlayer.seekToPreviousMediaItem()
+        currentIndex = exoPlayer.currentMediaItemIndex
+        setCurrentData(currentIndex)
         checkPrepare()
     }
 
     fun seekTo(position: Long) {
         exoPlayer.seekTo(position * 1000)
+    }
+
+    fun changePlayMode(mode: Int) {
+        when (mode) {
+            Constants.PLAY_MODE_SEQUENTIAL_PLAYBACK -> {
+                exoPlayer.shuffleModeEnabled = false
+                exoPlayer.repeatMode = Player.REPEAT_MODE_ALL
+                ToastUtil.showShortToast(R.string.list_loop)
+            }
+
+            Constants.PLAY_MODE_REPEAT_MODE_ONE -> {
+                exoPlayer.shuffleModeEnabled = false
+                exoPlayer.repeatMode = Player.REPEAT_MODE_ONE
+                ToastUtil.showShortToast(R.string.repeat_one)
+            }
+
+            Constants.PLAY_MODE_SHUFFLE_PLAYBACK -> {
+                exoPlayer.shuffleModeEnabled = true
+                exoPlayer.repeatMode = Player.REPEAT_MODE_ALL
+                ToastUtil.showShortToast(R.string.shuffle_mode)
+            }
+        }
     }
 
     fun onDestroy() {

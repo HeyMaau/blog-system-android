@@ -25,7 +25,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
@@ -36,6 +38,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import top.manpok.blog.R
+import top.manpok.blog.utils.Constants
 import top.manpok.blog.viewmodel.AudioViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -49,9 +52,14 @@ fun AudioPlayerControlPanel(
     onClickPlay: () -> Unit,
     onClickNext: () -> Unit,
     onClickPre: () -> Unit,
+    onPlayModeChange: (Int) -> Unit,
     playState: AudioViewModel.PlayState,
     modifier: Modifier = Modifier
 ) {
+    var playMode by remember {
+        mutableIntStateOf(Constants.PLAY_MODE_SEQUENTIAL_PLAYBACK)
+    }
+
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -86,10 +94,15 @@ fun AudioPlayerControlPanel(
                 .padding(horizontal = 12.dp)
         ) {
             Icon(
-                imageVector = ImageVector.vectorResource(id = R.drawable.ic_sequential_playback),
+                imageVector = ImageVector.vectorResource(id = if (playMode == Constants.PLAY_MODE_SEQUENTIAL_PLAYBACK) R.drawable.ic_sequential_playback else if (playMode == Constants.PLAY_MODE_REPEAT_MODE_ONE) R.drawable.ic_repeat_mode_one else R.drawable.ic_shuffle_playback),
                 contentDescription = null,
                 tint = Color.White,
-                modifier = Modifier.size(16.dp)
+                modifier = Modifier
+                    .size(16.dp)
+                    .clickable {
+                        playMode = (playMode + 1) % 3
+                        onPlayModeChange(playMode)
+                    }
             )
             Icon(
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_skip_previous),
@@ -167,6 +180,7 @@ private fun PreviewAudioPlayerControlPanel() {
         onClickPlay = {},
         playState = AudioViewModel.PlayState.Stop,
         onClickNext = {},
-        onClickPre = {}
+        onClickPre = {},
+        onPlayModeChange = {}
     )
 }

@@ -44,4 +44,8 @@ object Constants {
 
     const val CLIPBOARD_TAG_ARTICLE_SHARE_LINK = "article_share_link"
     const val CLIPBOARD_TAG_WEB_URL = "web_url"
+
+    const val PLAY_MODE_SEQUENTIAL_PLAYBACK = 0
+    const val PLAY_MODE_SHUFFLE_PLAYBACK = 1
+    const val PLAY_MODE_REPEAT_MODE_ONE = 2
 }

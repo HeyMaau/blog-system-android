@@ -132,6 +132,9 @@ class AudioPlayerActivity : BaseActivity() {
                         onClickPre = {
                             audioViewModel.playPre()
                         },
+                        onPlayModeChange = {
+                            audioViewModel.changePlayMode(it)
+                        },
                         playState = playState.value,
                         modifier = Modifier.padding(bottom = 24.dp)
                     )

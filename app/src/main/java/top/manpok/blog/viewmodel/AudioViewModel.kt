@@ -33,7 +33,7 @@ class AudioViewModel : ViewModel() {
 
     private val TAG = "AudioViewModel"
 
-    private val audioList = mutableListOf<BlogAudio.Data?>()
+    val audioList = mutableListOf<BlogAudio.Data?>()
 
     private val exoPlayer: ExoPlayer by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
         ExoPlayer.Builder(BaseApplication.getApplication()).build()

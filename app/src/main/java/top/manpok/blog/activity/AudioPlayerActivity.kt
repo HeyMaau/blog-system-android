@@ -148,7 +148,7 @@ class AudioPlayerActivity : BaseActivity() {
                         modifier = Modifier.padding(bottom = 24.dp)
                     )
                     if (showPlayListDialog) {
-                        AudioPlayListDialog(onDismiss = {
+                        AudioPlayListDialog(data = audioViewModel.audioList, onDismiss = {
                             showPlayListDialog = false
                         }, modifier = Modifier.fillMaxWidth())
                     }

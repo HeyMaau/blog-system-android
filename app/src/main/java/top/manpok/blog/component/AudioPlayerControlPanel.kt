@@ -95,10 +95,13 @@ fun AudioPlayerControlPanel(
                 tint = Color.White,
                 modifier = Modifier
                     .size(16.dp)
-                    .clickable {
-                        val tempPlayMode: Int = (playMode + 1) % 3
-                        onPlayModeChange(tempPlayMode)
-                    }
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null,
+                        onClick = {
+                            val tempPlayMode: Int = (playMode + 1) % 3
+                            onPlayModeChange(tempPlayMode)
+                        })
             )
             Icon(
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_skip_previous),
@@ -139,7 +142,10 @@ fun AudioPlayerControlPanel(
                     tint = Color.White,
                     modifier = Modifier
                         .size(48.dp)
-                        .clickable { onClickPlay() }
+                        .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null,
+                            onClick = { onClickPlay() })
                 )
             }
             Icon(
@@ -160,9 +166,12 @@ fun AudioPlayerControlPanel(
                 tint = Color.White,
                 modifier = Modifier
                     .size(16.dp)
-                    .clickable {
-                        onPlayListClick()
-                    }
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null,
+                        onClick = {
+                            onPlayListClick()
+                        })
             )
         }
     }

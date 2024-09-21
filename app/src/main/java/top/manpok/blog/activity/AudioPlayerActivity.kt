@@ -19,7 +19,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -37,7 +36,6 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.drawable.toBitmap
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.palette.graphics.Palette
 import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
@@ -48,6 +46,7 @@ import top.manpok.blog.R
 import top.manpok.blog.component.AudioPlayListDialog
 import top.manpok.blog.component.AudioPlayerControlPanel
 import top.manpok.blog.viewmodel.AudioViewModel
+import top.manpok.blog.viewmodel.GlobalViewModelManager
 
 class AudioPlayerActivity : BaseActivity() {
 
@@ -58,15 +57,9 @@ class AudioPlayerActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val audioViewModel: AudioViewModel = viewModel()
+            val audioViewModel: AudioViewModel = GlobalViewModelManager.audioViewModel
 
             val playState = audioViewModel.playState.collectAsState()
-
-            DisposableEffect(key1 = Unit) {
-                onDispose {
-                    audioViewModel.onDestroy()
-                }
-            }
 
             GetPalette(url = audioViewModel.currentAudioCover)
             Box {
@@ -88,7 +81,7 @@ class AudioPlayerActivity : BaseActivity() {
                                 .clickable(interactionSource = remember { MutableInteractionSource() },
                                     indication = null,
                                     onClick = {
-                                        moveTaskToBack(true)
+                                        finish()
                                     })
                         )
                     }

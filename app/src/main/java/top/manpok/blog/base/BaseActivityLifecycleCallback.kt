@@ -1,5 +1,6 @@
 package top.manpok.blog.base
 
+import android.animation.ObjectAnimator
 import android.app.Activity
 import android.app.Application.ActivityLifecycleCallbacks
 import android.os.Bundle
@@ -8,7 +9,10 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.View.OnTouchListener
 import android.view.ViewGroup
+import android.view.animation.LinearInterpolator
+import android.widget.ImageView
 import top.manpok.blog.R
+import top.manpok.blog.utils.DensityUtil
 
 class BaseActivityLifecycleCallback : ActivityLifecycleCallbacks {
 
@@ -79,12 +83,17 @@ class BaseActivityLifecycleCallback : ActivityLifecycleCallbacks {
                 return false
             }
         })
-        floatingWindow.x = 500F
-        floatingWindow.y = 500F
+        floatingWindow.y = (activity.resources.displayMetrics.heightPixels / 2).toFloat()
         val layoutParams = ViewGroup.LayoutParams(
-            200,
-            200
+            DensityUtil.dpToPx(activity, 50F),
+            DensityUtil.dpToPx(activity, 40F)
         )
         contentView.addView(floatingWindow, layoutParams)
+        val icMusic = floatingWindow.findViewById<ImageView>(R.id.ic_music)
+        val animator = ObjectAnimator.ofFloat(icMusic, "rotation", 0f, 360f)
+        animator.interpolator = LinearInterpolator()
+        animator.duration = 3000
+        animator.repeatCount = android.animation.ValueAnimator.INFINITE
+        animator.start()
     }
 }

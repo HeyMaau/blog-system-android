@@ -1,6 +1,7 @@
 package top.manpok.blog.base
 
 import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
 import android.app.Activity
 import android.app.Application.ActivityLifecycleCallbacks
 import android.os.Bundle
@@ -9,14 +10,13 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.View.OnTouchListener
 import android.view.ViewGroup
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.LinearInterpolator
 import android.widget.ImageView
 import top.manpok.blog.R
 import top.manpok.blog.utils.DensityUtil
 
 class BaseActivityLifecycleCallback : ActivityLifecycleCallbacks {
-
-    private lateinit var floatingWindow: View
 
     override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
     }
@@ -49,7 +49,12 @@ class BaseActivityLifecycleCallback : ActivityLifecycleCallbacks {
         val contentView = activity.window.decorView.findViewById<ViewGroup>(android.R.id.content)
         val floatingWindow =
             LayoutInflater.from(activity).inflate(R.layout.audio_floating_window, null)
-        floatingWindow.setOnClickListener { }
+        floatingWindow.setOnClickListener {
+            setWidthAnimation(activity, floatingWindow, 50F, 120F)
+            floatingWindow.postDelayed({
+                setWidthAnimation(activity, floatingWindow, 120F, 50F)
+            }, 2000)
+        }
         floatingWindow.setOnTouchListener(object : OnTouchListener {
 
             private var x = 0
@@ -88,12 +93,32 @@ class BaseActivityLifecycleCallback : ActivityLifecycleCallbacks {
             DensityUtil.dpToPx(activity, 50F),
             DensityUtil.dpToPx(activity, 40F)
         )
+        floatingWindow.id = R.id.id_floating_window
         contentView.addView(floatingWindow, layoutParams)
         val icMusic = floatingWindow.findViewById<ImageView>(R.id.ic_music)
         val animator = ObjectAnimator.ofFloat(icMusic, "rotation", 0f, 360f)
         animator.interpolator = LinearInterpolator()
         animator.duration = 3000
-        animator.repeatCount = android.animation.ValueAnimator.INFINITE
+        animator.repeatCount = ValueAnimator.INFINITE
         animator.start()
+
+        val icClose = floatingWindow.findViewById<ImageView>(R.id.ic_close)
+        icClose.setOnClickListener {
+            contentView.removeView(floatingWindow)
+        }
+    }
+
+    private fun setWidthAnimation(activity: Activity, view: View, start: Float, end: Float) {
+        val valueAnimator = ValueAnimator.ofInt(
+            DensityUtil.dpToPx(activity, start),
+            DensityUtil.dpToPx(activity, end)
+        )
+        valueAnimator.duration = 200
+        valueAnimator.interpolator = AccelerateDecelerateInterpolator()
+        valueAnimator.addUpdateListener {
+            view.layoutParams.width = valueAnimator.animatedValue as Int
+            view.requestLayout()
+        }
+        valueAnimator.start()
     }
 }

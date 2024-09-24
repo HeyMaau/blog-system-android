@@ -34,7 +34,7 @@ class BaseActivityLifecycleCallback : ActivityLifecycleCallbacks {
     }
 
     override fun onActivityStopped(activity: Activity) {
-
+        removeFloatingWindow(activity)
     }
 
     override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {
@@ -43,6 +43,14 @@ class BaseActivityLifecycleCallback : ActivityLifecycleCallbacks {
 
     override fun onActivityDestroyed(activity: Activity) {
 
+    }
+
+    private fun removeFloatingWindow(activity: Activity) {
+        val contentView = activity.window.decorView.findViewById<ViewGroup>(android.R.id.content)
+        val floatingWindow = contentView.findViewById<View>(R.id.id_floating_window)
+        if (floatingWindow != null) {
+            contentView.removeView(floatingWindow)
+        }
     }
 
     private fun addFloatingWindow(activity: Activity) {

@@ -14,6 +14,7 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.LinearInterpolator
 import android.widget.ImageView
 import top.manpok.blog.R
+import top.manpok.blog.activity.AudioPlayerActivity
 import top.manpok.blog.utils.DensityUtil
 
 class BaseActivityLifecycleCallback : ActivityLifecycleCallbacks {
@@ -26,7 +27,9 @@ class BaseActivityLifecycleCallback : ActivityLifecycleCallbacks {
     }
 
     override fun onActivityResumed(activity: Activity) {
-        addFloatingWindow(activity)
+        if (activity !is AudioPlayerActivity) {
+            addFloatingWindow(activity)
+        }
     }
 
     override fun onActivityPaused(activity: Activity) {

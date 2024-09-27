@@ -17,17 +17,26 @@ class ShareViewModel : ViewModel() {
         } else {
             Constants.BASE_ARTICLE_SHARE_LINK_DEV + id
         }
-        val clipboardManager =
-            context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        val clipData = ClipData.newPlainText(Constants.CLIPBOARD_TAG_ARTICLE_SHARE_LINK, link)
-        clipboardManager.setPrimaryClip(clipData)
-        ToastUtil.showShortToast(R.string.already_copy_to_clipboard)
+        write2Clipboard(context, link)
     }
 
     fun copyWebUrl(context: Context, url: String) {
+        write2Clipboard(context, url)
+    }
+
+    fun copyThinkingShareLink(context: Context, id: String) {
+        val link: String = if (TempData.currentEnv == Constants.ENV_PROD) {
+            Constants.BASE_THINKING_SHARE_LINK + id
+        } else {
+            Constants.BASE_THINKING_SHARE_LINK_DEV + id
+        }
+        write2Clipboard(context, link)
+    }
+
+    private fun write2Clipboard(context: Context, link: String) {
         val clipboardManager =
             context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        val clipData = ClipData.newPlainText(Constants.CLIPBOARD_TAG_WEB_URL, url)
+        val clipData = ClipData.newPlainText(Constants.CLIPBOARD_TAG_ARTICLE_SHARE_LINK, link)
         clipboardManager.setPrimaryClip(clipData)
         ToastUtil.showShortToast(R.string.already_copy_to_clipboard)
     }

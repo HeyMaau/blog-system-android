@@ -49,6 +49,7 @@ import top.manpok.blog.component.FloatingHeader
 import top.manpok.blog.utils.Constants
 import top.manpok.blog.utils.TempData
 import top.manpok.blog.viewmodel.CommentViewModel
+import top.manpok.blog.viewmodel.ShareViewModel
 
 class ThinkingDetailActivity : BaseActivity() {
 
@@ -71,6 +72,7 @@ class ThinkingDetailActivity : BaseActivity() {
         val splitImage = images?.split("-")
         setContent {
             val commentViewModel: CommentViewModel = viewModel()
+            val shareViewModel: ShareViewModel = viewModel()
             var showCommentBottomDialog by remember {
                 mutableStateOf(false)
             }
@@ -123,8 +125,16 @@ class ThinkingDetailActivity : BaseActivity() {
                     CommonHeader(
                         title = intent.getStringExtra(INTENT_KEY_THINKING_TITLE),
                         leftIcon = R.drawable.ic_arrow_back,
-                        rightIcon = null,
+                        rightIcon = R.drawable.ic_more,
                         leftIconClick = { finish() },
+                        onShareClick = {
+                            if (id != null) {
+                                shareViewModel.copyThinkingShareLink(
+                                    this@ThinkingDetailActivity,
+                                    id
+                                )
+                            }
+                        },
                         modifier = Modifier.onGloballyPositioned {
                             commonHeaderHeight = it.size.height
                         })
@@ -236,9 +246,17 @@ class ThinkingDetailActivity : BaseActivity() {
                 if (showFloatingHeader) {
                     FloatingHeader(
                         leftIcon = R.drawable.ic_arrow_back,
-                        rightIcon = null,
+                        rightIcon = R.drawable.ic_more,
                         leftIconClick = {
                             finish()
+                        },
+                        onShareClick = {
+                            if (id != null) {
+                                shareViewModel.copyThinkingShareLink(
+                                    this@ThinkingDetailActivity,
+                                    id
+                                )
+                            }
                         },
                         modifier = Modifier
                             .statusBarsPadding()

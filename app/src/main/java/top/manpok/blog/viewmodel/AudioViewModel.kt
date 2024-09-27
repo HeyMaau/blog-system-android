@@ -10,7 +10,13 @@ import androidx.lifecycle.viewModelScope
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
+import androidx.media3.database.StandaloneDatabaseProvider
+import androidx.media3.datasource.DefaultHttpDataSource
+import androidx.media3.datasource.cache.CacheDataSource
+import androidx.media3.datasource.cache.LeastRecentlyUsedCacheEvictor
+import androidx.media3.datasource.cache.SimpleCache
 import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,17 +34,37 @@ import top.manpok.blog.pojo.BlogAudio
 import top.manpok.blog.utils.Constants
 import top.manpok.blog.utils.LogUtil
 import top.manpok.blog.utils.ToastUtil
+import java.io.File
 
 class AudioViewModel : ViewModel() {
 
     private val TAG = "AudioViewModel"
 
-    val audioList = mutableListOf<BlogAudio.Data?>()
-
-    private val exoPlayer: ExoPlayer by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
-        ExoPlayer.Builder(BaseApplication.getApplication()).build()
+    private val databaseProvider by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
+        StandaloneDatabaseProvider(BaseApplication.getApplication())
     }
 
+    private val exoPlayer: ExoPlayer by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
+        val downloadDirectory =
+            File(BaseApplication.getApplication().externalCacheDir, "AudioCache")
+        val cache =
+            SimpleCache(
+                downloadDirectory,
+                LeastRecentlyUsedCacheEvictor(Constants.MAX_AUDIO_CACHE_SIZE),
+                databaseProvider
+            )
+        val cacheDataSourceFactory =
+            CacheDataSource.Factory()
+                .setCache(cache)
+                .setUpstreamDataSourceFactory(DefaultHttpDataSource.Factory())
+        ExoPlayer.Builder(BaseApplication.getApplication()).setMediaSourceFactory(
+            DefaultMediaSourceFactory(BaseApplication.getApplication()).setDataSourceFactory(
+                cacheDataSourceFactory
+            )
+        ).build()
+    }
+
+    val audioList = mutableListOf<BlogAudio.Data?>()
     var currentIndex by mutableIntStateOf(0)
     var currentAudioName by mutableStateOf("")
     var currentAudioArtist by mutableStateOf("")

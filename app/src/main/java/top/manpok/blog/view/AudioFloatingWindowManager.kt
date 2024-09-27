@@ -29,6 +29,10 @@ object AudioFloatingWindowManager {
 
     private var statusBarHeight = 0
     private var currentY = 0
+    
+    private val COLLAPSE_WIDTH_DP = 60F
+    private val EXPAND_WIDTH_DP = 130F
+    private val HEIGHT_DP = 40F
 
     sealed class ExpandState {
         data object Expand : ExpandState()
@@ -47,11 +51,11 @@ object AudioFloatingWindowManager {
         floatingWindow.y =
             if (currentY == 0) (activity.resources.displayMetrics.heightPixels / 2).toFloat() else currentY.toFloat()
         floatingWindow.x =
-            if (reverse) (screenWidth - DensityUtil.dpToPx(activity, 50F)).toFloat() else 0F
+            if (reverse) (screenWidth - DensityUtil.dpToPx(activity, COLLAPSE_WIDTH_DP)).toFloat() else 0F
         reverseView(reverse, floatingWindow, floatingWindow.findViewById(R.id.ic_ctrl))
         val layoutParams = ViewGroup.LayoutParams(
-            DensityUtil.dpToPx(activity, 50F),
-            DensityUtil.dpToPx(activity, 40F)
+            DensityUtil.dpToPx(activity, COLLAPSE_WIDTH_DP),
+            DensityUtil.dpToPx(activity, HEIGHT_DP)
         )
         floatingWindow.id = R.id.id_floating_window
         contentView.addView(floatingWindow, layoutParams)
@@ -83,7 +87,7 @@ object AudioFloatingWindowManager {
         val icCtrl = floatingWindow.findViewById<ImageView>(R.id.ic_ctrl)
 
         val collapseRunnable = Runnable {
-            setWidthAnimation(activity, floatingWindow, 120F, 50F)
+            setWidthAnimation(activity, floatingWindow, EXPAND_WIDTH_DP, COLLAPSE_WIDTH_DP)
             expandState = ExpandState.Collapse
         }
 
@@ -91,8 +95,8 @@ object AudioFloatingWindowManager {
             setWidthAnimationReverse(
                 activity,
                 floatingWindow,
-                120F,
-                50F
+                EXPAND_WIDTH_DP,
+                COLLAPSE_WIDTH_DP
             )
             expandState = ExpandState.Collapse
         }
@@ -238,9 +242,9 @@ object AudioFloatingWindowManager {
             return
         }
         if (reverse) {
-            setWidthAnimationReverse(activity, view, 50F, 120F)
+            setWidthAnimationReverse(activity, view, COLLAPSE_WIDTH_DP, EXPAND_WIDTH_DP)
         } else {
-            setWidthAnimation(activity, view, 50F, 120F)
+            setWidthAnimation(activity, view, COLLAPSE_WIDTH_DP, EXPAND_WIDTH_DP)
         }
         expandState = ExpandState.Expand
         view.postDelayed(if (reverse) collapseRunnableReverse else collapseRunnable, 2000)

@@ -1,6 +1,9 @@
 package top.manpok.blog.utils
 
+import android.app.Activity
 import android.content.Context
+import android.graphics.Rect
+import android.view.Window
 
 object DensityUtil {
 
@@ -20,5 +23,12 @@ object DensityUtil {
     fun pxToDp(context: Context, pxValue: Float): Int {
         val scale: Float = context.resources.displayMetrics.density
         return (pxValue / scale + 0.5f).toInt()
+    }
+
+    fun getStatusBarHeight(activity: Activity): Int {
+        val rectangle = Rect()
+        val window: Window = activity.window
+        window.decorView.getWindowVisibleDisplayFrame(rectangle)
+        return rectangle.top
     }
 }

@@ -27,12 +27,16 @@ object AudioFloatingWindowManager {
     private var screenWidth: Int = 0
     private var reverse = false
 
+    private var statusBarHeight = 0
+    private var currentY = 0
+
     sealed class ExpandState {
         data object Expand : ExpandState()
         data object Collapse : ExpandState()
     }
 
     fun addFloatingWindow(activity: Activity) {
+        statusBarHeight = DensityUtil.getStatusBarHeight(activity)
         val contentView = activity.window.decorView.findViewById<ViewGroup>(android.R.id.content)
         val floatingWindow =
             LayoutInflater.from(activity).inflate(R.layout.audio_floating_window, null)
@@ -40,7 +44,11 @@ object AudioFloatingWindowManager {
         val rotationAnimator = setRotationAnimator(icMusic)
         screenWidth = activity.resources.displayMetrics.widthPixels
         setListener(activity, floatingWindow, rotationAnimator)
-        floatingWindow.y = (activity.resources.displayMetrics.heightPixels / 2).toFloat()
+        floatingWindow.y =
+            if (currentY == 0) (activity.resources.displayMetrics.heightPixels / 2).toFloat() else currentY.toFloat()
+        floatingWindow.x =
+            if (reverse) (screenWidth - DensityUtil.dpToPx(activity, 50F)).toFloat() else 0F
+        reverseView(reverse, floatingWindow, floatingWindow.findViewById(R.id.ic_ctrl))
         val layoutParams = ViewGroup.LayoutParams(
             DensityUtil.dpToPx(activity, 50F),
             DensityUtil.dpToPx(activity, 40F)
@@ -56,7 +64,6 @@ object AudioFloatingWindowManager {
             contentView.removeView(floatingWindow)
         }
         expandState = ExpandState.Collapse
-        reverse = false
     }
 
     private fun setRotationAnimator(view: View): ObjectAnimator {
@@ -120,6 +127,9 @@ object AudioFloatingWindowManager {
                         floatingWindow.apply {
                             x += movedX
                             y += movedY
+                            if (y <= statusBarHeight) {
+                                y = statusBarHeight.toFloat()
+                            }
                         }
                     }
 
@@ -134,6 +144,7 @@ object AudioFloatingWindowManager {
                             return true
                         }
                         val floatingWindowX = floatingWindow.x
+                        currentY = floatingWindow.y.toInt()
                         if (floatingWindowX < 0 || floatingWindowX <= screenWidth / 2) {
                             reverseView(false, floatingWindow, icCtrl)
                             reverse = false

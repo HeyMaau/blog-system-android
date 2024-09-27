@@ -2,6 +2,9 @@ package top.manpok.blog.activity
 
 import android.os.Bundle
 import androidx.activity.compose.setContent
+import androidx.compose.animation.Animatable
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -19,6 +22,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -29,7 +33,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
@@ -43,6 +46,7 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.size.Size
 import top.manpok.blog.R
+import top.manpok.blog.base.BaseApplication
 import top.manpok.blog.component.AudioPlayListDialog
 import top.manpok.blog.component.AudioPlayerControlPanel
 import top.manpok.blog.viewmodel.AudioViewModel
@@ -52,7 +56,10 @@ class AudioPlayerActivity : BaseActivity() {
 
     private val TAG = "AudioPlayerActivity"
 
-    private var backgroundColor by mutableIntStateOf(Color.White.toArgb())
+    private var backgroundColor by mutableIntStateOf(
+        BaseApplication.getApplication().getColor(R.color.purple_5068a0)
+    )
+    private var animatableBackgroundColor = Animatable(Color(backgroundColor))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,12 +69,18 @@ class AudioPlayerActivity : BaseActivity() {
             val playState = audioViewModel.playState.collectAsState()
 
             GetPalette(url = audioViewModel.currentAudioCover)
+            LaunchedEffect(key1 = backgroundColor) {
+                animatableBackgroundColor.animateTo(
+                    targetValue = Color(backgroundColor),
+                    animationSpec = tween(durationMillis = 500, easing = LinearEasing)
+                )
+            }
             Box {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(Color(backgroundColor))
+                        .background(animatableBackgroundColor.value)
                         .statusBarsPadding()
                         .padding(horizontal = 12.dp)
                 ) {
@@ -178,9 +191,9 @@ class AudioPlayerActivity : BaseActivity() {
                 (painter.state as AsyncImagePainter.State.Success).result.drawable.toBitmap()
             Palette.from(bitmap).generate {
                 var defaultColor: Int
-                defaultColor = it?.getMutedColor(Color.DarkGray.toArgb())!!
-                if (defaultColor == Color.DarkGray.toArgb()) {
-                    defaultColor = it.getDarkVibrantColor(Color.DarkGray.toArgb())
+                defaultColor = it?.getMutedColor(this.getColor(R.color.purple_5068a0))!!
+                if (defaultColor == this.getColor(R.color.purple_5068a0)) {
+                    defaultColor = it.getDarkVibrantColor(this.getColor(R.color.purple_5068a0))
                 }
                 backgroundColor = defaultColor
             }

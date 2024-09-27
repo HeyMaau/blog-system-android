@@ -66,7 +66,7 @@ fun UpdateDialog(
                 if (changeLog != null) {
                     Spacer(modifier = Modifier.height(12.dp))
                     Text(
-                        text = changeLog,
+                        text = changeLog.replace("\\n", "\n"),
                         modifier = Modifier.align(Alignment.Start)
                     )
                 }

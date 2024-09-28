@@ -25,7 +25,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
@@ -49,6 +52,7 @@ fun AudioPlayerControlPanel(
     modifier: Modifier = Modifier,
     playMode: Int = Constants.PLAY_MODE_SEQUENTIAL_PLAYBACK,
     onValueChange: (Float) -> Unit,
+    onValueChangeFinished: (Float) -> Unit,
     onClickPlay: () -> Unit,
     onClickNext: () -> Unit,
     onClickPre: () -> Unit,
@@ -56,6 +60,12 @@ fun AudioPlayerControlPanel(
     onPlayListClick: () -> Unit,
     playState: AudioViewModel.PlayState
 ) {
+    var progress by remember {
+        mutableFloatStateOf(0F)
+    }
+    var changing by remember {
+        mutableStateOf(false)
+    }
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -63,8 +73,16 @@ fun AudioPlayerControlPanel(
     ) {
         CompositionLocalProvider(LocalMinimumInteractiveComponentEnforcement provides false) {
             Slider(
-                value = value,
-                onValueChange = onValueChange,
+                value = if (!changing) value else progress,
+                onValueChange = {
+                    changing = true
+                    onValueChange(it)
+                    progress = it
+                },
+                onValueChangeFinished = {
+                    onValueChangeFinished(progress)
+                    changing = false
+                },
                 valueRange = 0f..maxValue,
                 colors = SliderDefaults.colors(
                     activeTrackColor = Color.White,
@@ -191,6 +209,7 @@ private fun PreviewAudioPlayerControlPanel() {
         onClickNext = {},
         onClickPre = {},
         onPlayListClick = {},
-        onPlayModeChange = {}
+        onPlayModeChange = {},
+        onValueChangeFinished = {}
     )
 }

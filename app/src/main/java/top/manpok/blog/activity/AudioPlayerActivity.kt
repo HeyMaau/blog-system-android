@@ -137,6 +137,9 @@ class AudioPlayerActivity : BaseActivity() {
                         position = audioViewModel.currentAudioPositionStr,
                         playMode = audioViewModel.currentPlayMode,
                         onValueChange = {
+                            audioViewModel.currentAudioPosition = it.toLong()
+                        },
+                        onValueChangeFinished = {
                             audioViewModel.seekTo(it.toLong())
                         },
                         onClickPlay = {

@@ -39,6 +39,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.drawable.toBitmap
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.palette.graphics.Palette
 import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
@@ -63,6 +64,8 @@ class AudioPlayerActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val windowInsetsControllerCompat = WindowInsetsControllerCompat(window, window.decorView)
+        windowInsetsControllerCompat.isAppearanceLightStatusBars = false
         setContent {
             val audioViewModel: AudioViewModel = GlobalViewModelManager.audioViewModel
 

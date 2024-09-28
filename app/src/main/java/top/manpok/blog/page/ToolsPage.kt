@@ -135,7 +135,7 @@ fun ToolsPage(
                         item {
                             ActivityEntranceItem(
                                 showSkeleton = friendLinkViewModel.showSkeleton,
-                                logo = R.drawable.thinking_default,
+                                logo = R.drawable.ic_audio_player,
                                 name = stringResource(id = R.string.audio_player_entrance),
                                 modifier = Modifier
                                     .padding(

@@ -71,7 +71,7 @@
     <string name="copy_share_link">复制链接</string>
     <string name="already_copy_to_clipboard">已复制到剪贴板</string>
 
-    <string name="audio_player_entrance">来一首吗</string>
+    <string name="audio_player_entrance">来一曲吗</string>
     <string name="play_audio_error">播放音频失败</string>
     <string name="no_next_audio">没有下一首了</string>
     <string name="no_pre_audio">已经是第一首了</string>

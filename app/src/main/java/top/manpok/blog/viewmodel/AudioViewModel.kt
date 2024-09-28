@@ -84,6 +84,7 @@ class AudioViewModel : ViewModel() {
 
     private var isPrepare = false
     private var initFirstAudio = false
+    private var isEnd = false
 
     init {
         getAudioList()
@@ -134,6 +135,10 @@ class AudioViewModel : ViewModel() {
                         initFirstAudio = true
                     }
                     setAudioDuration(exoPlayer.duration)
+                }
+                if (playbackState == Player.STATE_ENDED) {
+                    _playState.value = PlayState.Stop
+                    isEnd = true
                 }
             }
 
@@ -196,7 +201,12 @@ class AudioViewModel : ViewModel() {
         } else {
             _playState.value = PlayState.Playing
         }
-        exoPlayer.play()
+        if (!isEnd) {
+            exoPlayer.play()
+        } else {
+            exoPlayer.seekTo(exoPlayer.currentMediaItemIndex, 0)
+            isEnd = false
+        }
     }
 
     fun playNext() {

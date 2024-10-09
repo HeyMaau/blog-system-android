@@ -82,6 +82,7 @@ dependencies {
     implementation(libs.okhttp3.logging.interceptor)
     implementation(libs.coil)
     implementation(libs.room.runtime)
+    implementation(libs.androidx.media3.session)
     ksp(libs.room.compiler)
     implementation(libs.room.ktx)
     implementation(libs.jsoup)

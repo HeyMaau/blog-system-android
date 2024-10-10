@@ -1,7 +1,12 @@
 package top.manpok.blog.activity
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.compose.animation.Animatable
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
@@ -38,6 +43,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.palette.graphics.Palette
@@ -50,12 +57,26 @@ import top.manpok.blog.R
 import top.manpok.blog.base.BaseApplication
 import top.manpok.blog.component.AudioPlayListDialog
 import top.manpok.blog.component.AudioPlayerControlPanel
+import top.manpok.blog.utils.TempData
+import top.manpok.blog.utils.ToastUtil
 import top.manpok.blog.viewmodel.AudioViewModel
 import top.manpok.blog.viewmodel.GlobalViewModelManager
 
 class AudioPlayerActivity : BaseActivity() {
 
     private val TAG = "AudioPlayerActivity"
+
+    private val requestPermissionLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted: Boolean ->
+            if (isGranted) {
+                TempData.hasNotificationPermission = true
+            } else {
+                ToastUtil.showShortToast(R.string.notification_permission_for_audio_player)
+                TempData.hasNotificationPermission = false
+            }
+        }
 
     private var backgroundColor by mutableIntStateOf(
         BaseApplication.getApplication().getColor(R.color.purple_5068a0)
@@ -180,6 +201,9 @@ class AudioPlayerActivity : BaseActivity() {
                 }
             }
         }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            checkNotificationPermission()
+        }
     }
 
     @Composable
@@ -202,6 +226,30 @@ class AudioPlayerActivity : BaseActivity() {
                     defaultColor = it.getDarkVibrantColor(this.getColor(R.color.purple_5068a0))
                 }
                 backgroundColor = defaultColor
+            }
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private fun checkNotificationPermission() {
+        when {
+            ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) == PackageManager.PERMISSION_GRANTED -> {
+                TempData.hasNotificationPermission = true
+            }
+
+            ActivityCompat.shouldShowRequestPermissionRationale(
+                this, Manifest.permission.POST_NOTIFICATIONS
+            ) -> {
+                ToastUtil.showShortToast(R.string.notification_permission_for_audio_player)
+            }
+
+            else -> {
+                requestPermissionLauncher.launch(
+                    Manifest.permission.POST_NOTIFICATIONS
+                )
             }
         }
     }

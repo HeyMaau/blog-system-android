@@ -40,6 +40,7 @@ import top.manpok.blog.pojo.BaseResponse
 import top.manpok.blog.pojo.BlogAudio
 import top.manpok.blog.utils.Constants
 import top.manpok.blog.utils.LogUtil
+import top.manpok.blog.utils.TempData
 import top.manpok.blog.utils.ToastUtil
 import java.io.File
 
@@ -241,7 +242,9 @@ class AudioViewModel : ViewModel() {
     }
 
     fun playOrPauseAudio() {
-        notificationManager.notify(0, notification)
+        if (TempData.hasNotificationPermission) {
+            notificationManager.notify(0, notification)
+        }
         checkPrepare()
         if (exoPlayer.isPlaying) {
             exoPlayer.pause()

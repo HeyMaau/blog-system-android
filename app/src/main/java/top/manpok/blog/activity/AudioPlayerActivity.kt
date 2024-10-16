@@ -209,7 +209,6 @@ class AudioPlayerActivity : BaseActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             checkNotificationPermission()
         }
-        startMusicService()
     }
 
     @Composable
@@ -225,6 +224,10 @@ class AudioPlayerActivity : BaseActivity() {
         if (painter.state is AsyncImagePainter.State.Success) {
             val bitmap =
                 (painter.state as AsyncImagePainter.State.Success).result.drawable.toBitmap()
+            if (TempData.hasNotificationPermission) {
+                GlobalViewModelManager.audioViewModel.currentCoverBitmap = bitmap
+                startAudioService()
+            }
             Palette.from(bitmap).generate {
                 var defaultColor: Int
                 defaultColor = it?.getMutedColor(this.getColor(R.color.purple_5068a0))!!
@@ -244,6 +247,7 @@ class AudioPlayerActivity : BaseActivity() {
                 Manifest.permission.POST_NOTIFICATIONS
             ) == PackageManager.PERMISSION_GRANTED -> {
                 TempData.hasNotificationPermission = true
+                startAudioService()
             }
 
             ActivityCompat.shouldShowRequestPermissionRationale(
@@ -261,7 +265,7 @@ class AudioPlayerActivity : BaseActivity() {
     }
 
     @OptIn(UnstableApi::class)
-    private fun startMusicService() {
+    private fun startAudioService() {
         val intent = Intent(this, AudioService::class.java)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             startForegroundService(intent)

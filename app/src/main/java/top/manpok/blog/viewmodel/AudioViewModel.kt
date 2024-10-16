@@ -1,5 +1,6 @@
 package top.manpok.blog.viewmodel
 
+import android.graphics.Bitmap
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableLongStateOf
@@ -82,8 +83,9 @@ class AudioViewModel : ViewModel() {
     var currentAudioPosition by mutableLongStateOf(0)
     var currentAudioPositionStr by mutableStateOf("00:00")
     var currentPlayMode by mutableIntStateOf(Constants.PLAY_MODE_SEQUENTIAL_PLAYBACK)
+    var currentCoverBitmap: Bitmap? by mutableStateOf(null)
 
-    var currentTimerJob: Job? = null
+    private var currentTimerJob: Job? = null
 
 
     private var _playState = MutableStateFlow<PlayState>(PlayState.Stop)

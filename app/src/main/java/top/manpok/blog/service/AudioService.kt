@@ -9,6 +9,7 @@ import android.content.Intent
 import android.content.pm.ServiceInfo
 import android.os.Build
 import android.os.IBinder
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.session.MediaStyleNotificationHelper
@@ -16,6 +17,7 @@ import top.manpok.blog.R
 import top.manpok.blog.base.BaseApplication
 import top.manpok.blog.utils.Constants
 import top.manpok.blog.viewmodel.GlobalViewModelManager
+import top.manpok.blog.viewmodel.GlobalViewModelManager.audioViewModel
 
 @UnstableApi
 class AudioService : Service() {
@@ -26,6 +28,7 @@ class AudioService : Service() {
 
     private val notificationBuilder by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
         val application = BaseApplication.getApplication()
+        val audioViewModel = GlobalViewModelManager.audioViewModel
         val mediaSession = GlobalViewModelManager.audioViewModel.mediaSession
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -62,9 +65,10 @@ class AudioService : Service() {
             NotificationCompat.Builder(
                 BaseApplication.getApplication(),
                 Constants.NOTIFICATION_CHANNEL_ID_AUDIO
-            ).setContentTitle("Havana(feat.Young Thug")
-                .setContentText("Camila Cabello - Havana")
-                .setSmallIcon(R.drawable.ic_pause_floating)
+            ).setContentTitle(audioViewModel.currentAudioName)
+                .setContentText(audioViewModel.currentAudioArtist)
+                .setSmallIcon(R.mipmap.logo_about)
+                .setLargeIcon(audioViewModel.currentCoverBitmap)
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                 .setOngoing(true)
                 .addAction(R.drawable.ic_skip_previous, "Play previous", pendingPreIntent)
@@ -98,9 +102,10 @@ class AudioService : Service() {
 
             NotificationCompat.Builder(
                 BaseApplication.getApplication(),
-            ).setContentTitle("Havana(feat.Young Thug")
-                .setContentText("Camila Cabello - Havana")
-                .setSmallIcon(R.drawable.ic_pause_floating)
+            ).setContentTitle(audioViewModel.currentAudioName)
+                .setContentText(audioViewModel.currentAudioArtist)
+                .setSmallIcon(R.mipmap.logo_about)
+                .setLargeIcon(audioViewModel.currentCoverBitmap)
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                 .setOngoing(true)
                 .addAction(R.drawable.ic_skip_previous, "Play previous", pendingPreIntent)
@@ -119,6 +124,18 @@ class AudioService : Service() {
 
     override fun onCreate() {
         super.onCreate()
+        updateNotification()
+    }
+
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        updateNotification()
+        return super.onStartCommand(intent, flags, startId)
+    }
+
+    private fun updateNotification() {
+        notificationBuilder.setContentTitle(audioViewModel.currentAudioName)
+            .setContentText(audioViewModel.currentAudioArtist)
+            .setLargeIcon(audioViewModel.currentCoverBitmap)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             startForeground(
                 Constants.NOTIFICATION_ID_AUDIO,

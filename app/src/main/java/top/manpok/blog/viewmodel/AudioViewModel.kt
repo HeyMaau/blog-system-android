@@ -1,20 +1,16 @@
 package top.manpok.blog.viewmodel
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.content.Context
-import android.os.Build
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.core.app.NotificationCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
+import androidx.media3.common.util.UnstableApi
 import androidx.media3.database.StandaloneDatabaseProvider
 import androidx.media3.datasource.DefaultHttpDataSource
 import androidx.media3.datasource.cache.CacheDataSource
@@ -23,7 +19,6 @@ import androidx.media3.datasource.cache.SimpleCache
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
 import androidx.media3.session.MediaSession
-import androidx.media3.session.MediaStyleNotificationHelper
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -40,56 +35,16 @@ import top.manpok.blog.pojo.BaseResponse
 import top.manpok.blog.pojo.BlogAudio
 import top.manpok.blog.utils.Constants
 import top.manpok.blog.utils.LogUtil
-import top.manpok.blog.utils.TempData
 import top.manpok.blog.utils.ToastUtil
 import java.io.File
 
+@UnstableApi
 class AudioViewModel : ViewModel() {
 
     private val TAG = "AudioViewModel"
 
-    private val notificationManager by lazy {
-        BaseApplication.getApplication()
-            .getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-    }
-
-    private val notification by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
-        val application = BaseApplication.getApplication()
-        val mediaSession = MediaSession.Builder(application, exoPlayer).build()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val notificationChannel = NotificationChannel(
-                Constants.NOTIFICATION_CHANNEL_ID_AUDIO,
-                application.getString(R.string.notification_channel_audio),
-                NotificationManager.IMPORTANCE_HIGH
-            )
-            notificationManager.createNotificationChannel(notificationChannel)
-            NotificationCompat.Builder(
-                BaseApplication.getApplication(),
-                Constants.NOTIFICATION_CHANNEL_ID_AUDIO
-            ).setContentTitle("Havana(feat.Young Thug")
-                .setContentText("Camila Cabello - Havana")
-                .setSmallIcon(R.drawable.ic_pause_floating)
-                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-                .setOngoing(true)
-                .setStyle(
-                    MediaStyleNotificationHelper.MediaStyle(mediaSession)
-                        .setShowActionsInCompactView(1)
-                )
-                .build();
-        } else {
-            NotificationCompat.Builder(
-                BaseApplication.getApplication(),
-            ).setContentTitle("Havana(feat.Young Thug")
-                .setContentText("Camila Cabello - Havana")
-                .setSmallIcon(R.drawable.ic_pause_floating)
-                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-                .setOngoing(true)
-                .setStyle(
-                    MediaStyleNotificationHelper.MediaStyle(mediaSession)
-                        .setShowActionsInCompactView(1)
-                )
-                .build()
-        }
+    val mediaSession by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
+        MediaSession.Builder(BaseApplication.getApplication(), exoPlayer).build()
     }
 
     private val databaseProvider by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
@@ -242,9 +197,6 @@ class AudioViewModel : ViewModel() {
     }
 
     fun playOrPauseAudio() {
-        if (TempData.hasNotificationPermission) {
-            notificationManager.notify(0, notification)
-        }
         checkPrepare()
         if (exoPlayer.isPlaying) {
             exoPlayer.pause()

@@ -1,11 +1,13 @@
 package top.manpok.blog.activity
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.OptIn
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.Animatable
 import androidx.compose.animation.core.LinearEasing
@@ -47,6 +49,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.media3.common.util.UnstableApi
 import androidx.palette.graphics.Palette
 import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
@@ -57,6 +60,7 @@ import top.manpok.blog.R
 import top.manpok.blog.base.BaseApplication
 import top.manpok.blog.component.AudioPlayListDialog
 import top.manpok.blog.component.AudioPlayerControlPanel
+import top.manpok.blog.service.AudioService
 import top.manpok.blog.utils.TempData
 import top.manpok.blog.utils.ToastUtil
 import top.manpok.blog.viewmodel.AudioViewModel
@@ -83,6 +87,7 @@ class AudioPlayerActivity : BaseActivity() {
     )
     private var animatableBackgroundColor = Animatable(Color(backgroundColor))
 
+    @OptIn(UnstableApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val windowInsetsControllerCompat = WindowInsetsControllerCompat(window, window.decorView)
@@ -204,6 +209,7 @@ class AudioPlayerActivity : BaseActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             checkNotificationPermission()
         }
+        startMusicService()
     }
 
     @Composable
@@ -251,6 +257,16 @@ class AudioPlayerActivity : BaseActivity() {
                     Manifest.permission.POST_NOTIFICATIONS
                 )
             }
+        }
+    }
+
+    @OptIn(UnstableApi::class)
+    private fun startMusicService() {
+        val intent = Intent(this, AudioService::class.java)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(intent)
+        } else {
+            startService(intent)
         }
     }
 }

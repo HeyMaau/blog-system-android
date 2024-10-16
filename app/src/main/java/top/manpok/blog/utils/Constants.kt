@@ -53,5 +53,6 @@ object Constants {
 
     const val MAX_AUDIO_CACHE_SIZE = 1024 * 1024 * 300L
 
+    const val NOTIFICATION_ID_AUDIO = 1
     const val NOTIFICATION_CHANNEL_ID_AUDIO = "notification_channel_id_audio"
 }

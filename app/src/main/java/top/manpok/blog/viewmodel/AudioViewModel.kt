@@ -1,6 +1,8 @@
 package top.manpok.blog.viewmodel
 
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.text.TextUtils
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableLongStateOf
@@ -20,12 +22,14 @@ import androidx.media3.datasource.cache.SimpleCache
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
 import androidx.media3.session.MediaSession
+import androidx.palette.graphics.Palette
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -83,7 +87,10 @@ class AudioViewModel : ViewModel() {
     var currentAudioPosition by mutableLongStateOf(0)
     var currentAudioPositionStr by mutableStateOf("00:00")
     var currentPlayMode by mutableIntStateOf(Constants.PLAY_MODE_SEQUENTIAL_PLAYBACK)
-    var currentCoverBitmap: Bitmap? by mutableStateOf(null)
+    var currentCoverBitmap: Bitmap? = null
+    var currentBackgroundColor by mutableIntStateOf(
+        BaseApplication.getApplication().getColor(R.color.purple_5068a0)
+    )
 
     private var currentTimerJob: Job? = null
 
@@ -275,6 +282,35 @@ class AudioViewModel : ViewModel() {
         currentIndex = exoPlayer.currentMediaItemIndex
         setCurrentData(currentIndex)
         checkPrepare()
+    }
+
+    fun getCoverBitmapAndPalette(url: String?) {
+        if (TextUtils.isEmpty(url) || url == null) {
+            return;
+        }
+        BlogRetrofit.imageApi.getImageStream(url).enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                if (response.isSuccessful) {
+                    currentCoverBitmap = BitmapFactory.decodeStream(response.body()?.byteStream())
+                    if (currentCoverBitmap != null) {
+                        val context = BaseApplication.getApplication().applicationContext
+                        Palette.from(currentCoverBitmap!!).generate {
+                            var defaultColor: Int
+                            defaultColor = it?.getMutedColor(context.getColor(R.color.purple_5068a0))!!
+                            if (defaultColor == context.getColor(R.color.purple_5068a0)) {
+                                defaultColor = it.getDarkVibrantColor(context.getColor(R.color.purple_5068a0))
+                            }
+                            currentBackgroundColor = defaultColor
+                        }
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseBody>, error: Throwable) {
+                LogUtil.e(TAG, "getCoverBitmapAndPalette error: $error")
+            }
+
+        })
     }
 
     fun onDestroy() {

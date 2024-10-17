@@ -66,14 +66,13 @@ object BlogRetrofit {
             .build()
     }
 
-    private val instance: Retrofit
-        get() {
-            return if (TempData.currentEnv == 0) {
-                prodInstance
-            } else {
-                devInstance
-            }
-        }
+    private val imageInstance: Retrofit by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
+        Retrofit.Builder().baseUrl(Constants.BASE_URL)
+            .client(
+                okHttpClient.build()
+            )
+            .build()
+    }
 
     private val prodArticleApi: ArticleApi by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
         prodInstance.create(ArticleApi::class.java)
@@ -244,4 +243,8 @@ object BlogRetrofit {
                 devAudioApi
             }
         }
+
+    val imageApi: ImageApi by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
+        imageInstance.create(ImageApi::class.java)
+    }
 }

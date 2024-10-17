@@ -28,11 +28,9 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -41,23 +39,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.graphics.drawable.toBitmap
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.media3.common.util.UnstableApi
-import androidx.palette.graphics.Palette
 import coil.compose.AsyncImage
-import coil.compose.AsyncImagePainter
-import coil.compose.rememberAsyncImagePainter
-import coil.request.ImageRequest
-import coil.size.Size
 import top.manpok.blog.R
-import top.manpok.blog.base.BaseApplication
 import top.manpok.blog.component.AudioPlayListDialog
 import top.manpok.blog.component.AudioPlayerControlPanel
 import top.manpok.blog.service.AudioService
@@ -69,6 +59,8 @@ import top.manpok.blog.viewmodel.GlobalViewModelManager
 class AudioPlayerActivity : BaseActivity() {
 
     private val TAG = "AudioPlayerActivity"
+
+    val audioViewModel: AudioViewModel = GlobalViewModelManager.audioViewModel
 
     private val requestPermissionLauncher =
         registerForActivityResult(
@@ -82,10 +74,7 @@ class AudioPlayerActivity : BaseActivity() {
             }
         }
 
-    private var backgroundColor by mutableIntStateOf(
-        BaseApplication.getApplication().getColor(R.color.purple_5068a0)
-    )
-    private var animatableBackgroundColor = Animatable(Color(backgroundColor))
+    private var animatableBackgroundColor = Animatable(Color(audioViewModel.currentBackgroundColor))
 
     @OptIn(UnstableApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -93,14 +82,14 @@ class AudioPlayerActivity : BaseActivity() {
         val windowInsetsControllerCompat = WindowInsetsControllerCompat(window, window.decorView)
         windowInsetsControllerCompat.isAppearanceLightStatusBars = false
         setContent {
-            val audioViewModel: AudioViewModel = GlobalViewModelManager.audioViewModel
-
             val playState = audioViewModel.playState.collectAsState()
 
-            GetPalette(url = audioViewModel.currentAudioCover)
-            LaunchedEffect(key1 = backgroundColor) {
+            LaunchedEffect(audioViewModel.currentAudioCover) {
+                audioViewModel.getCoverBitmapAndPalette(audioViewModel.currentAudioCover)
+            }
+            LaunchedEffect(key1 = audioViewModel.currentBackgroundColor) {
                 animatableBackgroundColor.animateTo(
-                    targetValue = Color(backgroundColor),
+                    targetValue = Color(audioViewModel.currentBackgroundColor),
                     animationSpec = tween(durationMillis = 500, easing = LinearEasing)
                 )
             }
@@ -208,34 +197,6 @@ class AudioPlayerActivity : BaseActivity() {
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             checkNotificationPermission()
-        }
-    }
-
-    @Composable
-    fun GetPalette(url: String) {
-        val painter = rememberAsyncImagePainter(
-            model = ImageRequest.Builder(LocalContext.current)
-                .data(url)
-                .size(Size.ORIGINAL) // Set the target size to load the image at.
-                .allowHardware(false)
-                .build()
-        )
-
-        if (painter.state is AsyncImagePainter.State.Success) {
-            val bitmap =
-                (painter.state as AsyncImagePainter.State.Success).result.drawable.toBitmap()
-            if (TempData.hasNotificationPermission) {
-                GlobalViewModelManager.audioViewModel.currentCoverBitmap = bitmap
-                startAudioService()
-            }
-            Palette.from(bitmap).generate {
-                var defaultColor: Int
-                defaultColor = it?.getMutedColor(this.getColor(R.color.purple_5068a0))!!
-                if (defaultColor == this.getColor(R.color.purple_5068a0)) {
-                    defaultColor = it.getDarkVibrantColor(this.getColor(R.color.purple_5068a0))
-                }
-                backgroundColor = defaultColor
-            }
         }
     }
 

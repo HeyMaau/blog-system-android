@@ -68,6 +68,7 @@ class AudioPlayerActivity : BaseActivity() {
         ) { isGranted: Boolean ->
             if (isGranted) {
                 TempData.hasNotificationPermission = true
+                startAudioService()
             } else {
                 ToastUtil.showShortToast(R.string.notification_permission_for_audio_player)
                 TempData.hasNotificationPermission = false

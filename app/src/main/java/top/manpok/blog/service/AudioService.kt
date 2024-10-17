@@ -16,6 +16,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import top.manpok.blog.R
+import top.manpok.blog.activity.AudioPlayerActivity
 import top.manpok.blog.base.BaseApplication
 import top.manpok.blog.utils.Constants
 import top.manpok.blog.viewmodel.AudioViewModel
@@ -35,6 +36,11 @@ class AudioService : Service() {
         val application = BaseApplication.getApplication()
         val mediaSession = audioViewModel.mediaSession
 
+        val contentIntent = Intent(this, AudioPlayerActivity::class.java)
+        val pendingContentIntent =
+            PendingIntent.getActivity(this, 4, contentIntent, PendingIntent.FLAG_IMMUTABLE)
+
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val notificationChannel = NotificationChannel(
                 Constants.NOTIFICATION_CHANNEL_ID_AUDIO,
@@ -51,7 +57,7 @@ class AudioService : Service() {
             )
                 .setSmallIcon(R.mipmap.logo_about)
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-                .setOngoing(true)
+                .setContentIntent(pendingContentIntent)
                 .setStyle(
                     MediaStyleNotificationHelper.MediaStyle(mediaSession)
                         .setShowActionsInCompactView(0, 1, 2)
@@ -62,7 +68,7 @@ class AudioService : Service() {
             )
                 .setSmallIcon(R.mipmap.logo_about)
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-                .setOngoing(true)
+                .setContentIntent(pendingContentIntent)
                 .setStyle(
                     MediaStyleNotificationHelper.MediaStyle(mediaSession)
                         .setShowActionsInCompactView(0, 1, 2)
@@ -92,6 +98,19 @@ class AudioService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         updateNotification()
+        when (intent?.action) {
+            ACTION_PLAY -> {
+                audioViewModel.playOrPauseAudio()
+            }
+
+            ACTION_PRE -> {
+                audioViewModel.playPre()
+            }
+
+            ACTION_NEXT -> {
+                audioViewModel.playNext()
+            }
+        }
         return super.onStartCommand(intent, flags, startId)
     }
 

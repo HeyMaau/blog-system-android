@@ -9,14 +9,16 @@ import android.content.Intent
 import android.content.pm.ServiceInfo
 import android.os.Build
 import android.os.IBinder
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.session.MediaStyleNotificationHelper
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import top.manpok.blog.R
 import top.manpok.blog.base.BaseApplication
 import top.manpok.blog.utils.Constants
-import top.manpok.blog.viewmodel.GlobalViewModelManager
+import top.manpok.blog.viewmodel.AudioViewModel
 import top.manpok.blog.viewmodel.GlobalViewModelManager.audioViewModel
 
 @UnstableApi
@@ -26,10 +28,12 @@ class AudioService : Service() {
     private val ACTION_PRE = "action_pre"
     private val ACTION_NEXT = "action_next"
 
+    private var job: Job? = null
+    private var playState: AudioViewModel.PlayState = AudioViewModel.PlayState.Stop
+
     private val notificationBuilder by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
         val application = BaseApplication.getApplication()
-        val audioViewModel = GlobalViewModelManager.audioViewModel
-        val mediaSession = GlobalViewModelManager.audioViewModel.mediaSession
+        val mediaSession = audioViewModel.mediaSession
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val notificationChannel = NotificationChannel(
@@ -41,76 +45,24 @@ class AudioService : Service() {
                 this.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(notificationChannel)
 
-            val playIntent = Intent(this, AudioService::class.java)
-            playIntent.action = ACTION_PLAY
-            val pendingPlayIntent = PendingIntent.getService(
-                this, 1, playIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-            )
-
-            val preIntent = Intent(this, AudioService::class.java)
-            preIntent.action = ACTION_PRE
-            val pendingPreIntent = PendingIntent.getService(
-                this, 2, preIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-            )
-
-            val nextIntent = Intent(this, AudioService::class.java)
-            nextIntent.action = ACTION_NEXT
-            val pendingNextIntent = PendingIntent.getService(
-                this, 3, nextIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-            )
-
             NotificationCompat.Builder(
                 BaseApplication.getApplication(),
                 Constants.NOTIFICATION_CHANNEL_ID_AUDIO
-            ).setContentTitle(audioViewModel.currentAudioName)
-                .setContentText(audioViewModel.currentAudioArtist)
+            )
                 .setSmallIcon(R.mipmap.logo_about)
-                .setLargeIcon(audioViewModel.currentCoverBitmap)
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                 .setOngoing(true)
-                .addAction(R.drawable.ic_skip_previous, "Play previous", pendingPreIntent)
-                .addAction(R.drawable.ic_play_floating, "Play", pendingPlayIntent)
-                .addAction(R.drawable.ic_skip_next, "Play next", pendingNextIntent)
                 .setStyle(
                     MediaStyleNotificationHelper.MediaStyle(mediaSession)
                         .setShowActionsInCompactView(0, 1, 2)
                 )
         } else {
-            val playIntent = Intent(this, AudioService::class.java)
-            playIntent.action = ACTION_PLAY
-            val pendingPlayIntent = PendingIntent.getService(
-                this, 1, playIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-            )
-
-            val preIntent = Intent(this, AudioService::class.java)
-            preIntent.action = ACTION_PRE
-            val pendingPreIntent = PendingIntent.getService(
-                this, 2, preIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-            )
-
-            val nextIntent = Intent(this, AudioService::class.java)
-            nextIntent.action = ACTION_NEXT
-            val pendingNextIntent = PendingIntent.getService(
-                this, 3, nextIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-            )
-
             NotificationCompat.Builder(
                 BaseApplication.getApplication(),
-            ).setContentTitle(audioViewModel.currentAudioName)
-                .setContentText(audioViewModel.currentAudioArtist)
+            )
                 .setSmallIcon(R.mipmap.logo_about)
-                .setLargeIcon(audioViewModel.currentCoverBitmap)
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                 .setOngoing(true)
-                .addAction(R.drawable.ic_skip_previous, "Play previous", pendingPreIntent)
-                .addAction(R.drawable.ic_play_floating, "Play", pendingPlayIntent)
-                .addAction(R.drawable.ic_skip_next, "Play next", pendingNextIntent)
                 .setStyle(
                     MediaStyleNotificationHelper.MediaStyle(mediaSession)
                         .setShowActionsInCompactView(0, 1, 2)
@@ -125,6 +77,17 @@ class AudioService : Service() {
     override fun onCreate() {
         super.onCreate()
         updateNotification()
+        job = GlobalScope.launch {
+            audioViewModel.playState.collect {
+                playState = it
+                updateNotification()
+            }
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        job?.cancel()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -133,9 +96,7 @@ class AudioService : Service() {
     }
 
     private fun updateNotification() {
-        notificationBuilder.setContentTitle(audioViewModel.currentAudioName)
-            .setContentText(audioViewModel.currentAudioArtist)
-            .setLargeIcon(audioViewModel.currentCoverBitmap)
+        setNotificationBuilder()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             startForeground(
                 Constants.NOTIFICATION_ID_AUDIO,
@@ -145,5 +106,39 @@ class AudioService : Service() {
         } else {
             startForeground(Constants.NOTIFICATION_ID_AUDIO, notificationBuilder.build())
         }
+    }
+
+    private fun setNotificationBuilder() {
+        val playIntent = Intent(this, AudioService::class.java)
+        playIntent.action = ACTION_PLAY
+        val pendingPlayIntent = PendingIntent.getService(
+            this, 1, playIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val preIntent = Intent(this, AudioService::class.java)
+        preIntent.action = ACTION_PRE
+        val pendingPreIntent = PendingIntent.getService(
+            this, 2, preIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val nextIntent = Intent(this, AudioService::class.java)
+        nextIntent.action = ACTION_NEXT
+        val pendingNextIntent = PendingIntent.getService(
+            this, 3, nextIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        notificationBuilder.setContentTitle(audioViewModel.currentAudioName)
+            .setContentText(audioViewModel.currentAudioArtist)
+            .setLargeIcon(audioViewModel.currentCoverBitmap)
+            .clearActions()
+            .addAction(R.drawable.ic_skip_previous, "Play previous", pendingPreIntent)
+            .addAction(
+                if (playState is AudioViewModel.PlayState.Playing) R.drawable.ic_pause_floating else R.drawable.ic_play_floating,
+                if (playState is AudioViewModel.PlayState.Playing) "Pause" else "Play",
+                pendingPlayIntent
+            )
+            .addAction(R.drawable.ic_skip_next, "Play next", pendingNextIntent)
     }
 }

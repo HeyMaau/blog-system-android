@@ -93,6 +93,12 @@ class AudioPlayerActivity : BaseActivity() {
                     animationSpec = tween(durationMillis = 500, easing = LinearEasing)
                 )
             }
+            LaunchedEffect(key1 = Unit) {
+                audioViewModel.refreshUIEvent.collect {
+                    startAudioService()
+                }
+            }
+
             Box {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,

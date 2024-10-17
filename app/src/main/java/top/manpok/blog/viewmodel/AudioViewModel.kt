@@ -102,6 +102,9 @@ class AudioViewModel : ViewModel() {
     private var initFirstAudio = false
     private var isEnd = false
 
+    private var _refreshUIEvent = MutableStateFlow<Any?>(null)
+    val refreshUIEvent: StateFlow<Any?> = _refreshUIEvent.asStateFlow()
+
     init {
         getAudioList()
     }
@@ -210,6 +213,7 @@ class AudioViewModel : ViewModel() {
         if (exoPlayer.isPlaying) {
             exoPlayer.pause()
             _playState.value = PlayState.Pause
+            sendRefreshUIEvent()
             return
         }
         if (!initFirstAudio) {
@@ -223,6 +227,7 @@ class AudioViewModel : ViewModel() {
             exoPlayer.seekTo(exoPlayer.currentMediaItemIndex, 0)
             isEnd = false
         }
+        sendRefreshUIEvent()
     }
 
     fun playNext() {
@@ -235,6 +240,7 @@ class AudioViewModel : ViewModel() {
         currentIndex = exoPlayer.currentMediaItemIndex
         setCurrentData(currentIndex)
         checkPrepare()
+        sendRefreshUIEvent()
     }
 
     fun playPre() {
@@ -247,6 +253,7 @@ class AudioViewModel : ViewModel() {
         currentIndex = exoPlayer.currentMediaItemIndex
         setCurrentData(currentIndex)
         checkPrepare()
+        sendRefreshUIEvent()
     }
 
     fun seekTo(position: Long) {
@@ -282,6 +289,13 @@ class AudioViewModel : ViewModel() {
         currentIndex = exoPlayer.currentMediaItemIndex
         setCurrentData(currentIndex)
         checkPrepare()
+        sendRefreshUIEvent()
+    }
+
+    private fun sendRefreshUIEvent() {
+        viewModelScope.launch {
+            _refreshUIEvent.emit(Any())
+        }
     }
 
     fun getCoverBitmapAndPalette(url: String?) {
@@ -296,13 +310,16 @@ class AudioViewModel : ViewModel() {
                         val context = BaseApplication.getApplication().applicationContext
                         Palette.from(currentCoverBitmap!!).generate {
                             var defaultColor: Int
-                            defaultColor = it?.getMutedColor(context.getColor(R.color.purple_5068a0))!!
+                            defaultColor =
+                                it?.getMutedColor(context.getColor(R.color.purple_5068a0))!!
                             if (defaultColor == context.getColor(R.color.purple_5068a0)) {
-                                defaultColor = it.getDarkVibrantColor(context.getColor(R.color.purple_5068a0))
+                                defaultColor =
+                                    it.getDarkVibrantColor(context.getColor(R.color.purple_5068a0))
                             }
                             currentBackgroundColor = defaultColor
                         }
                     }
+                    sendRefreshUIEvent()
                 }
             }
 

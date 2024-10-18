@@ -154,7 +154,7 @@ class AudioService : Service() {
             .clearActions()
             .addAction(R.drawable.ic_skip_previous, "Play previous", pendingPreIntent)
             .addAction(
-                if (playState is AudioViewModel.PlayState.Playing) R.drawable.ic_pause_floating else R.drawable.ic_play_floating,
+                if (playState is AudioViewModel.PlayState.Playing) R.drawable.ic_pause_notification else R.drawable.ic_play_notification,
                 if (playState is AudioViewModel.PlayState.Playing) "Pause" else "Play",
                 pendingPlayIntent
             )

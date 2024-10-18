@@ -1,7 +1,7 @@
 package top.manpok.blog.viewmodel
 
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
 import android.text.TextUtils
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -23,13 +23,15 @@ import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
 import androidx.media3.session.MediaSession
 import androidx.palette.graphics.Palette
+import coil.ImageLoader
+import coil.request.ImageRequest
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -74,6 +76,10 @@ class AudioViewModel : ViewModel() {
                 cacheDataSourceFactory
             )
         ).build()
+    }
+
+    private val imageLoader by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
+        ImageLoader(BaseApplication.getApplication())
     }
 
     val audioList = mutableListOf<BlogAudio.Data?>()
@@ -293,7 +299,7 @@ class AudioViewModel : ViewModel() {
     }
 
     private fun sendRefreshUIEvent() {
-        viewModelScope.launch {
+        viewModelScope.launch(context = Dispatchers.Main) {
             _refreshUIEvent.emit(Any())
         }
     }
@@ -302,10 +308,10 @@ class AudioViewModel : ViewModel() {
         if (TextUtils.isEmpty(url) || url == null) {
             return;
         }
-        BlogRetrofit.imageApi.getImageStream(url).enqueue(object : Callback<ResponseBody> {
-            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                if (response.isSuccessful) {
-                    currentCoverBitmap = BitmapFactory.decodeStream(response.body()?.byteStream())
+        val imageRequest =
+            ImageRequest.Builder(BaseApplication.getApplication()).data(url).allowHardware(false)
+                .target {
+                    currentCoverBitmap = (it as BitmapDrawable).bitmap
                     if (currentCoverBitmap != null) {
                         val context = BaseApplication.getApplication().applicationContext
                         Palette.from(currentCoverBitmap!!).generate {
@@ -320,14 +326,8 @@ class AudioViewModel : ViewModel() {
                         }
                     }
                     sendRefreshUIEvent()
-                }
-            }
-
-            override fun onFailure(call: Call<ResponseBody>, error: Throwable) {
-                LogUtil.e(TAG, "getCoverBitmapAndPalette error: $error")
-            }
-
-        })
+                }.build()
+        imageLoader.enqueue(imageRequest)
     }
 
     fun onDestroy() {

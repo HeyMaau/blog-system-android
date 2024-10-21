@@ -25,7 +25,6 @@ import androidx.media3.session.MediaSession
 import androidx.palette.graphics.Palette
 import coil.ImageLoader
 import coil.request.ImageRequest
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -299,7 +298,7 @@ class AudioViewModel : ViewModel() {
     }
 
     private fun sendRefreshUIEvent() {
-        viewModelScope.launch(context = Dispatchers.Main) {
+        viewModelScope.launch {
             _refreshUIEvent.emit(Any())
         }
     }

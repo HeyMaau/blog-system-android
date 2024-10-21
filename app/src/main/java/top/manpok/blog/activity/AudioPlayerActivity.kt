@@ -39,8 +39,11 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.util.UnstableApi
 import coil.compose.AsyncImage
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import top.manpok.blog.R
 import top.manpok.blog.component.AudioPlayListDialog
 import top.manpok.blog.component.AudioPlayerControlPanel
@@ -77,7 +80,9 @@ class AudioPlayerActivity : BaseActivity() {
             }
             LaunchedEffect(key1 = Unit) {
                 audioViewModel.refreshUIEvent.collect {
-                    startAudioService()
+                    lifecycleScope.launch(Dispatchers.Main) {
+                        startAudioService()
+                    }
                 }
             }
 

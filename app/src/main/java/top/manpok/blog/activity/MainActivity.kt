@@ -73,6 +73,8 @@ class MainActivity : BaseActivity() {
             } else {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                     checkNotificationPermission()
+                } else {
+                    TempData.hasNotificationPermission = true
                 }
                 BlogSystemAndroidTheme {
                     BlogScaffold()

@@ -81,5 +81,5 @@
     <string name="current_play_list">当前播放列表（%d）</string>
 
     <string name="notification_channel_audio">音频播放</string>
-    <string name="notification_permission_for_audio_player">通知权限用于状态栏显示噢</string>
+    <string name="notification_permission_for_audio_player">如需显示通知请手动前往应用设置打开通知权限噢</string>
 </resources>

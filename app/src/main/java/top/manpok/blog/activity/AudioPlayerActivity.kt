@@ -1,14 +1,10 @@
 package top.manpok.blog.activity
 
-import android.Manifest
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.compose.setContent
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.OptIn
-import androidx.annotation.RequiresApi
 import androidx.compose.animation.Animatable
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
@@ -42,8 +38,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.media3.common.util.UnstableApi
 import coil.compose.AsyncImage
@@ -51,8 +45,8 @@ import top.manpok.blog.R
 import top.manpok.blog.component.AudioPlayListDialog
 import top.manpok.blog.component.AudioPlayerControlPanel
 import top.manpok.blog.service.AudioService
+import top.manpok.blog.utils.LogUtil
 import top.manpok.blog.utils.TempData
-import top.manpok.blog.utils.ToastUtil
 import top.manpok.blog.viewmodel.AudioViewModel
 import top.manpok.blog.viewmodel.GlobalViewModelManager
 
@@ -61,19 +55,6 @@ class AudioPlayerActivity : BaseActivity() {
     private val TAG = "AudioPlayerActivity"
 
     val audioViewModel: AudioViewModel = GlobalViewModelManager.audioViewModel
-
-    private val requestPermissionLauncher =
-        registerForActivityResult(
-            ActivityResultContracts.RequestPermission()
-        ) { isGranted: Boolean ->
-            if (isGranted) {
-                TempData.hasNotificationPermission = true
-                startAudioService()
-            } else {
-                ToastUtil.showShortToast(R.string.notification_permission_for_audio_player)
-                TempData.hasNotificationPermission = false
-            }
-        }
 
     private var animatableBackgroundColor = Animatable(Color(audioViewModel.currentBackgroundColor))
 
@@ -202,38 +183,14 @@ class AudioPlayerActivity : BaseActivity() {
                 }
             }
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            checkNotificationPermission()
-        }
-    }
-
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-    private fun checkNotificationPermission() {
-        when {
-            ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.POST_NOTIFICATIONS
-            ) == PackageManager.PERMISSION_GRANTED -> {
-                TempData.hasNotificationPermission = true
-                startAudioService()
-            }
-
-            ActivityCompat.shouldShowRequestPermissionRationale(
-                this, Manifest.permission.POST_NOTIFICATIONS
-            ) -> {
-                ToastUtil.showShortToast(R.string.notification_permission_for_audio_player)
-            }
-
-            else -> {
-                requestPermissionLauncher.launch(
-                    Manifest.permission.POST_NOTIFICATIONS
-                )
-            }
-        }
     }
 
     @OptIn(UnstableApi::class)
     private fun startAudioService() {
+        if (!TempData.hasNotificationPermission) {
+            LogUtil.i(TAG, "No Notification Permission")
+            return
+        }
         val intent = Intent(this, AudioService::class.java)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             startForegroundService(intent)

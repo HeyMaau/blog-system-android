@@ -10,7 +10,7 @@ object Constants {
     const val BASE_ARTICLE_SHARE_LINK: String = "$BASE_URL/article/"
     const val BASE_THINKING_SHARE_LINK: String = "$BASE_URL/thinking/"
 
-    const val BASE_URL_DEV: String = "http://192.168.137.129:8080"
+    const val BASE_URL_DEV: String = "http://192.168.31.136:8080"
     const val BASE_IMAGE_URL_DEV: String = "$BASE_URL_DEV/image/"
     const val BASE_COMMENT_AVATAR_URL_DEV: String = BASE_IMAGE_URL_DEV + "comment/"
     const val BASE_ARTICLE_SHARE_LINK_DEV: String = "$BASE_URL_DEV/article/"
@@ -54,5 +54,7 @@ object Constants {
     const val MAX_AUDIO_CACHE_SIZE = 1024 * 1024 * 300L
 
     const val NOTIFICATION_ID_AUDIO = 1
+    const val NOTIFICATION_ID_NORMAL = 2
     const val NOTIFICATION_CHANNEL_ID_AUDIO = "notification_channel_id_audio"
+    const val NOTIFICATION_CHANNEL_ID_NORMAL = "notification_channel_id_normal"
 }

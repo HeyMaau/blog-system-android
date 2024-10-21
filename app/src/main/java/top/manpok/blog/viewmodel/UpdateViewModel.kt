@@ -1,11 +1,18 @@
 package top.manpok.blog.viewmodel
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.text.TextUtils
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.core.app.NotificationCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
@@ -62,6 +69,7 @@ class UpdateViewModel : ViewModel() {
                                     forceUpdate = data.forceUpdate
                                     versionName = data.versionName
                                     changeLog = data.changeLog
+                                    sendNotification()
                                 } else {
                                     if (checkManually) {
                                         ToastUtil.showShortToast(R.string.already_latest_version)
@@ -103,5 +111,53 @@ class UpdateViewModel : ViewModel() {
             Calendar.getInstance().get(Calendar.DAY_OF_YEAR)
         }
         return abs(nowDay - lastCloseUpdateDialogTime) >= 3
+    }
+
+    private fun sendNotification() {
+        val application = BaseApplication.getApplication()
+        val notificationManager: NotificationManager =
+            application.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val builder: NotificationCompat.Builder
+        val uri = Uri.parse(downloadUrl)
+        val intent = Intent(Intent.ACTION_VIEW, uri)
+        val pendingIntent = PendingIntent.getActivity(
+            application.applicationContext,
+            0,
+            intent,
+            PendingIntent.FLAG_IMMUTABLE
+        )
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                Constants.NOTIFICATION_CHANNEL_ID_NORMAL,
+                application.getString(R.string.notification_channel_normal),
+                NotificationManager.IMPORTANCE_DEFAULT
+            ).apply {
+                description =
+                    application.getString(R.string.notification_channel_normal_description)
+            }
+
+            notificationManager.createNotificationChannel(channel)
+
+            builder =
+                NotificationCompat.Builder(application, Constants.NOTIFICATION_CHANNEL_ID_NORMAL)
+                    .setContentIntent(pendingIntent)
+                    .setSmallIcon(R.mipmap.logo_about)
+                    .setContentTitle(application.getString(R.string.notification_title_has_update))
+                    .setContentText(application.getString(R.string.notification_content_text_click_to_update))
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                    .setAutoCancel(true)
+        } else {
+            builder =
+                NotificationCompat.Builder(application)
+                    .setContentIntent(pendingIntent)
+                    .setSmallIcon(R.mipmap.logo_about)
+                    .setContentTitle(application.getString(R.string.notification_title_has_update))
+                    .setContentText(application.getString(R.string.notification_content_text_click_to_update))
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                    .setAutoCancel(true)
+
+        }
+        notificationManager.notify(Constants.NOTIFICATION_ID_NORMAL, builder.build())
     }
 }

@@ -47,6 +47,8 @@ class AudioService : Service() {
                 application.getString(R.string.notification_channel_audio),
                 NotificationManager.IMPORTANCE_DEFAULT
             )
+            notificationChannel.description =
+                application.getString(R.string.notification_channel_audio_description)
             val notificationManager =
                 this.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(notificationChannel)

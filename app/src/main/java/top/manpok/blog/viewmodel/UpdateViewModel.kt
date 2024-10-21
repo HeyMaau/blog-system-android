@@ -142,7 +142,7 @@ class UpdateViewModel : ViewModel() {
             builder =
                 NotificationCompat.Builder(application, Constants.NOTIFICATION_CHANNEL_ID_NORMAL)
                     .setContentIntent(pendingIntent)
-                    .setSmallIcon(R.mipmap.logo_about)
+                    .setSmallIcon(R.mipmap.app_icon)
                     .setContentTitle(application.getString(R.string.notification_title_has_update))
                     .setContentText(application.getString(R.string.notification_content_text_click_to_update))
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT)
@@ -151,7 +151,7 @@ class UpdateViewModel : ViewModel() {
             builder =
                 NotificationCompat.Builder(application)
                     .setContentIntent(pendingIntent)
-                    .setSmallIcon(R.mipmap.logo_about)
+                    .setSmallIcon(R.mipmap.app_icon)
                     .setContentTitle(application.getString(R.string.notification_title_has_update))
                     .setContentText(application.getString(R.string.notification_content_text_click_to_update))
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT)

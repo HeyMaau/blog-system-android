@@ -57,7 +57,7 @@ class AudioService : Service() {
                 BaseApplication.getApplication(),
                 Constants.NOTIFICATION_CHANNEL_ID_AUDIO
             )
-                .setSmallIcon(R.mipmap.logo_about)
+                .setSmallIcon(R.mipmap.app_icon)
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                 .setContentIntent(pendingContentIntent)
                 .setStyle(
@@ -68,7 +68,7 @@ class AudioService : Service() {
             NotificationCompat.Builder(
                 BaseApplication.getApplication(),
             )
-                .setSmallIcon(R.mipmap.logo_about)
+                .setSmallIcon(R.mipmap.app_icon)
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                 .setContentIntent(pendingContentIntent)
                 .setStyle(

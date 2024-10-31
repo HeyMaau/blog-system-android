@@ -34,8 +34,6 @@ import coil.compose.SubcomposeAsyncImage
 import net.engawapg.lib.zoomable.rememberZoomState
 import net.engawapg.lib.zoomable.zoomable
 import top.manpok.blog.R
-import top.manpok.blog.utils.Constants
-import top.manpok.blog.utils.TempData
 
 
 class ImagePreviewActivity : BaseActivity() {
@@ -68,7 +66,7 @@ class ImagePreviewActivity : BaseActivity() {
                     }
                     HorizontalPager(state = pagerState, modifier = Modifier.fillMaxSize()) {
                         SubcomposeAsyncImage(
-                            model = (if (TempData.currentEnv == Constants.ENV_PROD) Constants.BASE_IMAGE_URL else Constants.BASE_IMAGE_URL_DEV) + imageList[it],
+                            model = imageList[it],
                             contentDescription = null,
                             loading = {
                                 Box(

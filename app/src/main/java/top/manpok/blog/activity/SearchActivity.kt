@@ -44,8 +44,6 @@ import top.manpok.blog.component.SearchHistoryPanel
 import top.manpok.blog.component.SearchInput
 import top.manpok.blog.component.SearchResultItem
 import top.manpok.blog.pojo.DefaultState
-import top.manpok.blog.utils.Constants
-import top.manpok.blog.utils.TempData
 import top.manpok.blog.utils.ToastUtil
 import top.manpok.blog.viewmodel.SearchViewModel
 
@@ -115,7 +113,7 @@ class SearchActivity : BaseActivity() {
                                         keyword = searchViewModel.keywords,
                                         titleList = it?.titleList,
                                         contentList = it?.contentList,
-                                        cover = (if (TempData.currentEnv == Constants.ENV_PROD) Constants.BASE_IMAGE_URL else Constants.BASE_IMAGE_URL_DEV) + it?.cover,
+                                        cover = it?.cover,
                                         updateTime = it?.updateTime,
                                         useSkeleton = searchViewModel.isLoading,
                                         onClick = {

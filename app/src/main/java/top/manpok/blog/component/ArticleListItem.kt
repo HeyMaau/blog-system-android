@@ -22,8 +22,6 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import top.manpok.blog.R
 import top.manpok.blog.pojo.BlogArticle
-import top.manpok.blog.utils.Constants
-import top.manpok.blog.utils.TempData
 
 @Composable
 fun ArticleListItem(
@@ -42,7 +40,7 @@ fun ArticleListItem(
         ) {
             Text(text = "${item?.title}", fontWeight = FontWeight(500), fontSize = 18.sp)
             AuthorInfoBanner(
-                avatarUrl = (if (TempData.currentEnv == Constants.ENV_PROD) Constants.BASE_IMAGE_URL else Constants.BASE_IMAGE_URL_DEV) + item?.user?.avatar,
+                avatarUrl = item?.user?.avatar ?: "",
                 name = "${item?.user?.userName}",
                 modifier = Modifier.padding(4.dp),
                 fontSize = 16.sp,
@@ -59,7 +57,7 @@ fun ArticleListItem(
             if (item?.cover != null) {
                 Spacer(modifier = Modifier.height(6.dp))
                 AsyncImage(
-                    model = (if (TempData.currentEnv == Constants.ENV_PROD) Constants.BASE_IMAGE_URL else Constants.BASE_IMAGE_URL_DEV) + item.cover,
+                    model = item.cover,
                     contentDescription = null,
                     modifier = Modifier
                         .fillMaxWidth(0.5f)

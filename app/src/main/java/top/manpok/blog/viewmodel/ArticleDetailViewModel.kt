@@ -28,7 +28,6 @@ import top.manpok.blog.pojo.DefaultState
 import top.manpok.blog.utils.Constants
 import top.manpok.blog.utils.LogUtil
 import top.manpok.blog.utils.NetworkUtil
-import top.manpok.blog.utils.TempData
 
 class ArticleDetailViewModel : ViewModel() {
 
@@ -81,11 +80,11 @@ class ArticleDetailViewModel : ViewModel() {
                                 val data = body.data
                                 title = data?.title!!
                                 authorAvatar =
-                                    (if (TempData.currentEnv == Constants.ENV_PROD) Constants.BASE_IMAGE_URL else Constants.BASE_IMAGE_URL_DEV) + data.user?.avatar
+                                    data.user?.avatar ?: ""
                                 authorName = data.user?.userName!!
                                 authorSign = data.user.sign!!
                                 cover =
-                                    (if (TempData.currentEnv == Constants.ENV_PROD) Constants.BASE_IMAGE_URL else Constants.BASE_IMAGE_URL_DEV) + data.cover!!
+                                    data.cover ?: ""
                                 updateTime = data.updateTime!!
                                 setHtmlContent(data.content!!)
                                 if (timeOut) {
@@ -127,11 +126,11 @@ class ArticleDetailViewModel : ViewModel() {
             withContext(Dispatchers.Main) {
                 title = data.title!!
                 authorAvatar =
-                    (if (TempData.currentEnv == Constants.ENV_PROD) Constants.BASE_IMAGE_URL else Constants.BASE_IMAGE_URL_DEV) + data.avatar
+                    data.avatar ?: ""
                 authorName = data.userName!!
                 authorSign = data.sign!!
                 cover =
-                    (if (TempData.currentEnv == Constants.ENV_PROD) Constants.BASE_IMAGE_URL else Constants.BASE_IMAGE_URL_DEV) + data.cover
+                    data.cover ?: ""
                 setHtmlContent(data.content!!)
                 updateTime = data.updateTime!!
             }

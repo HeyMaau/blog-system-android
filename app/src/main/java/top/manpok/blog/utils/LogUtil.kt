@@ -1,5 +1,6 @@
 package top.manpok.blog.utils
 
+import android.os.Process
 import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -90,9 +91,9 @@ object LogUtil {
         val logText: String
         if (msg.length > Constants.LOG_MSG_MAX_LENGTH) {
             val simpleMsg = msg.substring(0, Constants.LOG_MSG_MAX_LENGTH)
-            logText = "$date $level $tag $simpleMsg\n"
+            logText = "$date $level ${Process.myPid()}-${Process.myTid()} $tag $simpleMsg\n"
         } else {
-            logText = "$date $level $tag $msg\n"
+            logText = "$date $level ${Process.myPid()}-${Process.myTid()} $tag $msg\n"
         }
         logBuffer.add(logText)
         if (logBuffer.size >= BUFFER_SIZE) {

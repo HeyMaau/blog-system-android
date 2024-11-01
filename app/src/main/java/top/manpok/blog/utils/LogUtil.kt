@@ -31,7 +31,7 @@ object LogUtil {
     private val logBuffer: MutableList<String> = mutableListOf()
     private const val BUFFER_SIZE: Int = 10
     private val logDateFormatter: SimpleDateFormat = SimpleDateFormat("MM-dd hh:mm:ss:SSS")
-    private val fileDateFormatter: SimpleDateFormat = SimpleDateFormat("yyyyMMddhhmmssSSS")
+    val fileDateFormatter: SimpleDateFormat = SimpleDateFormat("yyyyMMddhhmmssSSS")
     private val mutex: Mutex = Mutex()
 
     /**
@@ -106,7 +106,7 @@ object LogUtil {
         }
     }
 
-    private suspend fun writeLog2File() {
+    private fun writeLog2File() {
         val rootPath = BaseApplication.getApplication().getExternalFilesDir("log")
         var file = File(rootPath, "log.txt")
         if (getFileSize(file) >= LOG_FILE_SIZE) {
@@ -136,7 +136,34 @@ object LogUtil {
         deleteRedundantLogFile()
     }
 
-    private suspend fun deleteRedundantLogFile() {
+    fun writeCrashLog2File(msg: String) {
+        val rootPath = BaseApplication.getApplication().getExternalFilesDir("log")
+        var file = File(rootPath, "crash_log.txt")
+        if (getFileSize(file) >= LOG_FILE_SIZE) {
+            val formatFileTimeSuffix = fileDateFormatter.format(Date())
+            val renameFile = File(rootPath, "crash_log_${formatFileTimeSuffix}.txt")
+            val renameSuccessfully = file.renameTo(renameFile)
+            if (renameSuccessfully) {
+                file = File(rootPath, "crash_log.txt")
+            }
+        }
+        val writer = FileWriter(file, true)
+        val bufferedWriter = BufferedWriter(writer)
+        try {
+            bufferedWriter.write(msg)
+        } catch (e: Exception) {
+            Log.e(TAG, "writeLog2File error: $e")
+        } finally {
+            try {
+                bufferedWriter.close()
+            } catch (e: Exception) {
+                Log.e(TAG, "writeLog2File close error: $e")
+            }
+        }
+        deleteRedundantLogFile()
+    }
+
+    private fun deleteRedundantLogFile() {
         val rootPath = BaseApplication.getApplication().getExternalFilesDir("log")
         val listFiles = rootPath?.listFiles()
         val fileNum = listFiles?.size
@@ -155,7 +182,7 @@ object LogUtil {
         }
     }
 
-    private suspend fun getFileSize(file: File): Long {
+    private fun getFileSize(file: File): Long {
         var fc: FileChannel? = null
         var fileSize: Long = 0
         try {

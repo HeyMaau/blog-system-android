@@ -197,10 +197,15 @@ class AudioPlayerActivity : BaseActivity() {
             return
         }
         val intent = Intent(this, AudioService::class.java)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            startForegroundService(intent)
-        } else {
-            startService(intent)
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                startForegroundService(intent)
+            } else {
+                startService(intent)
+            }
+        } catch (e: Exception) {
+            LogUtil.e(TAG, "startService error")
+            LogUtil.e(TAG, e.stackTraceToString())
         }
     }
 }

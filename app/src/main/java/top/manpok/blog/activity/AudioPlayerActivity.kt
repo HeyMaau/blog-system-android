@@ -57,7 +57,7 @@ class AudioPlayerActivity : BaseActivity() {
 
     private val TAG = "AudioPlayerActivity"
 
-    val audioViewModel: AudioViewModel = GlobalViewModelManager.audioViewModel
+    private val audioViewModel: AudioViewModel = GlobalViewModelManager.audioViewModel
 
     private var animatableBackgroundColor = Animatable(Color(audioViewModel.currentBackgroundColor))
 
@@ -66,6 +66,9 @@ class AudioPlayerActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         val windowInsetsControllerCompat = WindowInsetsControllerCompat(window, window.decorView)
         windowInsetsControllerCompat.isAppearanceLightStatusBars = false
+        if (audioViewModel.audioList.isEmpty()) {
+            audioViewModel.getAudioList()
+        }
         setContent {
             val playState = audioViewModel.playState.collectAsState()
 

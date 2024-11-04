@@ -44,7 +44,6 @@ import top.manpok.blog.utils.LogUtil
 import top.manpok.blog.utils.ToastUtil
 import java.io.File
 
-@UnstableApi
 class AudioViewModel : ViewModel() {
 
     private val TAG = "AudioViewModel"
@@ -114,7 +113,7 @@ class AudioViewModel : ViewModel() {
         getAudioList()
     }
 
-    private fun getAudioList() {
+    fun getAudioList() {
         BlogRetrofit.audioApi.getAudioList(Constants.DEFAULT_PAGE, Constants.DEFAULT_PAGE_SIZE)
             .enqueue(
                 object : Callback<BaseResponse<BlogAudio>> {

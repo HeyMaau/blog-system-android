@@ -40,9 +40,9 @@ object BlogRetrofit {
         builder.apply {
             addNetworkInterceptor(httpLoggingInterceptor)
             addInterceptor(headerInterceptor)
-            connectTimeout(60, TimeUnit.SECONDS)
-            readTimeout(60, TimeUnit.SECONDS)
-            writeTimeout(60, TimeUnit.SECONDS)
+            connectTimeout(20, TimeUnit.SECONDS)
+            readTimeout(30, TimeUnit.SECONDS)
+            writeTimeout(30, TimeUnit.SECONDS)
             retryOnConnectionFailure(true)
         }
         return@lazy builder

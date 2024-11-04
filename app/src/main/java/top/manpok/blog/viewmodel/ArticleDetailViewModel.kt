@@ -107,7 +107,10 @@ class ArticleDetailViewModel : ViewModel() {
                         if (timeOut) {
                             loading = false
                         }
-                        _articleDetailState.value = DefaultState.NETWORK_ERROR
+                        viewModelScope.launch(Dispatchers.IO) {
+                            LogUtil.e(TAG, "网络错误，从数据库中读取文章${id}的数据")
+                            getFromDB(id)
+                        }
                         LogUtil.e(TAG, "onFailure: $error")
                     }
 
@@ -134,6 +137,9 @@ class ArticleDetailViewModel : ViewModel() {
                 setHtmlContent(data.content!!)
                 updateTime = data.updateTime!!
             }
+        } else {
+            LogUtil.e(TAG, "文章${id}的数据库记录为空，展示错误页面")
+            _articleDetailState.value = DefaultState.NETWORK_ERROR
         }
     }
 

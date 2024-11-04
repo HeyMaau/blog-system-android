@@ -41,8 +41,6 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.zIndex
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import top.manpok.blog.R
 import top.manpok.blog.component.AuthorInfoBanner
 import top.manpok.blog.component.CommentWindow
@@ -73,18 +71,13 @@ class ArticleDetailActivity : BaseActivity() {
             val articleDetailViewModel: ArticleDetailViewModel = viewModel()
             val commentViewModel: CommentViewModel = viewModel()
             val shareViewModel: ShareViewModel = viewModel()
-            LaunchedEffect(key1 = Unit) {
-                withContext(Dispatchers.IO) {
-                    articleDetailViewModel.getFromDB(id)
-                }
-                articleDetailViewModel.getArticleDetail(id)
-                commentViewModel.getCommentList(
-                    commentViewModel.currentPage,
-                    commentViewModel.pageSize,
-                    Constants.COMMENT_TYPE_ARTICLE,
-                    id
-                )
-            }
+            articleDetailViewModel.getArticleDetail(id)
+            commentViewModel.getCommentList(
+                commentViewModel.currentPage,
+                commentViewModel.pageSize,
+                Constants.COMMENT_TYPE_ARTICLE,
+                id
+            )
 
             val scrollState = rememberScrollState()
             var commonHeaderHeight by remember {

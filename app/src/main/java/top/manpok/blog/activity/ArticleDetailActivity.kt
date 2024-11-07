@@ -71,13 +71,16 @@ class ArticleDetailActivity : BaseActivity() {
             val articleDetailViewModel: ArticleDetailViewModel = viewModel()
             val commentViewModel: CommentViewModel = viewModel()
             val shareViewModel: ShareViewModel = viewModel()
-            articleDetailViewModel.getArticleDetail(id)
-            commentViewModel.getCommentList(
-                commentViewModel.currentPage,
-                commentViewModel.pageSize,
-                Constants.COMMENT_TYPE_ARTICLE,
-                id
-            )
+
+            LaunchedEffect(key1 = Unit) {
+                articleDetailViewModel.getArticleDetail(id)
+                commentViewModel.getCommentList(
+                    commentViewModel.currentPage,
+                    commentViewModel.pageSize,
+                    Constants.COMMENT_TYPE_ARTICLE,
+                    id
+                )
+            }
 
             val scrollState = rememberScrollState()
             var commonHeaderHeight by remember {

@@ -168,7 +168,7 @@ class ArticleDetailViewModel : ViewModel() {
         elements.forEachIndexed { index, element ->
             val src = element.attr("src")
             imageMap[src] = index
-            imageList.add(src.substring(src.lastIndexOf("/") + 1))
+            imageList.add(src)
         }
     }
 

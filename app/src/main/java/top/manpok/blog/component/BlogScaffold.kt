@@ -94,7 +94,9 @@ fun BlogScaffold(
                 versionName = updateViewModel.versionName,
                 changeLog = updateViewModel.changeLog,
                 onConfirmClick = {
-                    updateViewModel.showUpdateDialog = false
+                    if (updateViewModel.forceUpdate != Constants.FORCE_UPDATE_TRUE) {
+                        updateViewModel.showUpdateDialog = false
+                    }
                     if (!TextUtils.isEmpty(updateViewModel.downloadUrl)) {
                         val uri = Uri.parse(updateViewModel.downloadUrl)
                         val intent = Intent(Intent.ACTION_VIEW, uri)

@@ -4,7 +4,7 @@ import android.graphics.Color
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.pullRefresh
@@ -20,12 +20,14 @@ import top.manpok.blog.utils.Constants
 import top.manpok.blog.utils.reachBottom
 import top.manpok.blog.viewmodel.ArticleViewModel
 import top.manpok.blog.viewmodel.BlogScaffoldViewModel
+import top.manpok.blog.viewmodel.GlobalViewModelManager
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun HomeArticleListPage(
     modifier: Modifier = Modifier,
     pagerState: PagerState? = null,
+    listState: LazyListState = GlobalViewModelManager.listStateViewModel.homeArticleListState,
     articleViewModel: ArticleViewModel = viewModel(),
     blogScaffoldViewModel: BlogScaffoldViewModel = viewModel()
 ) {
@@ -34,7 +36,6 @@ fun HomeArticleListPage(
             refresh(articleViewModel)
         })
 
-    val listState = rememberLazyListState()
     LaunchedEffect(key1 = listState.reachBottom(Constants.AUTO_LOAD_MORE_THRESHOLD)) {
         if (listState.reachBottom(Constants.AUTO_LOAD_MORE_THRESHOLD)
             && !articleViewModel.loading && !articleViewModel.refreshing && !articleViewModel.noMore

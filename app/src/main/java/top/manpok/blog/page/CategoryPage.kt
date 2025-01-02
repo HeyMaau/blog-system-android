@@ -17,8 +17,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
@@ -59,6 +59,7 @@ import top.manpok.blog.utils.reachBottom
 import top.manpok.blog.viewmodel.ArticleCategoryViewModel
 import top.manpok.blog.viewmodel.BlogScaffoldViewModel
 import top.manpok.blog.viewmodel.CategoryViewModel
+import top.manpok.blog.viewmodel.GlobalViewModelManager
 import top.manpok.blog.viewmodel.UserViewModel
 
 private const val TAG = "CategoryPage"
@@ -69,6 +70,7 @@ private const val ANIMATION_SECOND_STAGE_TIME = 200
 @Composable
 fun CategoryPage(
     modifier: Modifier = Modifier,
+    listState: LazyListState = GlobalViewModelManager.listStateViewModel.categoryArticleListState,
     categoryViewModel: CategoryViewModel = viewModel(),
     articleCategoryViewModel: ArticleCategoryViewModel = viewModel(),
     userViewModel: UserViewModel = viewModel(),
@@ -173,7 +175,6 @@ fun CategoryPage(
         }
     }
 
-    val listState = rememberLazyListState()
     LaunchedEffect(key1 = listState.reachBottom(Constants.AUTO_LOAD_MORE_THRESHOLD)) {
         if (listState.reachBottom(Constants.AUTO_LOAD_MORE_THRESHOLD) && !articleCategoryViewModel.noMore
             && !articleCategoryViewModel.refreshing && !articleCategoryViewModel.pureLoading

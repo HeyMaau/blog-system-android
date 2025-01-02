@@ -6,10 +6,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
-import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
@@ -30,6 +30,7 @@ import top.manpok.blog.component.ThinkingListItem
 import top.manpok.blog.utils.Constants
 import top.manpok.blog.utils.reachBottom
 import top.manpok.blog.viewmodel.BlogScaffoldViewModel
+import top.manpok.blog.viewmodel.GlobalViewModelManager
 import top.manpok.blog.viewmodel.ThinkingViewModel
 
 private const val TAG = "HomeThinkingListPage"
@@ -39,6 +40,7 @@ private const val TAG = "HomeThinkingListPage"
 fun HomeThinkingListPage(
     modifier: Modifier = Modifier,
     pagerState: PagerState? = null,
+    staggeredGridState: LazyStaggeredGridState = GlobalViewModelManager.listStateViewModel.homeThinkingGridState,
     thinkingViewModel: ThinkingViewModel = viewModel(),
     blogScaffoldViewModel: BlogScaffoldViewModel = viewModel()
 ) {
@@ -48,7 +50,6 @@ fun HomeThinkingListPage(
             refresh(thinkingViewModel)
         })
 
-    val staggeredGridState = rememberLazyStaggeredGridState()
     LaunchedEffect(key1 = staggeredGridState.reachBottom(Constants.AUTO_LOAD_MORE_THRESHOLD)) {
         if (staggeredGridState.reachBottom(Constants.AUTO_LOAD_MORE_THRESHOLD)
             && !thinkingViewModel.loading && !thinkingViewModel.refreshing && !thinkingViewModel.noMore

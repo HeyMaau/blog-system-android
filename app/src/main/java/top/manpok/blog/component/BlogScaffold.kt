@@ -8,9 +8,11 @@ import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.text.TextUtils
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -26,6 +28,7 @@ import top.manpok.blog.utils.Constants
 import top.manpok.blog.viewmodel.BlogScaffoldViewModel
 import top.manpok.blog.viewmodel.UpdateViewModel
 
+@OptIn(ExperimentalFoundationApi::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun BlogScaffold(
@@ -34,6 +37,11 @@ fun BlogScaffold(
     updateViewModel: UpdateViewModel = viewModel()
 ) {
     Box(contentAlignment = Alignment.Center) {
+        val pagerState = rememberPagerState(
+            initialPage = 0,
+            initialPageOffsetFraction = 0f,
+            pageCount = { 2 }
+        )
         Scaffold(
             containerColor = Color.White,
             bottomBar = {
@@ -64,9 +72,10 @@ fun BlogScaffold(
         ) {
             when (blogScaffoldViewModel.selectedBottomItemIndex) {
                 0 -> HomePage(
-                    modifier
+                    modifier = modifier
                         .padding(it)
-                        .background(Color.White)
+                        .background(Color.White),
+                    pagerState = pagerState
                 )
 
                 1 -> CategoryPage(

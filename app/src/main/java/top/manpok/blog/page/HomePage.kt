@@ -13,7 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
@@ -41,15 +41,12 @@ private const val TAG = "HomePage"
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun HomePage(modifier: Modifier = Modifier, homePageViewModel: HomePageViewModel = viewModel()) {
+fun HomePage(
+    modifier: Modifier = Modifier,
+    pagerState: PagerState,
+    homePageViewModel: HomePageViewModel = viewModel()
+) {
     val coroutineScope = rememberCoroutineScope()
-
-    val pagerState = rememberPagerState(
-        initialPage = 0,
-        initialPageOffsetFraction = 0f,
-        pageCount = { 2 }
-    )
-
 
     Column(modifier = modifier.fillMaxSize()) {
         CompositionLocalProvider(LocalRippleTheme provides NoRippleTheme) {

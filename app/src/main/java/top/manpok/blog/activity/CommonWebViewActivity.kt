@@ -83,7 +83,7 @@ class CommonWebViewActivity : BaseActivity() {
                         finish()
                     },
                     onShareClick = {
-                        shareViewModel.copyWebUrl(this@CommonWebViewActivity, url)
+                        shareViewModel.copyWebUrl(this@CommonWebViewActivity, webView.url ?: url)
                     },
                     modifier = Modifier
                         .zIndex(2f)

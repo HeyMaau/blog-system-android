@@ -8,12 +8,12 @@ plugins {
 
 android {
     namespace = "top.manpok.blog"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "top.manpok.blog"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 6
         versionName = "1.4.1"
 

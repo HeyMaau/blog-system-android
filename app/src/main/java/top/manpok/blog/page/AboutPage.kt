@@ -57,7 +57,7 @@ fun AboutPage(
         val versionName =
             packageManager.getPackageInfo(context.packageName, 0).versionName
         Text(
-            text = stringResource(id = R.string.app_version, versionName),
+            text = stringResource(id = R.string.app_version, versionName ?: ""),
             modifier = Modifier.padding(
                 bottom = 30.dp
             )

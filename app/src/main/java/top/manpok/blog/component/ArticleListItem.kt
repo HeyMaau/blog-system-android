@@ -38,20 +38,25 @@ fun ArticleListItem(
                 }, indication = null, onClick = click
             )
         ) {
-            Text(text = "${item?.title}", fontWeight = FontWeight(500), fontSize = 18.sp)
+            Text(
+                text = "${item?.title}",
+                fontWeight = FontWeight(500),
+                fontSize = 18.sp,
+                color = colorResource(R.color.text_article_title)
+            )
             AuthorInfoBanner(
                 avatarUrl = item?.user?.avatar ?: "",
                 name = "${item?.user?.userName}",
                 modifier = Modifier.padding(4.dp),
                 fontSize = 16.sp,
-                fontColor = R.color.gray_585858
+                fontColor = R.color.text_article_summary
             )
             Text(
                 text = "${item?.content}",
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 2,
                 color = colorResource(
-                    id = R.color.gray_585858
+                    id = R.color.text_article_summary
                 )
             )
             if (item?.cover != null) {

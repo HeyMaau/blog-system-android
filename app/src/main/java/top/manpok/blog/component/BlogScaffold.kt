@@ -19,7 +19,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.lifecycle.viewmodel.compose.viewModel
+import top.manpok.blog.R
 import top.manpok.blog.page.AboutPage
 import top.manpok.blog.page.CategoryPage
 import top.manpok.blog.page.HomePage
@@ -43,7 +45,7 @@ fun BlogScaffold(
             pageCount = { 2 }
         )
         Scaffold(
-            containerColor = Color.White,
+            containerColor = colorResource(R.color.bg_white),
             bottomBar = {
                 val context = LocalContext.current
                 val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
@@ -74,7 +76,7 @@ fun BlogScaffold(
                 0 -> HomePage(
                     modifier = modifier
                         .padding(it)
-                        .background(Color.White),
+                        .background(colorResource(R.color.bg_white)),
                     pagerState = pagerState
                 )
 

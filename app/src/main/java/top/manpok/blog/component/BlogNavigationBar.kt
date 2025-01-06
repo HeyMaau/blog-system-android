@@ -10,7 +10,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
@@ -28,7 +27,7 @@ fun BlogNavigationBar(
 ) {
     CompositionLocalProvider(LocalRippleTheme provides NoRippleTheme) {
         NavigationBar(
-            containerColor = Color.White,
+            containerColor = colorResource(R.color.bg_white),
             modifier = Modifier.shadow(elevation = 4.dp)
         ) {
             bottomBarItems.forEachIndexed { index, bottomBarItem ->
@@ -49,7 +48,7 @@ fun BlogNavigationBar(
                     colors = NavigationBarItemDefaults.colors(
                         selectedIconColor = colorResource(id = R.color.blue_4285f4),
                         selectedTextColor = colorResource(id = R.color.blue_4285f4),
-                        indicatorColor = Color.White
+                        indicatorColor = colorResource(R.color.bg_white)
                     )
                 )
             }

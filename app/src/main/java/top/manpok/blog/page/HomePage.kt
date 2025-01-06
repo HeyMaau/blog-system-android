@@ -53,7 +53,7 @@ fun HomePage(
             TabRow(
                 selectedTabIndex = pagerState.currentPage,
                 containerColor = Color.Transparent,
-                contentColor = Color.Black,
+                contentColor = colorResource(R.color.text_article_title),
                 divider = {},
                 indicator = { tabPositions ->
                     val currentTabPosition = tabPositions[pagerState.currentPage]

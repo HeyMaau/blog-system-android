@@ -44,7 +44,7 @@ fun BlogSearchBar(modifier: Modifier = Modifier) {
         )
         Text(
             text = stringResource(id = R.string.enter_key_word),
-            color = colorResource(id = R.color.gray_4f4f4f),
+            color = colorResource(id = R.color.text_search_bar_hint),
             fontSize = 12.sp,
             modifier = Modifier.padding(5.dp, 0.dp)
         )

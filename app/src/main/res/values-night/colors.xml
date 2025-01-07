@@ -30,4 +30,5 @@
     <color name="text_article_title">#FFDADADA</color>
     <color name="text_article_summary">#FFA6A9B2</color>
     <color name="text_search_bar_hint">#FFA6A9B2</color>
+    <color name="text_category_author_name">#FFA6A9B2</color>
 </resources>

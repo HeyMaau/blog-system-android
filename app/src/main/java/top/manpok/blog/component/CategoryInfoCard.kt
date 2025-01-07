@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -33,10 +34,10 @@ fun CategoryInfoCard(
 ) {
     Card(
         colors = CardColors(
-            containerColor = Color.White,
+            containerColor = colorResource(R.color.bg_white),
             contentColor = Color.Unspecified,
-            disabledContentColor = Color.White,
-            disabledContainerColor = Color.White
+            disabledContentColor = colorResource(R.color.bg_white),
+            disabledContainerColor = colorResource(R.color.bg_white)
         ),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 5.dp
@@ -52,17 +53,20 @@ fun CategoryInfoCard(
                 AuthorInfoBanner(
                     avatarUrl = avatarUrl,
                     name = userName,
-                    fontSize = 16.sp
+                    fontSize = 16.sp,
+                    fontColor = R.color.text_category_author_name
                 )
                 Text(
                     text = categoryName,
                     fontSize = 22.sp,
-                    modifier = Modifier.padding(0.dp, 5.dp, 0.dp, 5.dp)
+                    modifier = Modifier.padding(0.dp, 5.dp, 0.dp, 5.dp),
+                    color = colorResource(R.color.text_article_title)
                 )
-                Text(text = categoryDesc)
+                Text(text = categoryDesc, color = colorResource(R.color.text_article_title))
                 Text(
                     text = stringResource(id = R.string.category_total_article, totalArticle),
-                    modifier = Modifier.padding(0.dp, 5.dp, 0.dp, 0.dp)
+                    modifier = Modifier.padding(0.dp, 5.dp, 0.dp, 0.dp),
+                    color = colorResource(R.color.text_article_title)
                 )
             }
             AsyncImage(

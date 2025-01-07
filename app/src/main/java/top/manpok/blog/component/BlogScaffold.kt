@@ -83,7 +83,7 @@ fun BlogScaffold(
                 1 -> CategoryPage(
                     modifier = modifier
                         .padding(it)
-                        .background(Color.White)
+                        .background(colorResource(R.color.bg_white))
                 )
 
                 2 -> ToolsPage(

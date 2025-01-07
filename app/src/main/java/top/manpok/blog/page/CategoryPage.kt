@@ -268,7 +268,7 @@ fun CategoryPage(
                 rightIconClick = null,
                 modifier = Modifier
                     .zIndex(1f)
-                    .background(Color.White)
+                    .background(colorResource(R.color.bg_white))
                     .padding(12.dp, 0.dp)
                     .onGloballyPositioned {
                         with(density) {
@@ -295,11 +295,13 @@ fun CategoryPage(
                         text = if (categoryViewModel.currentIndex != -1) categoryViewModel.categoryList[categoryViewModel.currentIndex].name!! else stringResource(
                             id = R.string.default_category_android
                         ),
-                        fontSize = 18.sp
+                        fontSize = 18.sp,
+                        color = colorResource(R.color.text_article_title)
                     )
                     Icon(
                         imageVector = ImageVector.vectorResource(id = R.drawable.ic_arrow_drop_down),
-                        contentDescription = null
+                        contentDescription = null,
+                        tint = colorResource(R.color.text_article_title)
                     )
                 }
             }

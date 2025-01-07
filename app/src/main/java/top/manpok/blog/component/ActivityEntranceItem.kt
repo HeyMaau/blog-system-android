@@ -43,7 +43,8 @@ fun ActivityEntranceItem(
                 fontSize = 14.sp,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                color = colorResource(R.color.text_article_title)
             )
         }
     } else {

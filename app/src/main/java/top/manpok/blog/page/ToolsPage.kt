@@ -74,13 +74,15 @@ fun ToolsPage(
             Icon(
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_tools),
                 contentDescription = null,
-                modifier = Modifier.size(32.dp)
+                modifier = Modifier.size(32.dp),
+                tint = colorResource(R.color.text_article_title)
             )
             Text(
                 text = stringResource(id = R.string.all_tools),
                 fontSize = 20.sp,
                 modifier = Modifier.padding(10.dp, 0.dp),
-                fontWeight = FontWeight(400)
+                fontWeight = FontWeight(400),
+                color = colorResource(R.color.text_article_title)
             )
         }
 

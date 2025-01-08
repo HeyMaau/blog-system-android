@@ -12,7 +12,6 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -27,7 +26,7 @@ fun FeedbackInputArea(dataList: List<FeedbackItemData>, modifier: Modifier = Mod
     Column(
         modifier = modifier
             .clip(RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp))
-            .background(Color.White)
+            .background(colorResource(R.color.bg_white))
             .padding(top = 0.dp, start = 12.dp, end = 12.dp, bottom = 20.dp)
     ) {
         dataList.forEach { data ->
@@ -36,12 +35,15 @@ fun FeedbackInputArea(dataList: List<FeedbackItemData>, modifier: Modifier = Mod
                 onValueChange = data.onTextChange,
                 textStyle = TextStyle.Default.copy(fontSize = 16.sp),
                 colors = TextFieldDefaults.colors(
-                    focusedContainerColor = Color.White,
-                    unfocusedContainerColor = Color.White,
-                    focusedPlaceholderColor = colorResource(id = R.color.gray_878789),
+                    focusedContainerColor = colorResource(R.color.bg_white),
+                    unfocusedContainerColor = colorResource(R.color.bg_white),
+                    focusedPlaceholderColor = colorResource(id = R.color.text_category_author_name),
                     focusedLabelColor = colorResource(id = R.color.blue_4285f4),
+                    unfocusedLabelColor = colorResource(R.color.text_article_title),
                     focusedIndicatorColor = colorResource(id = R.color.blue_4285f4),
-                    unfocusedIndicatorColor = colorResource(id = R.color.gray_878789)
+                    unfocusedIndicatorColor = colorResource(id = R.color.text_category_author_name),
+                    focusedTextColor = colorResource(R.color.text_article_title),
+                    unfocusedTextColor = colorResource(R.color.text_category_author_name)
                 ),
                 label = {
                     Text(

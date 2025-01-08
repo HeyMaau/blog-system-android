@@ -61,7 +61,7 @@ class FeedbackActivity : BaseActivity() {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
-                    .background(colorResource(id = R.color.gray_f2f3f5))
+                    .background(colorResource(id = R.color.bg_f2f3f5))
                     .fillMaxSize()
                     .statusBarsPadding()
                     .padding(12.dp, 0.dp)

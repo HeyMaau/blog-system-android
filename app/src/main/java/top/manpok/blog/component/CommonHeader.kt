@@ -33,9 +33,9 @@ import top.manpok.blog.R
 @Composable
 fun CommonHeader(
     title: String?,
+    modifier: Modifier = Modifier,
     @DrawableRes leftIcon: Int?,
     @DrawableRes rightIcon: Int?,
-    modifier: Modifier = Modifier,
     @DrawableRes closeIcon: Int? = null,
     leftIconClick: () -> Unit,
     closeIconClick: (() -> Unit)? = null,
@@ -55,6 +55,7 @@ fun CommonHeader(
                     Icon(
                         imageVector = ImageVector.vectorResource(id = leftIcon),
                         contentDescription = null,
+                        tint = colorResource(R.color.text_article_title)
                     )
                 }
             }
@@ -82,7 +83,8 @@ fun CommonHeader(
                     overflow = TextOverflow.Ellipsis,
                     textAlign = TextAlign.Center,
                     modifier = Modifier
-                        .fillMaxWidth(0.6f)
+                        .fillMaxWidth(0.6f),
+                    color = colorResource(R.color.text_article_title)
                 )
             }
         }

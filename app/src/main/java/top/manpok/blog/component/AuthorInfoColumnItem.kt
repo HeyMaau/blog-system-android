@@ -42,7 +42,7 @@ fun AuthorInfoColumnItem(
         )
         Text(
             text = text,
-            color = colorResource(id = R.color.gray_878789),
+            color = colorResource(id = R.color.text_category_author_name),
             modifier = Modifier
                 .padding(start = 10.dp)
                 .weight(1f)
@@ -52,7 +52,8 @@ fun AuthorInfoColumnItem(
                 imageVector = ImageVector.vectorResource(id = rightIcon),
                 contentDescription = null,
                 modifier = Modifier
-                    .size(16.dp)
+                    .size(16.dp),
+                tint = colorResource(R.color.text_article_title)
             )
         }
     }

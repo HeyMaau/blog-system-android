@@ -16,7 +16,6 @@ import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -37,7 +36,7 @@ class PersonalInfoActivity : BaseActivity() {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
-                    .background(colorResource(id = R.color.gray_f2f3f5))
+                    .background(colorResource(id = R.color.bg_f2f3f5))
                     .fillMaxSize()
                     .statusBarsPadding()
                     .padding(12.dp, 0.dp)
@@ -61,7 +60,8 @@ class PersonalInfoActivity : BaseActivity() {
                 Text(
                     text = userViewModel.authorName,
                     fontSize = 24.sp,
-                    fontWeight = FontWeight(500)
+                    fontWeight = FontWeight(500),
+                    color = colorResource(R.color.text_article_title)
                 )
                 Spacer(modifier = Modifier.height(20.dp))
                 AuthorInfoColumn(
@@ -70,7 +70,7 @@ class PersonalInfoActivity : BaseActivity() {
                     sign = userViewModel.authorSign,
                     modifier = Modifier
                         .clip(RoundedCornerShape(10))
-                        .background(Color.White)
+                        .background(colorResource(R.color.bg_white))
                         .padding(12.dp, 0.dp)
                 )
             }

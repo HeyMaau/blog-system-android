@@ -17,7 +17,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -95,7 +94,7 @@ fun BlogScaffold(
                 3 -> AboutPage(
                     modifier = Modifier
                         .padding(it)
-                        .background(Color.White)
+                        .background(colorResource(R.color.bg_white))
                 )
             }
         }

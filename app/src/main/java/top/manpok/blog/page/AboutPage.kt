@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -51,7 +52,8 @@ fun AboutPage(
             text = stringResource(id = R.string.app_name),
             fontWeight = FontWeight.Bold,
             fontSize = 20.sp,
-            modifier = Modifier.padding(top = 15.dp)
+            modifier = Modifier.padding(top = 15.dp),
+            color = colorResource(R.color.text_article_title)
         )
         val packageManager = context.packageManager
         val versionName =
@@ -60,7 +62,8 @@ fun AboutPage(
             text = stringResource(id = R.string.app_version, versionName ?: ""),
             modifier = Modifier.padding(
                 bottom = 30.dp
-            )
+            ),
+            color = colorResource(R.color.text_article_title)
         )
         HorizontalDivider(thickness = 0.5.dp)
         aboutPageViewModel.settingItemList.forEachIndexed { index, settingItemData ->

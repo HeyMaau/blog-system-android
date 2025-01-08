@@ -18,9 +18,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
+import top.manpok.blog.R
 
 @Composable
 fun SettingItem(
@@ -44,11 +46,13 @@ fun SettingItem(
         ) {
             Text(
                 text = stringResource(id = name),
+                color = colorResource(R.color.text_article_title),
             )
             Icon(
                 imageVector = ImageVector.vectorResource(id = rightIcon),
                 contentDescription = null,
-                modifier = Modifier.size(16.dp)
+                modifier = Modifier.size(16.dp),
+                tint = colorResource(R.color.text_article_title)
             )
         }
         if (!isLast) {

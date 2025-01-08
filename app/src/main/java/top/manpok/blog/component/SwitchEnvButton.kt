@@ -22,13 +22,21 @@ import top.manpok.blog.viewmodel.EnvViewModel
 fun SwitchEnvButton(modifier: Modifier = Modifier) {
     val envViewModel: EnvViewModel = viewModel()
     Column(modifier = modifier) {
-        Text(text = stringResource(id = R.string.choose_env_type), fontSize = 16.sp)
+        Text(
+            text = stringResource(id = R.string.choose_env_type),
+            fontSize = 16.sp,
+            color = colorResource(R.color.text_article_title)
+        )
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text(text = stringResource(id = R.string.env_prod), fontSize = 16.sp)
+            Text(
+                text = stringResource(id = R.string.env_prod),
+                fontSize = 16.sp,
+                color = colorResource(R.color.text_article_title)
+            )
             RadioButton(selected = envViewModel.currentEnv == 0,
                 colors = RadioButtonDefaults.colors(
                     selectedColor = colorResource(
@@ -44,7 +52,11 @@ fun SwitchEnvButton(modifier: Modifier = Modifier) {
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text(text = stringResource(id = R.string.env_dev), fontSize = 16.sp)
+            Text(
+                text = stringResource(id = R.string.env_dev),
+                fontSize = 16.sp,
+                color = colorResource(R.color.text_article_title)
+            )
             RadioButton(selected = envViewModel.currentEnv == 1,
                 colors = RadioButtonDefaults.colors(
                     selectedColor = colorResource(

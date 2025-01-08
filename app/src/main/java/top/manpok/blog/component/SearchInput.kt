@@ -14,9 +14,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import top.manpok.blog.R
 
@@ -32,11 +34,13 @@ fun SearchInput(
         onValueChange = onTextChange,
         singleLine = true,
         modifier = modifier,
+        cursorBrush  = SolidColor(colorResource(R.color.text_article_title)),
+        textStyle = TextStyle.Default.copy(color = colorResource(R.color.text_article_title)),
         decorationBox = {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
-                    .background(colorResource(id = R.color.gray_f8f8fa), shape = CircleShape)
+                    .background(colorResource(id = R.color.bg_f8f8fa), shape = CircleShape)
                     .fillMaxWidth()
                     .padding(horizontal = 12.dp, vertical = 8.dp)
             ) {
@@ -50,7 +54,7 @@ fun SearchInput(
                     .padding(start = 5.dp)
                     .weight(1f)) {
                     if (TextUtils.isEmpty(text) && !TextUtils.isEmpty(hint)) {
-                        Text(text = hint, color = colorResource(id = R.color.gray_878789))
+                        Text(text = hint, color = colorResource(id = R.color.text_category_author_name))
                     }
                     it()
                 }

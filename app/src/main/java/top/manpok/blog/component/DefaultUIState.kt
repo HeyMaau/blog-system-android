@@ -14,7 +14,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.vectorResource
@@ -34,7 +33,7 @@ fun DefaultUIState(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
         modifier = modifier
-            .background(Color.White)
+            .background(colorResource(R.color.bg_white))
             .fillMaxSize()
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
@@ -52,7 +51,7 @@ fun DefaultUIState(
             text = hint,
             fontSize = 16.sp,
             modifier = Modifier.padding(top = 20.dp),
-            color = colorResource(id = R.color.gray_878789)
+            color = colorResource(id = R.color.text_category_author_name)
         )
     }
 }

@@ -184,6 +184,7 @@ fun CommonHeader(
                 Icon(
                     imageVector = ImageVector.vectorResource(id = leftIcon),
                     contentDescription = null,
+                    tint = colorResource(R.color.text_article_title)
                 )
             }
         }

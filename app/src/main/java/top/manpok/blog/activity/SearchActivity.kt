@@ -26,7 +26,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
@@ -65,7 +64,7 @@ class SearchActivity : BaseActivity() {
             Box(
                 contentAlignment = Alignment.TopCenter,
                 modifier = Modifier
-                    .background(Color.White)
+                    .background(colorResource(R.color.bg_white))
                     .fillMaxSize()
                     .statusBarsPadding()
             ) {
@@ -90,7 +89,7 @@ class SearchActivity : BaseActivity() {
                     } else {
                         LazyColumn(
                             modifier = Modifier
-                                .background(colorResource(id = R.color.gray_f7f6fb))
+                                .background(colorResource(id = R.color.bg_f7f6fb))
                                 .fillMaxSize()
                                 .padding(top = searchViewModel.commonHeaderHeight)
                         ) {
@@ -173,7 +172,7 @@ class SearchActivity : BaseActivity() {
                         focusManager.clearFocus()
                     },
                     modifier = Modifier
-                        .background(Color.White)
+                        .background(colorResource(R.color.bg_white))
                         .padding(start = 12.dp, end = 12.dp, bottom = 8.dp)
                         .onGloballyPositioned {
                             with(density) {

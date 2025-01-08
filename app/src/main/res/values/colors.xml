@@ -28,6 +28,9 @@
     <color name="orange_ff8c00">#FF8C00</color>
     <color name="bg_white">#FFFFFFFF</color>
     <color name="bg_f2f3f5">#f2f3f5</color>
+    <color name="bg_f8f8fa">#f8f8fa</color>
+    <color name="bg_f7f6fb">#f7f6fb</color>
+    <color name="bg_cccccc">#cccccc</color>
     <color name="text_article_title">#FF000000</color>
     <color name="text_article_summary">#FF585858</color>
     <color name="text_search_bar_hint">#FF4f4f4f</color>

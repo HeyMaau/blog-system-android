@@ -17,7 +17,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.SpanStyle
@@ -47,13 +46,13 @@ fun SearchResultItem(
     if (useSkeleton) {
         Column(
             modifier
-                .background(Color.White)
+                .background(colorResource(R.color.bg_white))
                 .fillMaxWidth()
                 .padding(bottom = 12.dp, start = 12.dp, end = 12.dp)
                 .clickable(onClick = onClick)
         ) {
             Surface(
-                color = colorResource(id = R.color.gray_cccccc),
+                color = colorResource(id = R.color.bg_cccccc),
                 shape = CircleShape,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -69,7 +68,7 @@ fun SearchResultItem(
                 ) {
                     for (i in 0..1) {
                         Surface(
-                            color = colorResource(id = R.color.gray_cccccc),
+                            color = colorResource(id = R.color.bg_cccccc),
                             shape = CircleShape,
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -84,12 +83,12 @@ fun SearchResultItem(
                             .padding(top = 8.dp),
                         shape = CircleShape,
                         color = colorResource(
-                            id = R.color.gray_cccccc
+                            id = R.color.bg_cccccc
                         )
                     ) {}
                 }
                 Surface(
-                    color = colorResource(id = R.color.gray_cccccc),
+                    color = colorResource(id = R.color.bg_cccccc),
                     modifier = Modifier
                         .weight(1f)
                         .height(CONTENT_HEIGHT)
@@ -101,7 +100,7 @@ fun SearchResultItem(
     } else {
         Column(
             modifier
-                .background(Color.White)
+                .background(colorResource(R.color.bg_white))
                 .fillMaxWidth()
                 .padding(bottom = 12.dp, start = 12.dp, end = 12.dp)
                 .clickable(onClick = onClick)
@@ -120,7 +119,8 @@ fun SearchResultItem(
                 fontSize = 16.sp,
                 lineHeight = 1.2.em,
                 fontWeight = FontWeight(550),
-                modifier = Modifier.padding(vertical = 8.dp)
+                modifier = Modifier.padding(vertical = 8.dp),
+                color = colorResource(R.color.text_article_title)
             )
             Row(modifier = Modifier.fillMaxWidth()) {
                 Column(
@@ -143,14 +143,15 @@ fun SearchResultItem(
                         maxLines = 2,
                         fontSize = 12.sp,
                         lineHeight = 1.5.em,
-                        overflow = TextOverflow.Ellipsis
+                        overflow = TextOverflow.Ellipsis,
+                        color = colorResource(R.color.text_article_summary)
                     )
                     Text(
                         text = updateTime ?: "",
                         modifier = Modifier.padding(top = 8.dp),
                         fontSize = 12.sp,
                         color = colorResource(
-                            id = R.color.gray_cccccc
+                            id = R.color.text_article_summary
                         )
                     )
                 }

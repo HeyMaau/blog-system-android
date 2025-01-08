@@ -53,7 +53,8 @@ fun SearchHistoryPanel(
             Text(
                 text = stringResource(id = R.string.search_history),
                 fontSize = 16.sp,
-                modifier = Modifier.padding(start = 8.dp)
+                modifier = Modifier.padding(start = 8.dp),
+                color = colorResource(R.color.text_article_title)
             )
         }
         LazyVerticalGrid(columns = GridCells.Fixed(2)) {
@@ -66,7 +67,8 @@ fun SearchHistoryPanel(
                             .clickable {
                                 onItemClick(it.keyword)
                             }
-                            .padding(vertical = 8.dp)
+                            .padding(vertical = 8.dp),
+                        color = colorResource(R.color.text_article_title)
                     )
                 }
             } else {

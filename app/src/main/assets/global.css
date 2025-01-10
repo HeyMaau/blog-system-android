@@ -12,7 +12,22 @@ body {
     word-break: break-word;
 }
 
+@media (prefers-color-scheme: dark) {
+    body {
+        font-size: 4vw;
+        word-break: break-word;
+        color: #DADADA;
+    }
+}
+
 a {
     text-decoration: none;
     color: black;
+}
+
+@media (prefers-color-scheme: dark) {
+    a {
+        text-decoration: none;
+        color: #DADADA;
+    }
 }

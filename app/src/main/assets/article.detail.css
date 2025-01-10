@@ -23,6 +23,16 @@ blockquote {
     font-size: 3.5vw;
 }
 
+@media (prefers-color-scheme: dark) {
+    blockquote {
+        border-left: 0.8vw solid #D3D3D3;
+        color: #A6A9B2;
+        padding-left: 1em;
+        margin: 1.4em 0;
+        font-size: 3.5vw;
+    }
+}
+
 a {
     border-bottom: 0.266vw solid #808080;
 }

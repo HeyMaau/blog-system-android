@@ -44,7 +44,7 @@ fun AboutPage(
         val context = LocalContext.current
         Spacer(modifier = Modifier.height(100.dp))
         Image(
-            bitmap = ImageBitmap.imageResource(id = R.mipmap.logo_about),
+            bitmap = ImageBitmap.imageResource(id = R.drawable.logo_transparent),
             contentDescription = null,
             modifier = Modifier.size(150.dp)
         )

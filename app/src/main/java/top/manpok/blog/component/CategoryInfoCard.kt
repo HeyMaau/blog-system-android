@@ -34,10 +34,10 @@ fun CategoryInfoCard(
 ) {
     Card(
         colors = CardColors(
-            containerColor = colorResource(R.color.bg_white),
+            containerColor = colorResource(R.color.bg_white_dark_282828),
             contentColor = Color.Unspecified,
-            disabledContentColor = colorResource(R.color.bg_white),
-            disabledContainerColor = colorResource(R.color.bg_white)
+            disabledContentColor = colorResource(R.color.bg_white_dark_282828),
+            disabledContainerColor = colorResource(R.color.bg_white_dark_282828)
         ),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 5.dp

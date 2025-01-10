@@ -41,12 +41,13 @@ fun FloatingHeader(
         Icon(
             imageVector = ImageVector.vectorResource(id = leftIcon),
             contentDescription = null,
+            tint = colorResource(R.color.text_article_title),
             modifier = Modifier
                 .shadow(elevation = 5.dp, shape = CircleShape)
                 .clip(
                     CircleShape
                 )
-                .background(color = colorResource(id = R.color.white_f2ffffff))
+                .background(color = colorResource(id = R.color.bg_f2ffffff))
                 .padding(4.dp)
                 .clickable(
                     onClick = leftIconClick,
@@ -57,12 +58,13 @@ fun FloatingHeader(
             Icon(
                 imageVector = ImageVector.vectorResource(id = rightIcon),
                 contentDescription = null,
+                tint = colorResource(R.color.text_article_title),
                 modifier = Modifier
                     .shadow(elevation = 5.dp, shape = CircleShape)
                     .clip(
                         CircleShape
                     )
-                    .background(color = colorResource(id = R.color.white_f2ffffff))
+                    .background(color = colorResource(id = R.color.bg_f2ffffff))
                     .padding(4.dp)
                     .clickable(onClick = {
                         showBottomDialog = true

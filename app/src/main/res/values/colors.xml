@@ -31,6 +31,7 @@
     <color name="bg_f8f8fa">#f8f8fa</color>
     <color name="bg_f7f6fb">#f7f6fb</color>
     <color name="bg_cccccc">#cccccc</color>
+    <color name="bg_f2ffffff">#f2ffffff</color>
     <color name="text_article_title">#FF000000</color>
     <color name="text_article_summary">#FF585858</color>
     <color name="text_search_bar_hint">#FF4f4f4f</color>

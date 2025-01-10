@@ -28,7 +28,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.colorResource
@@ -128,7 +127,7 @@ class ArticleDetailActivity : BaseActivity() {
 
             Box(
                 modifier = Modifier
-                    .background(Color.White)
+                    .background(colorResource(R.color.bg_white))
                     .fillMaxSize()
                     .padding(12.dp, 0.dp)
             ) {
@@ -193,7 +192,8 @@ class ArticleDetailActivity : BaseActivity() {
                         Text(
                             text = articleDetailViewModel.title,
                             fontSize = 18.sp,
-                            modifier = Modifier.padding(0.dp, 15.dp)
+                            modifier = Modifier.padding(0.dp, 15.dp),
+                            color = colorResource(R.color.text_article_title)
                         )
                         AuthorInfoBanner(
                             avatarUrl = articleDetailViewModel.authorAvatar,
@@ -212,6 +212,7 @@ class ArticleDetailActivity : BaseActivity() {
                         if (!TextUtils.isEmpty(articleDetailViewModel.content)) {
                             AndroidView(modifier = Modifier.fillMaxSize(), factory = {
                                 val webView = WebView(it)
+                                webView.setBackgroundColor(getColor(R.color.bg_white))
                                 webView.settings.apply {
                                     setSupportZoom(false)
                                     builtInZoomControls = false
@@ -297,11 +298,11 @@ class ArticleDetailActivity : BaseActivity() {
                         modifier = Modifier
                             .statusBarsPadding()
                             .padding(top = commonHeaderHeightDP)
-                            .background(Color.White)
+                            .background(colorResource(R.color.bg_white))
                             .fillMaxSize()
                     ) {
                         Surface(
-                            color = colorResource(id = R.color.gray_cccccc),
+                            color = colorResource(id = R.color.bg_cccccc),
                             shape = RoundedCornerShape(40),
                             modifier = Modifier
                                 .padding(vertical = 15.dp)
@@ -312,7 +313,7 @@ class ArticleDetailActivity : BaseActivity() {
                         Spacer(modifier = Modifier.height(30.dp))
                         for (i in 0..3) {
                             Surface(
-                                color = colorResource(id = R.color.gray_cccccc),
+                                color = colorResource(id = R.color.bg_cccccc),
                                 shape = RoundedCornerShape(30),
                                 modifier = Modifier
                                     .padding(vertical = 10.dp)

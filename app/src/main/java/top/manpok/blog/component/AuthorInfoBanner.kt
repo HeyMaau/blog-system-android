@@ -43,7 +43,7 @@ fun AuthorInfoBanner(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
-                painter = ColorPainter(colorResource(id = R.color.gray_cccccc)),
+                painter = ColorPainter(colorResource(id = R.color.bg_cccccc)),
                 contentDescription = null,
                 modifier = Modifier
                     .clip(
@@ -56,14 +56,14 @@ fun AuthorInfoBanner(
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 Surface(
-                    color = colorResource(id = R.color.gray_cccccc),
+                    color = colorResource(id = R.color.bg_cccccc),
                     shape = RoundedCornerShape(40),
                     modifier = Modifier
                         .height(10.dp)
                         .width(80.dp)
                 ) {}
                 Surface(
-                    color = colorResource(id = R.color.gray_cccccc),
+                    color = colorResource(id = R.color.bg_cccccc),
                     shape = RoundedCornerShape(40),
                     modifier = Modifier
                         .height(10.dp)
@@ -91,8 +91,16 @@ fun AuthorInfoBanner(
                 modifier = Modifier.padding(8.dp, 0.dp),
                 verticalArrangement = Arrangement.spacedBy(5.dp)
             ) {
-                Text(text = name, fontSize = 16.sp)
-                Text(text = sign, fontSize = 14.sp, color = colorResource(id = R.color.gray_878789))
+                Text(
+                    text = name,
+                    fontSize = 16.sp,
+                    color = colorResource(R.color.text_article_title)
+                )
+                Text(
+                    text = sign,
+                    fontSize = 14.sp,
+                    color = colorResource(id = R.color.text_category_author_name)
+                )
             }
         }
     }

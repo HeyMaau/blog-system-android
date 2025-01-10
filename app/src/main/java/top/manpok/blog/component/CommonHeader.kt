@@ -70,6 +70,7 @@ fun CommonHeader(
                     Icon(
                         imageVector = ImageVector.vectorResource(id = closeIcon),
                         contentDescription = null,
+                        tint = colorResource(R.color.text_article_title)
                     )
                 }
             }
@@ -99,7 +100,8 @@ fun CommonHeader(
                 ) {
                     Icon(
                         imageVector = ImageVector.vectorResource(id = rightIcon),
-                        contentDescription = null
+                        contentDescription = null,
+                        tint = colorResource(R.color.text_article_title)
                     )
                 }
             }

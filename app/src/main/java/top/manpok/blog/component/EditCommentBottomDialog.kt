@@ -3,7 +3,6 @@ package top.manpok.blog.component
 import android.text.TextUtils
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -37,7 +36,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.colorResource
@@ -90,7 +88,7 @@ fun EditCommentBottomDialog(
         onDismissRequest = onDismiss,
         sheetState = sheetState,
         dragHandle = null,
-        containerColor = Color.White,
+        containerColor = colorResource(R.color.bg_white),
         shape = RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp),
         modifier = modifier
     ) {
@@ -120,7 +118,7 @@ fun EditCommentBottomDialog(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(bottom = 4.dp)
-                            .height(0.5.dp), color = colorResource(id = R.color.gray_cccccc)
+                            .height(0.5.dp), color = colorResource(id = R.color.bg_cccccc)
                     ) {
 
                     }
@@ -137,7 +135,7 @@ fun EditCommentBottomDialog(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(bottom = 4.dp)
-                            .height(0.5.dp), color = colorResource(id = R.color.gray_cccccc)
+                            .height(0.5.dp), color = colorResource(id = R.color.bg_cccccc)
                     ) {
 
                     }
@@ -154,6 +152,7 @@ fun EditCommentBottomDialog(
                 Icon(
                     imageVector = ImageVector.vectorResource(id = if (fullScreen) R.drawable.ic_exit_full_screen else R.drawable.ic_full_screen),
                     contentDescription = null,
+                    tint = colorResource(R.color.text_article_title),
                     modifier = Modifier
                         .size(20.dp)
                         .clickable {
@@ -166,9 +165,10 @@ fun EditCommentBottomDialog(
                 modifier = Modifier.padding(horizontal = 12.dp)
             ) {
                 val keyboardController = LocalSoftwareKeyboardController.current
-                Image(
+                Icon(
                     imageVector = ImageVector.vectorResource(id = if (showEmojiPanel) R.drawable.ic_keyboard else R.drawable.ic_emoji_panel),
                     contentDescription = null,
+                    tint = colorResource(R.color.text_article_title),
                     modifier = Modifier
                         .size(20.dp)
                         .clickable {
@@ -182,7 +182,8 @@ fun EditCommentBottomDialog(
                         }
                 )
                 Surface(
-                    color = colorResource(id = R.color.gray_878789), modifier = Modifier
+                    color = colorResource(id = R.color.text_category_author_name),
+                    modifier = Modifier
                         .padding(start = 8.dp, end = 4.dp)
                         .height(20.dp)
                         .width(1.dp)
@@ -208,7 +209,7 @@ fun EditCommentBottomDialog(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.End, modifier = Modifier
                     .background(
-                        colorResource(id = R.color.gray_f8f8fa)
+                        colorResource(id = R.color.bg_f8f8fa)
                     )
                     .fillMaxWidth()
                     .padding(12.dp)

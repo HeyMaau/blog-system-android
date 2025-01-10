@@ -7,8 +7,10 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.TextFieldValue
 import top.manpok.blog.R
 
@@ -24,6 +26,8 @@ fun CommentBasicTextField(
         modifier = modifier,
         minLines = minLines,
         value = text,
+        textStyle = TextStyle.Default.copy(color = colorResource(R.color.text_article_title)),
+        cursorBrush = SolidColor(colorResource(R.color.text_article_title)),
         onValueChange = {
             onTextChange(it)
         },
@@ -33,7 +37,7 @@ fun CommentBasicTextField(
                     Text(
                         text = stringResource(id = hintText),
                         color = colorResource(
-                            id = R.color.gray_878789
+                            id = R.color.text_category_author_name
                         )
                     )
                 }
@@ -54,6 +58,8 @@ fun CommentBasicTextField(
         modifier = modifier,
         minLines = minLines,
         value = text,
+        textStyle = TextStyle.Default.copy(color = colorResource(R.color.text_article_title)),
+        cursorBrush = SolidColor(colorResource(R.color.text_article_title)),
         onValueChange = {
             onTextChange(it)
         },
@@ -63,7 +69,7 @@ fun CommentBasicTextField(
                     Text(
                         text = hintText,
                         color = colorResource(
-                            id = R.color.gray_878789
+                            id = R.color.text_category_author_name
                         )
                     )
                 }

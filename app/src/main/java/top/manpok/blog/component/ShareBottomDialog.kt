@@ -19,8 +19,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
@@ -41,14 +41,18 @@ fun ShareBottomDialog(
         sheetState = modalBottomSheetState,
         onDismissRequest = onDismiss, dragHandle = null,
         shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
-        containerColor = Color.White,
+        containerColor = colorResource(R.color.bg_white),
         windowInsets = WindowInsets(0, 0, 0, 0)
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = modifier.padding(top = 12.dp, bottom = 32.dp, start = 12.dp, end = 12.dp)
         ) {
-            Text(text = stringResource(id = R.string.share), fontSize = 16.sp)
+            Text(
+                text = stringResource(id = R.string.share),
+                fontSize = 16.sp,
+                color = colorResource(R.color.text_article_title)
+            )
             Spacer(modifier = Modifier.height(8.dp))
             LazyVerticalGrid(columns = GridCells.Fixed(4)) {
                 items(1) {
@@ -69,7 +73,8 @@ fun ShareBottomDialog(
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
                             text = stringResource(id = R.string.copy_share_link),
-                            fontSize = 12.sp
+                            fontSize = 12.sp,
+                            color = colorResource(R.color.text_article_title)
                         )
                     }
                 }

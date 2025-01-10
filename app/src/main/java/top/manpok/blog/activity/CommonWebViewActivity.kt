@@ -64,7 +64,7 @@ class CommonWebViewActivity : BaseActivity() {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color.White)
+                    .background(colorResource(R.color.bg_white))
                     .statusBarsPadding()
             ) {
                 CommonHeader(

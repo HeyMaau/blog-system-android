@@ -1,5 +1,7 @@
 package top.manpok.blog.viewmodel
 
+import android.content.Context
+import android.content.res.Configuration
 import android.text.TextUtils
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -42,6 +44,8 @@ class ArticleDetailViewModel : ViewModel() {
     var cover by mutableStateOf("")
     var content by mutableStateOf("")
     var updateTime by mutableStateOf("")
+    var darkTheme by mutableStateOf(false)
+    private var tempContent by mutableStateOf("")
 
     var loading by mutableStateOf(true)
     private var timeOut by mutableStateOf(false)
@@ -53,6 +57,7 @@ class ArticleDetailViewModel : ViewModel() {
     var articleDetailState = _articleDetailState.asStateFlow()
 
     init {
+        checkAndSetDarkTheme(BaseApplication.getApplication())
         initLoading()
     }
 
@@ -87,6 +92,7 @@ class ArticleDetailViewModel : ViewModel() {
                                     data.cover ?: ""
                                 updateTime = data.updateTime!!
                                 setHtmlContent(data.content!!)
+                                tempContent = data.content
                                 if (timeOut) {
                                     loading = false
                                 }
@@ -135,6 +141,7 @@ class ArticleDetailViewModel : ViewModel() {
                 cover =
                     data.cover ?: ""
                 setHtmlContent(data.content!!)
+                tempContent = data.content
                 updateTime = data.updateTime!!
             }
         } else {
@@ -172,8 +179,24 @@ class ArticleDetailViewModel : ViewModel() {
         }
     }
 
+    fun checkAndSetDarkTheme(context: Context) {
+        val currentNightMode =
+            context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        when (currentNightMode) {
+            Configuration.UI_MODE_NIGHT_NO -> darkTheme =
+                false // Night mode is not active, we're using the light theme.
+            Configuration.UI_MODE_NIGHT_YES -> darkTheme =
+                true // Night mode is active, we're using dark theme.
+        }
+    }
+
+    fun resetContent() {
+        setHtmlContent(tempContent)
+    }
 
     private fun setHtmlContent(data: String) {
+        val highlightCssLink =
+            if (darkTheme) "<link rel=\"stylesheet\" href=\"highlight.dark.min.css\"/>" else "<link rel=\"stylesheet\" href=\"highlight.default.min.css\"/>"
         content = """
             <!DOCTYPE html>
             <html lang="zh">
@@ -181,7 +204,7 @@ class ArticleDetailViewModel : ViewModel() {
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no,maximum-scale=1.0,minimum-scale=1.0">
                 <title>Article Title</title>
-                <link rel="stylesheet" href="highlight.default.min.css"/>
+                $highlightCssLink
                 <link rel="stylesheet" href="global.css"/>
                 <link rel="stylesheet" href="article.detail.css"/>
                 <script src="highlight.min.js"></script>

@@ -62,16 +62,19 @@ class ArticleDetailActivity : BaseActivity() {
         const val INTENT_KEY_ARTICLE_ID = "intent_key_article_id"
     }
 
+    private lateinit var articleDetailViewModel: ArticleDetailViewModel
+
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val id = intent.getStringExtra(INTENT_KEY_ARTICLE_ID)
         setContent {
-            val articleDetailViewModel: ArticleDetailViewModel = viewModel()
+            articleDetailViewModel = viewModel()
             val commentViewModel: CommentViewModel = viewModel()
             val shareViewModel: ShareViewModel = viewModel()
 
             LaunchedEffect(key1 = Unit) {
+                articleDetailViewModel.checkAndSetDarkTheme(this@ArticleDetailActivity)
                 articleDetailViewModel.getArticleDetail(id)
                 commentViewModel.getCommentList(
                     commentViewModel.currentPage,
@@ -362,6 +365,11 @@ class ArticleDetailActivity : BaseActivity() {
                 }
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        articleDetailViewModel.content = ""
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {

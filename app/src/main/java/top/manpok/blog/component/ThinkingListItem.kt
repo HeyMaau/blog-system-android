@@ -12,9 +12,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -27,7 +27,7 @@ import top.manpok.blog.pojo.BlogThinking
 @Composable
 fun ThinkingListItem(data: BlogThinking.Data?, click: () -> Unit, modifier: Modifier = Modifier) {
     Surface(
-        color = Color.White,
+        color = colorResource(R.color.bg_white_dark_282828),
         shape = RoundedCornerShape(5),
         modifier = Modifier.clickable(interactionSource = remember {
             MutableInteractionSource()
@@ -65,7 +65,8 @@ fun ThinkingListItem(data: BlogThinking.Data?, click: () -> Unit, modifier: Modi
                 overflow = TextOverflow.Ellipsis,
                 fontSize = 14.sp,
                 lineHeight = 16.sp,
-                modifier = Modifier.padding(8.dp)
+                modifier = Modifier.padding(8.dp),
+                color = colorResource(R.color.text_article_title)
             )
             AuthorInfoBanner(
                 avatarUrl = data.user?.avatar ?: "",

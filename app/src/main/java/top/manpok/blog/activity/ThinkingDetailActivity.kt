@@ -28,7 +28,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
@@ -112,7 +111,7 @@ class ThinkingDetailActivity : BaseActivity() {
             }
             Box(
                 modifier = Modifier
-                    .background(Color.White)
+                    .background(colorResource(R.color.bg_white))
                     .fillMaxSize()
                     .padding(12.dp, 0.dp)
             ) {
@@ -149,12 +148,14 @@ class ThinkingDetailActivity : BaseActivity() {
                         text = intent.getStringExtra(INTENT_KEY_THINKING_TITLE)!!,
                         fontSize = 18.sp,
                         fontWeight = FontWeight(500),
-                        modifier = Modifier.padding(0.dp, 10.dp)
+                        modifier = Modifier.padding(0.dp, 10.dp),
+                        color = colorResource(R.color.text_article_title)
                     )
                     Text(
                         text = intent.getStringExtra(INTENT_KEY_THINKING_CONTENT)!!,
                         fontSize = 16.sp,
-                        lineHeight = 1.5.em
+                        lineHeight = 1.5.em,
+                        color = colorResource(R.color.text_article_title)
                     )
                     if (splitImage?.size == 1) {
                         AsyncImage(
@@ -215,7 +216,7 @@ class ThinkingDetailActivity : BaseActivity() {
                                 INTENT_KEY_THINKING_UPDATE_TIME
                             )!!
                         ),
-                        color = colorResource(id = R.color.gray_878789),
+                        color = colorResource(id = R.color.text_category_author_name),
                         modifier = Modifier.padding(0.dp, 10.dp, 0.dp, 30.dp)
                     )
                     CommentWindow(

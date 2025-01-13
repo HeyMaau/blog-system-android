@@ -113,7 +113,7 @@ fun AuthorInfoBanner(
     avatarUrl: String,
     name: String,
     fontSize: TextUnit = 14.sp,
-    @ColorRes fontColor: Int = R.color.gray_878789
+    @ColorRes fontColor: Int = R.color.text_category_author_name
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,

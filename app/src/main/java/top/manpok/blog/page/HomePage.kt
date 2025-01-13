@@ -117,7 +117,7 @@ fun HomePage(
                         .background(
                             Brush.verticalGradient(
                                 listOf(
-                                    Color.White, colorResource(id = R.color.gray_f6f7fb)
+                                    colorResource(R.color.bg_white), colorResource(id = R.color.bg_f6f7fb)
                                 ),
                                 endY = 50f
                             )

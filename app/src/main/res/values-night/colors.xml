@@ -32,6 +32,7 @@
     <color name="bg_f7f6fb">#282828</color>
     <color name="bg_cccccc">#282828</color>
     <color name="bg_f2ffffff">#282828</color>
+    <color name="bg_f6f7fb">#FF16171B</color>
     <color name="bg_white_dark_282828">#282828</color>
     <color name="text_article_title">#FFDADADA</color>
     <color name="text_article_summary">#FFA6A9B2</color>

@@ -23,7 +23,7 @@ import top.manpok.blog.utils.Emoji
 fun CommentInput(modifier: Modifier = Modifier, onClick: () -> Unit) {
     Row(
         modifier = modifier
-            .background(color = colorResource(id = R.color.gray_f8f8fa), shape = CircleShape)
+            .background(color = colorResource(id = R.color.bg_f8f8fa), shape = CircleShape)
             .fillMaxWidth()
             .clickable(onClick = onClick)
             .padding(vertical = 10.dp, horizontal = 12.dp),
@@ -34,7 +34,7 @@ fun CommentInput(modifier: Modifier = Modifier, onClick: () -> Unit) {
             text = stringResource(id = R.string.write_comment),
             fontSize = 14.sp,
             color = colorResource(
-                id = R.color.gray_878789
+                id = R.color.text_category_author_name
             )
         )
         Text(text = "${Emoji.list[3]} ${Emoji.list[10]}", fontSize = 16.sp)

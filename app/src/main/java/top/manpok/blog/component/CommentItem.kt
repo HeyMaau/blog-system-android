@@ -56,19 +56,21 @@ fun CommentItem(
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                             fontWeight = FontWeight(500),
-                            modifier = Modifier.padding(end = 5.dp)
+                            modifier = Modifier.padding(end = 5.dp),
+                            color = colorResource(R.color.text_article_title)
                         )
                         Icon(
                             imageVector = ImageVector.vectorResource(id = R.drawable.ic_reply_to),
                             contentDescription = null,
-                            tint = colorResource(id = R.color.gray_878789)
+                            tint = colorResource(id = R.color.text_category_author_name)
                         )
                         Text(
                             text = data.replyUserName ?: "",
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                             fontWeight = FontWeight(500),
-                            modifier = Modifier.padding(start = 5.dp)
+                            modifier = Modifier.padding(start = 5.dp),
+                            color = colorResource(R.color.text_article_title)
                         )
                     }
                     Spacer(modifier = Modifier.height(10.dp))
@@ -78,12 +80,14 @@ fun CommentItem(
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         fontWeight = FontWeight(500),
-                        modifier = Modifier.padding(bottom = 10.dp)
+                        modifier = Modifier.padding(bottom = 10.dp),
+                        color = colorResource(R.color.text_article_title)
                     )
                 }
                 Text(
                     text = data.content,
                     modifier = Modifier.padding(bottom = 8.dp),
+                    color = colorResource(R.color.text_article_title)
                 )
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -96,7 +100,7 @@ fun CommentItem(
                         text = data.updateTime ?: "",
                         fontSize = 12.sp,
                         color = colorResource(
-                            id = R.color.gray_878789
+                            id = R.color.text_category_author_name
                         ),
                     )
                     Icon(
@@ -104,7 +108,8 @@ fun CommentItem(
                         contentDescription = null,
                         modifier = Modifier.clickable {
                             onReplyClick(data.parentCommentId, data.id, data.userName)
-                        }
+                        },
+                        tint = colorResource(R.color.text_article_title)
                     )
                 }
                 if (data.children != null) {

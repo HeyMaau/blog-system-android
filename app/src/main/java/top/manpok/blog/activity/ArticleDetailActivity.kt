@@ -247,7 +247,7 @@ class ArticleDetailActivity : BaseActivity() {
                                     id = R.string.update_time,
                                     articleDetailViewModel.updateTime
                                 ),
-                                color = colorResource(id = R.color.gray_878789),
+                                color = colorResource(id = R.color.text_category_author_name),
                                 modifier = Modifier.padding(vertical = 15.dp)
                             )
                         }

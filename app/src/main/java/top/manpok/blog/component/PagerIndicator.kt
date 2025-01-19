@@ -24,8 +24,8 @@ fun PagerIndicator(modifier: Modifier = Modifier, total: Int, current: Int) {
         for (i in 0 until total) {
             Surface(
                 shape = CircleShape,
-                color = if (current == i) colorResource(id = R.color.gray_878789) else colorResource(
-                    id = R.color.gray_cccccc
+                color = if (current == i) colorResource(id = R.color.text_category_author_name) else colorResource(
+                    id = R.color.bg_cccccc
                 ),
                 modifier = Modifier
                     .padding(4.dp)

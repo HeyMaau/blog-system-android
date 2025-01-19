@@ -191,8 +191,13 @@ object AudioFloatingWindowManager {
         })
         val icClose = floatingWindow.findViewById<ImageView>(R.id.ic_close)
         icClose.setOnClickListener {
-            GlobalViewModelManager.audioViewModel.playOrPauseAudio()
-            removeFloatingWindow(activity)
+            MainScope().launch {
+                val playState = GlobalViewModelManager.audioViewModel.playState.first()
+                if (playState == AudioViewModel.PlayState.Playing) {
+                    GlobalViewModelManager.audioViewModel.playOrPauseAudio()
+                }
+                removeFloatingWindow(activity)
+            }
         }
 
         icCtrl.setOnClickListener {

@@ -58,7 +58,7 @@ fun AudioPlayListDialog(
         sheetState = modalBottomSheetState,
         onDismissRequest = { onDismiss() },
         shape = RoundedCornerShape(10.dp),
-        windowInsets = WindowInsets(0, 0, 0, 0),
+        contentWindowInsets = { WindowInsets(0, 0, 0, 0) },
         modifier = modifier
     ) {
         Column(

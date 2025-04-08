@@ -1,7 +1,8 @@
 package top.manpok.blog.component
 
-import androidx.compose.material.ripple.LocalRippleTheme
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalRippleConfiguration
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
@@ -19,13 +20,14 @@ import top.manpok.blog.R
 import top.manpok.blog.pojo.BottomBarItem
 import top.manpok.blog.ui.theme.NoRippleTheme
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BlogNavigationBar(
     bottomBarItems: List<BottomBarItem>,
     selectedItemIndex: Int,
     onSelectedChanged: (index: Int) -> Unit
 ) {
-    CompositionLocalProvider(LocalRippleTheme provides NoRippleTheme) {
+    CompositionLocalProvider(LocalRippleConfiguration provides NoRippleTheme) {
         NavigationBar(
             containerColor = colorResource(R.color.bg_white),
             modifier = Modifier.shadow(elevation = 4.dp)

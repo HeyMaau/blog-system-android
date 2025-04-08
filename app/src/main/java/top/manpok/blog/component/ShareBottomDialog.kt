@@ -42,7 +42,7 @@ fun ShareBottomDialog(
         onDismissRequest = onDismiss, dragHandle = null,
         shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
         containerColor = colorResource(R.color.bg_white),
-        windowInsets = WindowInsets(0, 0, 0, 0)
+        contentWindowInsets = { WindowInsets(0, 0, 0, 0) }
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,

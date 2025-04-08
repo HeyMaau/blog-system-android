@@ -18,7 +18,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LocalMinimumInteractiveComponentEnforcement
+import androidx.compose.material3.LocalMinimumInteractiveComponentSize
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
@@ -36,6 +36,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import top.manpok.blog.R
@@ -71,7 +72,7 @@ fun AudioPlayerControlPanel(
             .fillMaxWidth()
             .padding(12.dp)
     ) {
-        CompositionLocalProvider(LocalMinimumInteractiveComponentEnforcement provides false) {
+        CompositionLocalProvider(LocalMinimumInteractiveComponentSize provides Dp.Unspecified) {
             Slider(
                 value = if (!changing) value else progress,
                 onValueChange = {
@@ -84,10 +85,25 @@ fun AudioPlayerControlPanel(
                     changing = false
                 },
                 valueRange = 0f..maxValue,
-                colors = SliderDefaults.colors(
-                    activeTrackColor = Color.White,
-                    thumbColor = Color.White
-                ),
+                thumb = {
+                    Icon(
+                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_slider_dot),
+                        contentDescription = null,
+                        tint = Color.White,
+                        modifier = Modifier.size(20.dp)
+                    )
+                },
+                track = {
+                    SliderDefaults.Track(
+                        colors = SliderDefaults.colors(
+                            activeTrackColor = Color.White,
+                            thumbColor = Color.White
+                        ), enabled = true, sliderState = it,
+                        thumbTrackGapSize = 0.dp,
+                        drawStopIndicator = null,
+                        modifier = Modifier.height(4.dp)
+                    )
+                }
             )
         }
         Row(

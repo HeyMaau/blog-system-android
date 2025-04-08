@@ -14,7 +14,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
-import androidx.compose.material.ripple.LocalRippleTheme
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.LocalRippleConfiguration
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.TabRowDefaults.SecondaryIndicator
@@ -39,7 +40,7 @@ import top.manpok.blog.viewmodel.HomePageViewModel
 
 private const val TAG = "HomePage"
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun HomePage(
     modifier: Modifier = Modifier,
@@ -49,7 +50,7 @@ fun HomePage(
     val coroutineScope = rememberCoroutineScope()
 
     Column(modifier = modifier.fillMaxSize()) {
-        CompositionLocalProvider(LocalRippleTheme provides NoRippleTheme) {
+        CompositionLocalProvider(LocalRippleConfiguration provides NoRippleTheme) {
             TabRow(
                 selectedTabIndex = pagerState.currentPage,
                 containerColor = Color.Transparent,
@@ -101,7 +102,7 @@ fun HomePage(
             }
         }
 
-        HorizontalPager(state = pagerState, beyondBoundsPageCount = 1) {
+        HorizontalPager(state = pagerState, beyondViewportPageCount = 1) {
             when (it) {
                 0 -> HomeArticleListPage(
                     pagerState = pagerState,

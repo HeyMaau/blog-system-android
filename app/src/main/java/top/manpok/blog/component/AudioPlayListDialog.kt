@@ -1,5 +1,6 @@
 package top.manpok.blog.component
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
@@ -23,7 +24,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
@@ -59,17 +59,20 @@ fun AudioPlayListDialog(
         onDismissRequest = { onDismiss() },
         shape = RoundedCornerShape(10.dp),
         contentWindowInsets = { WindowInsets(0, 0, 0, 0) },
+        containerColor = colorResource(R.color.bg_white_dark_282828),
         modifier = modifier
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
+                .background(colorResource(R.color.bg_white_dark_282828))
                 .padding(start = 12.dp, end = 12.dp, bottom = 12.dp)
         ) {
             Text(
                 text = stringResource(id = R.string.current_play_list, data.size),
                 fontSize = 20.sp,
-                fontWeight = FontWeight(600)
+                fontWeight = FontWeight(600),
+                color = colorResource(R.color.text_article_title)
             )
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -86,13 +89,13 @@ fun AudioPlayListDialog(
                 Icon(
                     imageVector = ImageVector.vectorResource(id = if (playMode == Constants.PLAY_MODE_SEQUENTIAL_PLAYBACK) R.drawable.ic_sequential_playback else if (playMode == Constants.PLAY_MODE_REPEAT_MODE_ONE) R.drawable.ic_repeat_mode_one else R.drawable.ic_shuffle_playback),
                     contentDescription = null,
-                    tint = colorResource(id = R.color.gray_878789),
+                    tint = colorResource(id = R.color.text_category_author_name),
                     modifier = Modifier.size(14.dp)
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
                     text = stringResource(id = if (playMode == Constants.PLAY_MODE_SEQUENTIAL_PLAYBACK) R.string.list_loop else if (playMode == Constants.PLAY_MODE_REPEAT_MODE_ONE) R.string.repeat_one else R.string.shuffle_mode),
-                    color = colorResource(id = R.color.gray_878789)
+                    color = colorResource(id = R.color.text_category_author_name)
                 )
             }
             LazyColumn {
@@ -104,7 +107,7 @@ fun AudioPlayListDialog(
                                 style = SpanStyle(
                                     color = if (currentIndex == index) colorResource(
                                         id = R.color.blue_0185fa
-                                    ) else colorResource(id = R.color.gray_878789)
+                                    ) else colorResource(id = R.color.text_category_author_name)
                                 )
                             ) {
                                 append(" - ${item?.artist}")
@@ -113,7 +116,9 @@ fun AudioPlayListDialog(
                         fontSize = 16.sp,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
-                        color = if (currentIndex == index) colorResource(id = R.color.blue_0185fa) else Color.Unspecified,
+                        color = if (currentIndex == index) colorResource(id = R.color.blue_0185fa) else colorResource(
+                            R.color.text_article_title
+                        ),
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(vertical = 16.dp)

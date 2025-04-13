@@ -6,6 +6,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import top.manpok.blog.base.BaseApplication
 import top.manpok.blog.utils.Constants
 import top.manpok.blog.utils.LogUtil
 import top.manpok.blog.utils.TempData
@@ -24,12 +25,20 @@ object BlogRetrofit {
     }
 
     private val headerInterceptor: Interceptor by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
+        val packageManager = BaseApplication.getApplication().packageManager
+        val versionName =
+            packageManager.getPackageInfo(
+                BaseApplication.getApplication().packageName,
+                0
+            ).versionName
         val interceptor = Interceptor { chain ->
             val build = chain.request().newBuilder()
                 .addHeader(
                     "User-Agent",
-                    "Android ${Build.VERSION.RELEASE}; ${Build.BRAND} ${Build.MODEL}"
-                ).build()
+                    "Android/${Build.VERSION.RELEASE} ${Build.BRAND}/${Build.MODEL} manpok/$versionName"
+                )
+                .addHeader("referer", "https://m.manpok.top")
+                .build()
             return@Interceptor chain.proceed(build)
         }
         return@lazy interceptor

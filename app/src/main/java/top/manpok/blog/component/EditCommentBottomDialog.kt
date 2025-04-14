@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.pager.HorizontalPager
@@ -90,7 +91,7 @@ fun EditCommentBottomDialog(
         dragHandle = null,
         containerColor = colorResource(R.color.bg_white),
         shape = RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp),
-        modifier = modifier
+        modifier = modifier.statusBarsPadding()
     ) {
         Column(
             modifier = Modifier
@@ -109,6 +110,7 @@ fun EditCommentBottomDialog(
                         hintText = contentHintText,
                         modifier = Modifier
                             .fillMaxWidth()
+                            .then(if (fullScreen) Modifier.weight(1f) else Modifier)
                             .focusRequester(focusRequester)
                     ) {
                         onContentTextChange(it)

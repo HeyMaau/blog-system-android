@@ -35,7 +35,7 @@ object BlogRetrofit {
             val build = chain.request().newBuilder()
                 .addHeader(
                     "User-Agent",
-                    "Android/${Build.VERSION.RELEASE} ${Build.BRAND}/${Build.MODEL} manpok/$versionName"
+                    "Android/${Build.VERSION.RELEASE} ${Build.BRAND}/${Build.MODEL} manpok_app/$versionName"
                 )
                 .addHeader("referer", "https://m.manpok.top")
                 .build()

@@ -41,6 +41,7 @@ import androidx.compose.ui.zIndex
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import top.manpok.blog.R
+import top.manpok.blog.base.BaseApplication
 import top.manpok.blog.component.AuthorInfoBanner
 import top.manpok.blog.component.CommentWindow
 import top.manpok.blog.component.CommonHeader
@@ -221,6 +222,14 @@ class ArticleDetailActivity : BaseActivity() {
                                     builtInZoomControls = false
                                     displayZoomControls = false
                                     javaScriptEnabled = true
+
+                                    val packageManager = BaseApplication.getApplication().packageManager
+                                    val versionName =
+                                        packageManager.getPackageInfo(
+                                            BaseApplication.getApplication().packageName,
+                                            0
+                                        ).versionName
+                                    userAgentString += " manpok_app/$versionName"
                                 }
                                 webView.apply {
                                     webView.webViewClient = BlogWebViewClient()

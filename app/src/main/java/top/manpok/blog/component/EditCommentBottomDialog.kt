@@ -168,9 +168,9 @@ fun EditCommentBottomDialog(
             ) {
                 val keyboardController = LocalSoftwareKeyboardController.current
                 Icon(
-                    imageVector = ImageVector.vectorResource(id = if (showEmojiPanel) R.drawable.ic_keyboard else R.drawable.ic_emoji_panel),
+                    imageVector = ImageVector.vectorResource(id = if (showEmojiPanel) R.drawable.ic_keyboard_square else R.drawable.ic_emoji_panel),
                     contentDescription = null,
-                    tint = colorResource(R.color.text_article_title),
+                    tint = colorResource(R.color.text_article_summary),
                     modifier = Modifier
                         .size(20.dp)
                         .clickable {

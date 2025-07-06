@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -40,6 +42,7 @@ fun AboutPage(
         modifier = modifier
             .fillMaxSize()
             .padding(12.dp, 0.dp)
+            .verticalScroll(rememberScrollState())
     ) {
         val context = LocalContext.current
         Spacer(modifier = Modifier.height(100.dp))

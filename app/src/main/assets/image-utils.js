@@ -6,3 +6,11 @@ function addImageOnClick() {
         }
     }
 }
+
+function updateViewModelContent(innerHTML) {
+    window.img_api.updateViewModelContent(innerHTML)
+}
+
+function initWebViewImageMap() {
+    window.img_api.initWebViewImageMap()
+}

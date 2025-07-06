@@ -214,41 +214,75 @@ class ArticleDetailActivity : BaseActivity() {
                             )
                         }
                         if (!TextUtils.isEmpty(articleDetailViewModel.content)) {
-                            AndroidView(modifier = Modifier.fillMaxSize(), factory = {
-                                val webView = WebView(it)
-                                webView.setBackgroundColor(getColor(R.color.bg_white))
-                                webView.settings.apply {
-                                    setSupportZoom(false)
-                                    builtInZoomControls = false
-                                    displayZoomControls = false
-                                    javaScriptEnabled = true
+                            if (articleDetailViewModel.type == "0") {
+                                AndroidView(modifier = Modifier.fillMaxSize(), factory = {
+                                    val webView = WebView(it)
+                                    webView.setBackgroundColor(getColor(R.color.bg_white))
+                                    webView.settings.apply {
+                                        setSupportZoom(false)
+                                        builtInZoomControls = false
+                                        displayZoomControls = false
+                                        javaScriptEnabled = true
 
-                                    val packageManager = BaseApplication.getApplication().packageManager
-                                    val versionName =
-                                        packageManager.getPackageInfo(
-                                            BaseApplication.getApplication().packageName,
-                                            0
-                                        ).versionName
-                                    userAgentString += " manpok_app/$versionName"
-                                }
-                                webView.apply {
-                                    webView.webViewClient = BlogWebViewClient()
-                                    webChromeClient = BlogWebChromeClient()
-                                    loadDataWithBaseURL(
-                                        "file:///android_asset/",
-                                        articleDetailViewModel.content,
-                                        "text/html",
-                                        "utf-8",
-                                        null
-                                    )
-                                    addJavascriptInterface(
-                                        ImageJSInterface(
-                                            this@ArticleDetailActivity,
-                                            articleDetailViewModel
-                                        ), "img_api"
-                                    )
-                                }
-                            })
+                                        val packageManager =
+                                            BaseApplication.getApplication().packageManager
+                                        val versionName =
+                                            packageManager.getPackageInfo(
+                                                BaseApplication.getApplication().packageName,
+                                                0
+                                            ).versionName
+                                        userAgentString += " manpok_app/$versionName"
+                                    }
+                                    webView.apply {
+                                        webView.webViewClient = BlogWebViewClient(articleDetailViewModel)
+                                        webChromeClient = BlogWebChromeClient()
+                                        loadDataWithBaseURL(
+                                            "file:///android_asset/",
+                                            articleDetailViewModel.content,
+                                            "text/html",
+                                            "utf-8",
+                                            null
+                                        )
+                                        addJavascriptInterface(
+                                            ImageJSInterface(
+                                                this@ArticleDetailActivity,
+                                                articleDetailViewModel
+                                            ), "img_api"
+                                        )
+                                    }
+                                })
+                            } else {
+                                AndroidView(modifier = Modifier.fillMaxSize(), factory = {
+                                    val webView = WebView(it)
+                                    webView.setBackgroundColor(getColor(R.color.bg_white))
+                                    webView.settings.apply {
+                                        setSupportZoom(false)
+                                        builtInZoomControls = false
+                                        displayZoomControls = false
+                                        javaScriptEnabled = true
+
+                                        val packageManager =
+                                            BaseApplication.getApplication().packageManager
+                                        val versionName =
+                                            packageManager.getPackageInfo(
+                                                BaseApplication.getApplication().packageName,
+                                                0
+                                            ).versionName
+                                        userAgentString += " manpok_app/$versionName"
+                                    }
+                                    webView.apply {
+                                        webView.webViewClient = BlogWebViewClient(articleDetailViewModel)
+                                        webChromeClient = BlogWebChromeClient()
+                                        loadUrl("file:///android_asset/markdown_template.html")
+                                        addJavascriptInterface(
+                                            ImageJSInterface(
+                                                this@ArticleDetailActivity,
+                                                articleDetailViewModel
+                                            ), "img_api"
+                                        )
+                                    }
+                                })
+                            }
                         }
                         if (!TextUtils.isEmpty(articleDetailViewModel.updateTime)) {
                             Text(

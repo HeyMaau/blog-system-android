@@ -5,12 +5,18 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import top.manpok.blog.utils.Constants
+import top.manpok.blog.viewmodel.ArticleDetailViewModel
 
-class BlogWebViewClient : WebViewClient() {
+class BlogWebViewClient(val articleDetailViewModel: ArticleDetailViewModel) : WebViewClient() {
 
     override fun onPageFinished(view: WebView?, url: String?) {
         super.onPageFinished(view, url)
         view?.evaluateJavascript("javascript:blogHighlightAll()", null)
+        val renderString = articleDetailViewModel.content
+            .replace("\\", "\\\\")
+            .replace("'", "\\'")
+            .replace("\n", "\\n")
+        view?.evaluateJavascript("renderMarkdown('$renderString');", null)
         view?.evaluateJavascript("javascript:callAddImageOnClick()", null)
     }
 

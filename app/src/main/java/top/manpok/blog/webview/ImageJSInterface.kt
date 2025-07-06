@@ -26,4 +26,14 @@ class ImageJSInterface(
         intent.putExtra(ImagePreviewActivity.INTENT_KEY_CURRENT_INDEX, index)
         context.startActivity(intent)
     }
+
+    @JavascriptInterface
+    fun updateViewModelContent(innerHTML: String) {
+        articleDetailViewModel.content = innerHTML
+    }
+
+    @JavascriptInterface
+    fun initWebViewImageMap() {
+        articleDetailViewModel.initImageMap();
+    }
 }

@@ -1,0 +1,50 @@
+<!-- assets/markdown_template.html -->
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>Markdown Viewer</title>
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1.0,user-scalable=no,maximum-scale=1.0,minimum-scale=1.0">
+    <script src="marked.umd.min.js"></script>
+    <script src="highlight.min.js"></script>
+    <link rel="stylesheet" href="github-markdown.min.css">
+    <link rel="stylesheet" href="highlight.default.min.css">
+    <style>
+        .markdown-body {
+            box-sizing: border-box;
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 0;
+        }
+        pre {
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+<div id="content" class="markdown-body">Loading...</div>
+<script>
+    function renderMarkdown(markdownText) {
+        document.getElementById('content').innerHTML = marked.parse(markdownText);
+        document.querySelectorAll('pre code').forEach((block) => {
+            hljs.highlightElement(block);
+        });
+        callUpdateViewModelContent(document.getElementById('content').innerHTML)
+        callInitWebViewImageMap()
+    }
+</script>
+<script src="image-utils.js"></script>
+<script>
+    function callAddImageOnClick() {
+        addImageOnClick()
+    }
+    function callUpdateViewModelContent(innerHTML) {
+        updateViewModelContent(innerHTML)
+    }
+    function callInitWebViewImageMap() {
+        initWebViewImageMap()
+    }
+</script>
+</body>
+</html>

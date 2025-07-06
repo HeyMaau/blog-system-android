@@ -45,7 +45,7 @@ class ArticleDetailViewModel : ViewModel() {
     var content by mutableStateOf("")
     var updateTime by mutableStateOf("")
     var darkTheme by mutableStateOf(false)
-    private var tempContent by mutableStateOf("")
+    var type by mutableStateOf("")
 
     var loading by mutableStateOf(true)
     private var timeOut by mutableStateOf(false)
@@ -91,8 +91,12 @@ class ArticleDetailViewModel : ViewModel() {
                                 cover =
                                     data.cover ?: ""
                                 updateTime = data.updateTime!!
-                                setHtmlContent(data.content!!)
-                                tempContent = data.content
+                                type = data.type!!
+                                if (type == "0") {
+                                    setHtmlContent(data.content!!)
+                                } else {
+                                    content = data.content!!
+                                }
                                 if (timeOut) {
                                     loading = false
                                 }
@@ -100,7 +104,6 @@ class ArticleDetailViewModel : ViewModel() {
                                     mutex.withLock {
                                         saveToDB(data)
                                     }
-                                    initImageMap(data.content)
                                 }
                             }
                         }
@@ -141,7 +144,6 @@ class ArticleDetailViewModel : ViewModel() {
                 cover =
                     data.cover ?: ""
                 setHtmlContent(data.content!!)
-                tempContent = data.content
                 updateTime = data.updateTime!!
             }
         } else {
@@ -169,13 +171,15 @@ class ArticleDetailViewModel : ViewModel() {
         }
     }
 
-    private fun initImageMap(htmlContent: String) {
-        val document = Jsoup.parse(htmlContent)
-        val elements = document.select("img")
-        elements.forEachIndexed { index, element ->
-            val src = element.attr("src")
-            imageMap[src] = index
-            imageList.add(src)
+    fun initImageMap() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val document = Jsoup.parse(content)
+            val elements = document.select("img")
+            elements.forEachIndexed { index, element ->
+                val src = element.attr("src")
+                imageMap[src] = index
+                imageList.add(src)
+            }
         }
     }
 
@@ -188,10 +192,6 @@ class ArticleDetailViewModel : ViewModel() {
             Configuration.UI_MODE_NIGHT_YES -> darkTheme =
                 true // Night mode is active, we're using dark theme.
         }
-    }
-
-    fun resetContent() {
-        setHtmlContent(tempContent)
     }
 
     private fun setHtmlContent(data: String) {
@@ -228,6 +228,7 @@ class ArticleDetailViewModel : ViewModel() {
             </script>
             </html>
         """.trimIndent()
+        initImageMap()
     }
 
     fun initLoading() {

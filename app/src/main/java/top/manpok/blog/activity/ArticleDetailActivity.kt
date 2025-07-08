@@ -234,7 +234,8 @@ class ArticleDetailActivity : BaseActivity() {
                                         userAgentString += " manpok_app/$versionName"
                                     }
                                     webView.apply {
-                                        webView.webViewClient = BlogWebViewClient(articleDetailViewModel)
+                                        isVerticalScrollBarEnabled = false
+                                        webViewClient = BlogWebViewClient(articleDetailViewModel)
                                         webChromeClient = BlogWebChromeClient()
                                         loadDataWithBaseURL(
                                             "file:///android_asset/",
@@ -271,7 +272,8 @@ class ArticleDetailActivity : BaseActivity() {
                                         userAgentString += " manpok_app/$versionName"
                                     }
                                     webView.apply {
-                                        webView.webViewClient = BlogWebViewClient(articleDetailViewModel)
+                                        isVerticalScrollBarEnabled = false
+                                        webViewClient = BlogWebViewClient(articleDetailViewModel)
                                         webChromeClient = BlogWebChromeClient()
                                         loadUrl("file:///android_asset/markdown_template.html")
                                         addJavascriptInterface(

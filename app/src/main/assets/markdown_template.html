@@ -8,23 +8,38 @@
           content="width=device-width,initial-scale=1.0,user-scalable=no,maximum-scale=1.0,minimum-scale=1.0">
     <script src="marked.umd.min.js"></script>
     <script src="highlight.min.js"></script>
+    <script src="groovy.min.js"></script>
     <link rel="stylesheet" href="github-markdown.min.css">
-    <link rel="stylesheet" href="highlight.default.min.css">
+    <link id="hljs-theme" rel="stylesheet" href="highlight.default.min.css">
     <style>
         .markdown-body {
             box-sizing: border-box;
             max-width: 100%;
             margin: 0 auto;
             padding: 0;
+            background-color: transparent;
         }
         pre {
             overflow-x: auto;
+        }
+        body {
+            margin: 0;
         }
     </style>
 </head>
 <body>
 <div id="content" class="markdown-body">Loading...</div>
 <script>
+    function switchThemeIfDarkMode() {
+        const isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const themeLink = document.getElementById('hljs-theme');
+        themeLink.href = isDark ? 'highlight.dark.min.css' : 'highlight.default.min.css';
+    }
+
+    switchThemeIfDarkMode();
+
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', switchThemeIfDarkMode);
+
     function renderMarkdown(markdownText) {
         document.getElementById('content').innerHTML = marked.parse(markdownText);
         document.querySelectorAll('pre code').forEach((block) => {

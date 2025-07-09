@@ -143,8 +143,14 @@ class ArticleDetailViewModel : ViewModel() {
                 authorSign = data.sign!!
                 cover =
                     data.cover ?: ""
-                setHtmlContent(data.content!!)
+                type = data.type ?: "0"
                 updateTime = data.updateTime!!
+                if (type == "0") {
+                    setHtmlContent(data.content!!)
+                } else {
+                    content = data.content!!
+                }
+
             }
         } else {
             LogUtil.e(TAG, "文章${id}的数据库记录为空，展示错误页面")
@@ -164,7 +170,8 @@ class ArticleDetailViewModel : ViewModel() {
                 updateTime = data.updateTime,
                 avatar = data.user?.avatar,
                 sign = data.user?.sign,
-                userName = data.user?.userName
+                userName = data.user?.userName,
+                type = data.type
             )
             articleDetailDao.deleteOne(blogArticleDetailForDB)
             articleDetailDao.insert(blogArticleDetailForDB)

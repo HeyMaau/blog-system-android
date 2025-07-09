@@ -14,5 +14,6 @@ data class BlogArticleDetailForDB(
     val updateTime: String?,
     val avatar: String?,
     val sign: String?,
-    val userName: String?
+    val userName: String?,
+    val type: String?
 )

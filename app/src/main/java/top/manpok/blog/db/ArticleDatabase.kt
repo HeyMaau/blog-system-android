@@ -12,7 +12,7 @@ import top.manpok.blog.utils.Constants
 
 @Database(
     entities = [BlogArticleListItemForDB::class, BlogArticleDetailForDB::class],
-    version = 2
+    version = 3
 )
 abstract class ArticleDatabase : RoomDatabase() {
     abstract fun articleListDao(): ArticleListDao
@@ -27,6 +27,12 @@ abstract class ArticleDatabase : RoomDatabase() {
             }
         }
 
+        private val MIGRATION_2_3 = object : Migration(2, 3) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("ALTER TABLE ${Constants.TABLE_NAME_ARTICLE_DETAIL} ADD `type` TEXT")
+            }
+        }
+
         @Volatile
         private var Instance: ArticleDatabase? = null
 
@@ -37,7 +43,7 @@ abstract class ArticleDatabase : RoomDatabase() {
                     context,
                     ArticleDatabase::class.java,
                     Constants.DB_NAME_ARTICLE
-                ).addMigrations(MIGRATION_1_2)
+                ).addMigrations(MIGRATION_1_2, MIGRATION_2_3)
                     .build()
                     .also { Instance = it }
             }

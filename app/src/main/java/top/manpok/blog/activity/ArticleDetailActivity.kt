@@ -48,6 +48,7 @@ import top.manpok.blog.component.CommonHeader
 import top.manpok.blog.component.DefaultUIState
 import top.manpok.blog.component.EditCommentBottomDialog
 import top.manpok.blog.component.FloatingHeader
+import top.manpok.blog.component.MarkDownWebView
 import top.manpok.blog.pojo.DefaultState
 import top.manpok.blog.utils.Constants
 import top.manpok.blog.viewmodel.ArticleDetailViewModel
@@ -251,39 +252,16 @@ class ArticleDetailActivity : BaseActivity() {
                                             ), "img_api"
                                         )
                                     }
+                                }, onRelease = {
+                                    it.removeJavascriptInterface("img_api")
+                                    it.removeAllViews()
+                                    it.destroy()
                                 })
                             } else {
-                                AndroidView(modifier = Modifier.fillMaxSize(), factory = {
-                                    val webView = WebView(it)
-                                    webView.setBackgroundColor(getColor(R.color.bg_white))
-                                    webView.settings.apply {
-                                        setSupportZoom(false)
-                                        builtInZoomControls = false
-                                        displayZoomControls = false
-                                        javaScriptEnabled = true
-
-                                        val packageManager =
-                                            BaseApplication.getApplication().packageManager
-                                        val versionName =
-                                            packageManager.getPackageInfo(
-                                                BaseApplication.getApplication().packageName,
-                                                0
-                                            ).versionName
-                                        userAgentString += " manpok_app/$versionName"
-                                    }
-                                    webView.apply {
-                                        isVerticalScrollBarEnabled = false
-                                        webViewClient = BlogWebViewClient(articleDetailViewModel)
-                                        webChromeClient = BlogWebChromeClient()
-                                        loadUrl("file:///android_asset/markdown_template.html")
-                                        addJavascriptInterface(
-                                            ImageJSInterface(
-                                                this@ArticleDetailActivity,
-                                                articleDetailViewModel
-                                            ), "img_api"
-                                        )
-                                    }
-                                })
+                                MarkDownWebView(
+                                    viewModel = articleDetailViewModel,
+                                    modifier = Modifier.fillMaxSize()
+                                )
                             }
                         }
                         if (!TextUtils.isEmpty(articleDetailViewModel.updateTime)) {

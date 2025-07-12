@@ -167,6 +167,9 @@ class CommonWebViewActivity : BaseActivity() {
                             }
                         }, update = {
                             it.loadUrl(url)
+                        }, onRelease = {
+                            it.removeAllViews()
+                            it.destroy()
                         })
                 }
             }

@@ -21,5 +21,5 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "blog-system-android"
-include(":app", ":markdowntext")
+include(":app")
  

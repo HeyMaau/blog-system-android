@@ -72,7 +72,7 @@ class AudioService : Service() {
             val notificationChannel = NotificationChannel(
                 Constants.NOTIFICATION_CHANNEL_ID_AUDIO,
                 getString(R.string.notification_channel_audio),
-                NotificationManager.IMPORTANCE_DEFAULT
+                NotificationManager.IMPORTANCE_LOW
             )
             notificationChannel.description = getString(R.string.notification_channel_audio_description)
             val notificationManager =
@@ -108,6 +108,7 @@ class AudioService : Service() {
             .setContentTitle(audioViewModel.currentAudioName)
             .setContentText(audioViewModel.currentAudioArtist)
             .setLargeIcon(audioViewModel.currentCoverBitmap)
+            .setOnlyAlertOnce(true)
             .addAction(R.drawable.ic_skip_previous, "Previous", pendingPreIntent)
             .addAction(
                 if (playState is AudioViewModel.PlayState.Playing) R.drawable.ic_pause_notification else R.drawable.ic_play_notification,

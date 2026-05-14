@@ -55,6 +55,6 @@ object Constants {
 
     const val NOTIFICATION_ID_AUDIO = 1
     const val NOTIFICATION_ID_NORMAL = 2
-    const val NOTIFICATION_CHANNEL_ID_AUDIO = "notification_channel_id_audio"
+    const val NOTIFICATION_CHANNEL_ID_AUDIO = "notification_channel_id_audio_v2"
     const val NOTIFICATION_CHANNEL_ID_NORMAL = "notification_channel_id_normal"
 }

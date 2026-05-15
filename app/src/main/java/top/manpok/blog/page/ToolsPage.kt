@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import top.manpok.blog.R
 import top.manpok.blog.activity.AudioPlayerActivity
+import top.manpok.blog.activity.CounterActivity
 import top.manpok.blog.activity.CommonWebViewActivity
 import top.manpok.blog.component.ActivityEntranceItem
 import top.manpok.blog.component.DefaultUIState
@@ -149,6 +150,25 @@ fun ToolsPage(
                                     .clickable {
                                         val intent =
                                             Intent(context, AudioPlayerActivity::class.java)
+                                        context.startActivity(intent)
+                                    }
+                            )
+                        }
+                        item {
+                            ActivityEntranceItem(
+                                showSkeleton = friendLinkViewModel.showSkeleton,
+                                logo = R.drawable.ic_update,
+                                name = "计数器",
+                                modifier = Modifier
+                                    .padding(
+                                        start = 12.dp,
+                                        top = 16.dp,
+                                        end = 12.dp,
+                                        bottom = 16.dp
+                                    )
+                                    .clickable {
+                                        val intent =
+                                            Intent(context, CounterActivity::class.java)
                                         context.startActivity(intent)
                                     }
                             )

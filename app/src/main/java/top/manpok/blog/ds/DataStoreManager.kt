@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -22,6 +23,8 @@ class DataStoreManager private constructor() {
         private val KEY_CURRENT_ENV = intPreferencesKey("key_current_env")
         private val KEY_LAST_CLOSE_UPDATE_DIALOG_TIME =
             intPreferencesKey("key_last_close_update_dialog_time")
+        private val KEY_COUNTER_TITLE = stringPreferencesKey("key_counter_title")
+        private val KEY_COUNTER_COUNT = intPreferencesKey("key_counter_count")
         val instance: DataStoreManager by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
             DataStoreManager()
         }
@@ -70,6 +73,34 @@ class DataStoreManager private constructor() {
             context.dataStore.data.map {
                 it[KEY_LAST_CLOSE_UPDATE_DIALOG_TIME] ?: 0
             }.first()
+        }
+    }
+
+    fun getCounterTitleSync(context: Context): String {
+        return runBlocking {
+            context.dataStore.data.map {
+                it[KEY_COUNTER_TITLE] ?: "计数器"
+            }.first()
+        }
+    }
+
+    suspend fun setCounterTitle(context: Context, title: String) {
+        context.dataStore.edit {
+            it[KEY_COUNTER_TITLE] = title
+        }
+    }
+
+    fun getCounterCountSync(context: Context): Int {
+        return runBlocking {
+            context.dataStore.data.map {
+                it[KEY_COUNTER_COUNT] ?: 0
+            }.first()
+        }
+    }
+
+    suspend fun setCounterCount(context: Context, count: Int) {
+        context.dataStore.edit {
+            it[KEY_COUNTER_COUNT] = count
         }
     }
 }

@@ -1,6 +1,14 @@
-# CLAUDE.md
+# 项目说明
 
-本文档为 Claude Code (claude.ai/code) 在此仓库中编写代码提供指引。
+本项目为个人博客类android app，包含文章阅读、图片浏览、工具使用等功能。
+
+## 编码规范
+
+- 字符串、颜色的值必须写入对应的xml资源文件再引用
+
+## 技能使用补充
+
+- 如果用到了android-cli skill，请先运行android update命令
 
 ## 构建命令
 

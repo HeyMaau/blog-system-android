@@ -17,6 +17,8 @@
     <string name="default_category_android">Android</string>
 
     <string name="all_tools">全部工具</string>
+    <string name="tools_local">本地工具</string>
+    <string name="tools_online">在线工具</string>
 
     <string name="app_version">Version %s</string>
 

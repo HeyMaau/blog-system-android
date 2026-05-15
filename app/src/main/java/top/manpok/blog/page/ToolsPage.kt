@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.ExperimentalMaterialApi
@@ -56,10 +57,38 @@ fun ToolsPage(
     blogScaffoldViewModel: BlogScaffoldViewModel = viewModel()
 ) {
     val context = LocalContext.current
+
+    var uiState: DefaultState by remember {
+        mutableStateOf(DefaultState.NONE)
+    }
+
+    LaunchedEffect(key1 = Unit) {
+        friendLinkViewModel.friendLinkState.collect {
+            uiState = it
+        }
+    }
+
+    val pullRefreshState =
+        rememberPullRefreshState(refreshing = friendLinkViewModel.refreshing, onRefresh = {
+            refresh(friendLinkViewModel)
+        })
+
+    LaunchedEffect(key1 = Unit) {
+        blogScaffoldViewModel.sameBottomItemClickIndex.collect {
+            when (it) {
+                2 -> {
+                    refresh(friendLinkViewModel)
+                    blogScaffoldViewModel.dispatchEvent(BlogScaffoldViewModel.ScaffoldIntent.FinishSameBottomItemClick)
+                }
+            }
+        }
+    }
+
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        // Title
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center,
@@ -69,7 +98,7 @@ fun ToolsPage(
                     start = 0.dp,
                     top = 20.dp,
                     end = 0.dp,
-                    10.dp
+                    bottom = 10.dp
                 )
         ) {
             Icon(
@@ -87,45 +116,82 @@ fun ToolsPage(
             )
         }
 
-        val pullRefreshState =
-            rememberPullRefreshState(refreshing = friendLinkViewModel.refreshing, onRefresh = {
-                refresh(friendLinkViewModel)
-            })
-
-        LaunchedEffect(key1 = Unit) {
-            blogScaffoldViewModel.sameBottomItemClickIndex.collect {
-                when (it) {
-                    2 -> {
-                        refresh(friendLinkViewModel)
-                        blogScaffoldViewModel.dispatchEvent(BlogScaffoldViewModel.ScaffoldIntent.FinishSameBottomItemClick)
-                    }
+        // Scrollable content with pull-to-refresh
+        Box(
+            contentAlignment = Alignment.TopCenter,
+            modifier = Modifier
+                .weight(1f)
+                .pullRefresh(pullRefreshState)
+        ) {
+            LazyVerticalGrid(columns = GridCells.Fixed(3), modifier = Modifier.fillMaxSize()) {
+                // Local tools section header
+                item(span = { GridItemSpan(3) }) {
+                    Text(
+                        text = stringResource(id = R.string.tools_local),
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight(500),
+                        color = colorResource(R.color.text_article_title),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 16.dp, top = 8.dp, bottom = 4.dp)
+                    )
                 }
-            }
-        }
 
-        var uiState: DefaultState by remember {
-            mutableStateOf(DefaultState.NONE)
-        }
+                // Local tool items
+                item {
+                    ActivityEntranceItem(
+                        showSkeleton = false,
+                        logo = R.drawable.ic_audio_player,
+                        name = stringResource(id = R.string.audio_player_entrance),
+                        modifier = Modifier
+                            .padding(start = 12.dp, top = 16.dp, end = 12.dp, bottom = 16.dp)
+                            .clickable {
+                                val intent =
+                                    Intent(context, AudioPlayerActivity::class.java)
+                                context.startActivity(intent)
+                            }
+                    )
+                }
+                item {
+                    ActivityEntranceItem(
+                        showSkeleton = false,
+                        logo = R.drawable.ic_update,
+                        name = "计数器",
+                        modifier = Modifier
+                            .padding(start = 12.dp, top = 16.dp, end = 12.dp, bottom = 16.dp)
+                            .clickable {
+                                val intent =
+                                    Intent(context, CounterActivity::class.java)
+                                context.startActivity(intent)
+                            }
+                    )
+                }
 
-        LaunchedEffect(key1 = Unit) {
-            friendLinkViewModel.friendLinkState.collect {
-                uiState = it
-            }
-        }
+                // Online tools section header
+                item(span = { GridItemSpan(3) }) {
+                    Text(
+                        text = stringResource(id = R.string.tools_online),
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight(500),
+                        color = colorResource(R.color.text_article_title),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 16.dp, top = 8.dp, bottom = 4.dp)
+                    )
+                }
 
-        if (uiState == DefaultState.NETWORK_ERROR) {
-            DefaultUIState(
-                state = uiState,
-                hint = stringResource(id = R.string.network_error),
-                onClick = {
-                    refresh(friendLinkViewModel)
-                })
-        } else {
-            Box(
-                contentAlignment = Alignment.TopCenter,
-                modifier = Modifier.pullRefresh(pullRefreshState)
-            ) {
-                LazyVerticalGrid(columns = GridCells.Fixed(3), modifier = Modifier.fillMaxSize()) {
+                // Online tools content
+                if (uiState == DefaultState.NETWORK_ERROR) {
+                    item(span = { GridItemSpan(3) }) {
+                        DefaultUIState(
+                            state = uiState,
+                            hint = stringResource(id = R.string.network_error),
+                            onClick = {
+                                refresh(friendLinkViewModel)
+                            }
+                        )
+                    }
+                } else {
                     if (friendLinkViewModel.showSkeleton) {
                         items(9) {
                             FriendLinkItem(
@@ -135,44 +201,6 @@ fun ToolsPage(
                             )
                         }
                     } else {
-                        item {
-                            ActivityEntranceItem(
-                                showSkeleton = friendLinkViewModel.showSkeleton,
-                                logo = R.drawable.ic_audio_player,
-                                name = stringResource(id = R.string.audio_player_entrance),
-                                modifier = Modifier
-                                    .padding(
-                                        start = 12.dp,
-                                        top = 16.dp,
-                                        end = 12.dp,
-                                        bottom = 16.dp
-                                    )
-                                    .clickable {
-                                        val intent =
-                                            Intent(context, AudioPlayerActivity::class.java)
-                                        context.startActivity(intent)
-                                    }
-                            )
-                        }
-                        item {
-                            ActivityEntranceItem(
-                                showSkeleton = friendLinkViewModel.showSkeleton,
-                                logo = R.drawable.ic_update,
-                                name = "计数器",
-                                modifier = Modifier
-                                    .padding(
-                                        start = 12.dp,
-                                        top = 16.dp,
-                                        end = 12.dp,
-                                        bottom = 16.dp
-                                    )
-                                    .clickable {
-                                        val intent =
-                                            Intent(context, CounterActivity::class.java)
-                                        context.startActivity(intent)
-                                    }
-                            )
-                        }
                         items(friendLinkViewModel.friendLinkList) {
                             FriendLinkItem(
                                 showSkeleton = friendLinkViewModel.showSkeleton,
@@ -198,13 +226,13 @@ fun ToolsPage(
                         }
                     }
                 }
-                PullRefreshIndicator(
-                    refreshing = friendLinkViewModel.refreshing,
-                    state = pullRefreshState,
-                    backgroundColor = Color.White,
-                    contentColor = colorResource(id = R.color.blue_4285f4)
-                )
             }
+            PullRefreshIndicator(
+                refreshing = friendLinkViewModel.refreshing,
+                state = pullRefreshState,
+                backgroundColor = Color.White,
+                contentColor = colorResource(id = R.color.blue_4285f4)
+            )
         }
     }
 }

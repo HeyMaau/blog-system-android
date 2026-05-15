@@ -79,6 +79,19 @@
             android:name=".activity.CounterActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
+
+        <receiver
+            android:name=".widget.CounterWidgetProvider"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="top.manpok.blog.action.WIDGET_INCREMENT" />
+                <action android:name="top.manpok.blog.action.WIDGET_RESET" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_counter_info" />
+        </receiver>
         <activity
             android:name=".activity.MainActivity"
             android:exported="true"

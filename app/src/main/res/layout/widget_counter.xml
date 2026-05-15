@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="6dp"
+    android:background="@drawable/widget_counter_background">
+
+    <TextView
+        android:id="@+id/widget_counter_title"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:ellipsize="end"
+        android:gravity="center|bottom"
+        android:maxLines="1"
+        android:text="计数器"
+        android:textStyle="bold"
+        android:textColor="@color/text_article_title"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/widget_counter_count"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:gravity="center"
+        android:text="0"
+        android:textColor="@color/blue_4285f4"
+        android:textSize="36sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/widget_counter_reset"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="6dp"
+        android:text="重置"
+        android:textColor="#FFFFFFFF"
+        android:textSize="16sp"
+        android:background="@drawable/widget_reset_button_bg" />
+
+</LinearLayout>

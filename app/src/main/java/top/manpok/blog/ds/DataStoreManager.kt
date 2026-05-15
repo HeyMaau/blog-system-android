@@ -103,4 +103,12 @@ class DataStoreManager private constructor() {
             it[KEY_COUNTER_COUNT] = count
         }
     }
+
+    fun setCounterCountSync(context: Context, count: Int) {
+        runBlocking {
+            context.dataStore.edit {
+                it[KEY_COUNTER_COUNT] = count
+            }
+        }
+    }
 }

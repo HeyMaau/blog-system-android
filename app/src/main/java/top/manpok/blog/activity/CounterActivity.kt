@@ -36,6 +36,7 @@ import kotlinx.coroutines.launch
 import top.manpok.blog.R
 import top.manpok.blog.component.CommonHeader
 import top.manpok.blog.ds.DataStoreManager
+import top.manpok.blog.widget.CounterWidgetProvider
 
 class CounterActivity : BaseActivity() {
 
@@ -74,6 +75,7 @@ class CounterActivity : BaseActivity() {
                                             this@CounterActivity,
                                             editText
                                         )
+                                        CounterWidgetProvider.refreshWidgets(this@CounterActivity)
                                     }
                                     showDialog = false
                                 }
@@ -89,6 +91,7 @@ class CounterActivity : BaseActivity() {
                                         this@CounterActivity,
                                         editText
                                     )
+                                    CounterWidgetProvider.refreshWidgets(this@CounterActivity)
                                 }
                                 showDialog = false
                             }
@@ -133,6 +136,7 @@ class CounterActivity : BaseActivity() {
                                     this@CounterActivity,
                                     count
                                 )
+                                CounterWidgetProvider.refreshWidgets(this@CounterActivity)
                             }
                         }
                         .padding(48.dp)
@@ -170,6 +174,7 @@ class CounterActivity : BaseActivity() {
                                         this@CounterActivity,
                                         0
                                     )
+                                    CounterWidgetProvider.refreshWidgets(this@CounterActivity)
                                 }
                             }
                             .padding(horizontal = 20.dp, vertical = 12.dp)

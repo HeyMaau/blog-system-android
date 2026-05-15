@@ -155,8 +155,8 @@ fun ToolsPage(
                 item {
                     ActivityEntranceItem(
                         showSkeleton = false,
-                        logo = R.drawable.ic_update,
-                        name = "计数器",
+                        logo = R.drawable.ic_counter,
+                        name = stringResource(R.string.counter),
                         modifier = Modifier
                             .padding(start = 12.dp, top = 16.dp, end = 12.dp, bottom = 16.dp)
                             .clickable {

@@ -5,6 +5,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.floatPreferencesKey
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
@@ -24,7 +25,8 @@ class DataStoreManager private constructor() {
         private val KEY_LAST_CLOSE_UPDATE_DIALOG_TIME =
             intPreferencesKey("key_last_close_update_dialog_time")
         private val KEY_COUNTER_TITLE = stringPreferencesKey("key_counter_title")
-        private val KEY_COUNTER_COUNT = intPreferencesKey("key_counter_count")
+        private val KEY_COUNTER_COUNT = floatPreferencesKey("key_counter_count")
+        private val KEY_COUNTER_INCREMENT = floatPreferencesKey("key_counter_increment")
         val instance: DataStoreManager by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
             DataStoreManager()
         }
@@ -90,25 +92,39 @@ class DataStoreManager private constructor() {
         }
     }
 
-    fun getCounterCountSync(context: Context): Int {
+    fun getCounterCountSync(context: Context): Float {
         return runBlocking {
             context.dataStore.data.map {
-                it[KEY_COUNTER_COUNT] ?: 0
+                it[KEY_COUNTER_COUNT] ?: 0f
             }.first()
         }
     }
 
-    suspend fun setCounterCount(context: Context, count: Int) {
+    suspend fun setCounterCount(context: Context, count: Float) {
         context.dataStore.edit {
             it[KEY_COUNTER_COUNT] = count
         }
     }
 
-    fun setCounterCountSync(context: Context, count: Int) {
+    fun setCounterCountSync(context: Context, count: Float) {
         runBlocking {
             context.dataStore.edit {
                 it[KEY_COUNTER_COUNT] = count
             }
+        }
+    }
+
+    fun getCounterIncrementSync(context: Context): Float {
+        return runBlocking {
+            context.dataStore.data.map {
+                it[KEY_COUNTER_INCREMENT] ?: 1f
+            }.first()
+        }
+    }
+
+    suspend fun setCounterIncrement(context: Context, increment: Float) {
+        context.dataStore.edit {
+            it[KEY_COUNTER_INCREMENT] = increment
         }
     }
 }

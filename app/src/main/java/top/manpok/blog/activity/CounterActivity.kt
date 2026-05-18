@@ -19,7 +19,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -28,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
@@ -49,23 +49,27 @@ class CounterActivity : BaseActivity() {
         val initTitle = intent.getStringExtra(EXTRA_TITLE)
             ?: DataStoreManager.instance.getCounterTitleSync(this)
         val initCount = DataStoreManager.instance.getCounterCountSync(this)
+        val initIncrement = DataStoreManager.instance.getCounterIncrementSync(this)
         setContent {
-            var count by remember { mutableIntStateOf(initCount) }
+            var count by remember { mutableStateOf(initCount) }
             var title by remember { mutableStateOf(initTitle) }
-            var showDialog by remember { mutableStateOf(false) }
+            var increment by remember { mutableStateOf(initIncrement) }
+            var showTitleDialog by remember { mutableStateOf(false) }
+            var showIncrementDialog by remember { mutableStateOf(false) }
             var editText by remember { mutableStateOf("") }
+            var editIncrementText by remember { mutableStateOf("") }
             val scope = rememberCoroutineScope()
 
-            if (showDialog) {
+            if (showTitleDialog) {
                 AlertDialog(
-                    onDismissRequest = { showDialog = false },
-                    title = { Text("设置标题") },
+                    onDismissRequest = { showTitleDialog = false },
+                    title = { Text(stringResource(R.string.counter_set_title)) },
                     text = {
                         OutlinedTextField(
                             value = editText,
                             onValueChange = { editText = it },
                             singleLine = true,
-                            placeholder = { Text("请输入标题") },
+                            placeholder = { Text(stringResource(R.string.counter_input_title_hint)) },
                             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                             keyboardActions = KeyboardActions(onDone = {
                                 if (editText.isNotBlank()) {
@@ -77,7 +81,7 @@ class CounterActivity : BaseActivity() {
                                         )
                                         CounterWidgetProvider.refreshWidgets(this@CounterActivity)
                                     }
-                                    showDialog = false
+                                    showTitleDialog = false
                                 }
                             })
                         )
@@ -93,15 +97,70 @@ class CounterActivity : BaseActivity() {
                                     )
                                     CounterWidgetProvider.refreshWidgets(this@CounterActivity)
                                 }
-                                showDialog = false
+                                showTitleDialog = false
                             }
                         }) {
-                            Text("保存")
+                            Text(stringResource(R.string.counter_save))
                         }
                     },
                     dismissButton = {
-                        TextButton(onClick = { showDialog = false }) {
-                            Text("取消")
+                        TextButton(onClick = { showTitleDialog = false }) {
+                            Text(stringResource(R.string.counter_cancel))
+                        }
+                    }
+                )
+            }
+
+            if (showIncrementDialog) {
+                AlertDialog(
+                    onDismissRequest = { showIncrementDialog = false },
+                    title = { Text(stringResource(R.string.counter_set_increment)) },
+                    text = {
+                        OutlinedTextField(
+                            value = editIncrementText,
+                            onValueChange = { editIncrementText = it },
+                            singleLine = true,
+                            placeholder = { Text(stringResource(R.string.counter_input_increment_hint)) },
+                            keyboardOptions = KeyboardOptions(
+                                imeAction = ImeAction.Done
+                            ),
+                            keyboardActions = KeyboardActions(onDone = {
+                                val value = editIncrementText.toFloatOrNull()
+                                if (value != null && value > 0f) {
+                                    increment = value
+                                    scope.launch {
+                                        DataStoreManager.instance.setCounterIncrement(
+                                            this@CounterActivity,
+                                            value
+                                        )
+                                        CounterWidgetProvider.refreshWidgets(this@CounterActivity)
+                                    }
+                                    showIncrementDialog = false
+                                }
+                            })
+                        )
+                    },
+                    confirmButton = {
+                        TextButton(onClick = {
+                            val value = editIncrementText.toFloatOrNull()
+                            if (value != null && value > 0f) {
+                                increment = value
+                                scope.launch {
+                                    DataStoreManager.instance.setCounterIncrement(
+                                        this@CounterActivity,
+                                        value
+                                    )
+                                    CounterWidgetProvider.refreshWidgets(this@CounterActivity)
+                                }
+                                showIncrementDialog = false
+                            }
+                        }) {
+                            Text(stringResource(R.string.counter_save))
+                        }
+                    },
+                    dismissButton = {
+                        TextButton(onClick = { showIncrementDialog = false }) {
+                            Text(stringResource(R.string.counter_cancel))
                         }
                     }
                 )
@@ -122,7 +181,7 @@ class CounterActivity : BaseActivity() {
                     modifier = Modifier.align(Alignment.TopCenter)
                 )
                 Text(
-                    text = "$count",
+                    text = count.toString().removeSuffix(".0"),
                     fontSize = 64.sp,
                     fontWeight = FontWeight.Bold,
                     color = colorResource(id = R.color.text_article_title),
@@ -130,7 +189,7 @@ class CounterActivity : BaseActivity() {
                         .align(Alignment.Center)
                         .clip(CircleShape)
                         .clickable {
-                            count++
+                            count += increment
                             scope.launch {
                                 DataStoreManager.instance.setCounterCount(
                                     this@CounterActivity,
@@ -148,7 +207,20 @@ class CounterActivity : BaseActivity() {
                         .padding(16.dp)
                 ) {
                     Text(
-                        text = "设置标题",
+                        text = stringResource(R.string.counter_set_increment),
+                        fontSize = 16.sp,
+                        color = androidx.compose.ui.graphics.Color.White,
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(20.dp))
+                            .background(colorResource(id = R.color.blue_4285f4))
+                            .clickable {
+                                editIncrementText = increment.toString()
+                                showIncrementDialog = true
+                            }
+                            .padding(horizontal = 20.dp, vertical = 12.dp)
+                    )
+                    Text(
+                        text = stringResource(R.string.counter_set_title),
                         fontSize = 16.sp,
                         color = androidx.compose.ui.graphics.Color.White,
                         modifier = Modifier
@@ -156,23 +228,23 @@ class CounterActivity : BaseActivity() {
                             .background(colorResource(id = R.color.blue_4285f4))
                             .clickable {
                                 editText = title
-                                showDialog = true
+                                showTitleDialog = true
                             }
                             .padding(horizontal = 20.dp, vertical = 12.dp)
                     )
                     Text(
-                        text = "重置",
+                        text = stringResource(R.string.counter_reset),
                         fontSize = 16.sp,
                         color = androidx.compose.ui.graphics.Color.White,
                         modifier = Modifier
                             .clip(RoundedCornerShape(20.dp))
                             .background(colorResource(id = R.color.blue_4285f4))
                             .clickable {
-                                count = 0
+                                count = 0f
                                 scope.launch {
                                     DataStoreManager.instance.setCounterCount(
                                         this@CounterActivity,
-                                        0
+                                        0f
                                     )
                                     CounterWidgetProvider.refreshWidgets(this@CounterActivity)
                                 }

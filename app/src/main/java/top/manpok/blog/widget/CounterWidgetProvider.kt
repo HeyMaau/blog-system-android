@@ -25,12 +25,13 @@ class CounterWidgetProvider : AppWidgetProvider() {
     override fun onReceive(context: Context, intent: Intent) {
         when (intent.action) {
             ACTION_INCREMENT -> {
-                val count = DataStoreManager.instance.getCounterCountSync(context) + 1
+                val increment = DataStoreManager.instance.getCounterIncrementSync(context)
+                val count = DataStoreManager.instance.getCounterCountSync(context) + increment
                 DataStoreManager.instance.setCounterCountSync(context, count)
                 refreshAllWidgets(context)
             }
             ACTION_RESET -> {
-                DataStoreManager.instance.setCounterCountSync(context, 0)
+                DataStoreManager.instance.setCounterCountSync(context, 0f)
                 refreshAllWidgets(context)
             }
             else -> super.onReceive(context, intent)
@@ -57,7 +58,7 @@ class CounterWidgetProvider : AppWidgetProvider() {
 
         val views = RemoteViews(context.packageName, R.layout.widget_counter)
         views.setTextViewText(R.id.widget_counter_title, title)
-        views.setTextViewText(R.id.widget_counter_count, count.toString())
+        views.setTextViewText(R.id.widget_counter_count, count.toString().removeSuffix(".0"))
 
         val openAppIntent = Intent(context, CounterActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
@@ -109,7 +110,7 @@ class CounterWidgetProvider : AppWidgetProvider() {
                 val count = DataStoreManager.instance.getCounterCountSync(context)
                 val views = RemoteViews(context.packageName, R.layout.widget_counter)
                 views.setTextViewText(R.id.widget_counter_title, title)
-                views.setTextViewText(R.id.widget_counter_count, count.toString())
+                views.setTextViewText(R.id.widget_counter_count, count.toString().removeSuffix(".0"))
 
                 val openAppIntent = Intent(context, CounterActivity::class.java).apply {
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP

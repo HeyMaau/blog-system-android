@@ -84,6 +84,14 @@
 
     <string name="counter">计数器</string>
 
+    <string name="counter_set_title">设置标题</string>
+    <string name="counter_input_title_hint">请输入标题</string>
+    <string name="counter_set_increment">设置增量</string>
+    <string name="counter_input_increment_hint">请输入增量值</string>
+    <string name="counter_save">保存</string>
+    <string name="counter_cancel">取消</string>
+    <string name="counter_reset">重置</string>
+
     <string name="notification_channel_audio">音频播放</string>
     <string name="notification_channel_normal">普通消息</string>
     <string name="notification_channel_audio_description">此通道用于显示音频播放器</string>
